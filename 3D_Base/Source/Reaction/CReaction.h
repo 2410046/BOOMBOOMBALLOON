@@ -2,7 +2,7 @@
 /********************************************************************************
 * リアクションクラス
 **/
-//#include "CReactionApply/CReactionApply.h"
+#include <memory>
 class CReaction
 {
 public:
@@ -68,9 +68,16 @@ public:
          m_State.timer = 0.0f;
      }
      //リアクション中の場合
-     bool Play(CReaction::MoveType type)
+     bool Play(const std::shared_ptr<CReaction>& reaction,
+         MoveType type)
      {
-         return GetType() == type && IsActive();
+         if (!reaction)
+         {
+             return false;
+         }
+
+         return reaction->IsActive() &&
+             reaction->GetType() == type;
      }
 protected:
     ReactionState m_State = {};

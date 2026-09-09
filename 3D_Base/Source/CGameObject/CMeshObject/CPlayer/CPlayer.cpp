@@ -255,16 +255,14 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 
 		//風船が多いほどスコアの量が上がる
 		//ブースト状態
-		if (m_pReaction &&
-			m_pReaction->Play(CReaction::Boost))
+		if (m_pReaction->Play(m_pReaction,CReaction::Boost))
 		{
 			//プレイヤーは風船とスコアを1つ取得する
-			m_Life += 1;//一気に5つも増える
+			m_Life = std::clamp(m_Life + 1, 0, 5);
 			m_pReaction->Stop();//リアクションを終わらせる
 		}
 		//相手がブースト状態の場合
-		else if (BoostOther&&
-			     BoostOther->Play(CReaction::Boost))
+		else if (BoostOther->Play(BoostOther,CReaction::Boost))
 		{
 			//自身の風船を失いスコアが減少
 			m_MoveState = enMoveState::Down;
