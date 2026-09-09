@@ -54,6 +54,26 @@ void CPlayer::Update()
 		Controller();
 		CCharacter::Update();
 		break;
+	case enMoveState::Boost:		//ブースト状態
+	{
+		//プレイヤーの方向にまっすぐ進む
+		CReaction::ReactionParam param;
+		param.rot = m_vQuaternion;
+		m_pReaction = CReactionFactory::Create(CReaction::Boost);
+		m_pReaction->Apply(param);
+		m_MoveState = enMoveState::Live;
+	}
+		break;
+	case enMoveState::Shot://ショット状態
+	{
+		CReaction::ReactionParam param;
+		param.rot = m_vQuaternion;
+		m_pReaction = CReactionFactory::Create(CReaction::Firing);
+		m_pReaction->Apply(param);
+		m_MoveState = enMoveState::Live;		//一瞬で切り替える
+	}
+		break;
+
 	case enMoveState::Down://ダウン状態
 
 		m_angle += 0.1f; // 回転速度
@@ -71,29 +91,15 @@ void CPlayer::Update()
 			{
 				m_Life = 0;
 			}
-			m_MoveState = enMoveState::Live;
+			m_MoveState = enMoveState::Invincible;
 			m_angle = 0.f;
 		}
 		break;
-	case enMoveState::Boost:		//ブースト状態
-	{
-		//プレイヤーの方向にまっすぐ進む
-		CReaction::ReactionParam param;
-		param.rot = m_vQuaternion;
-		m_pReaction = CReactionFactory::Create(CReaction::Boost);
-		m_pReaction->Apply(param);
-		m_MoveState = enMoveState::Live;
-	}
-		break;
-	case enMoveState::Shot://
-		//ここはまだできてない
-	{
-		CReaction::ReactionParam param;
-		param.rot = m_vQuaternion;
-		m_pReaction = CReactionFactory::Create(CReaction::Firing);
-		m_pReaction->Apply(param);
-		m_MoveState = enMoveState::Live;		//一瞬で切り替える
-	}
+	case enMoveState::Invincible://無敵状態
+		//コントローラー操作
+		Controller();
+		CCharacter::Update();
+
 		break;
 	default:
 		break;
