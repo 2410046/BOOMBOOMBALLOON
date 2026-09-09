@@ -84,9 +84,7 @@ void CShotManager::Update(
 
     }
 
-    // 死んだShotを削除//これをコメントアウトしないと当たり判定を実装したときエラーが起きる
-    // 弾が消えたときにエラーが起きる
-
+    //Shotを削除
         m_Shots.erase(
             std::remove_if(
                 m_Shots.begin(),

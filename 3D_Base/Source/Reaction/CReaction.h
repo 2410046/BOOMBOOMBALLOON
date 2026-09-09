@@ -61,7 +61,17 @@ public:
      {
          return m_State.timer <= 0.f;
      };
-
+     //リアクションを終了する
+     void Stop()
+     {
+         m_State.active = false;
+         m_State.timer = 0.0f;
+     }
+     //リアクション中の場合
+     bool Play(CReaction::MoveType type)
+     {
+         return GetType() == type && IsActive();
+     }
 protected:
     ReactionState m_State = {};
     D3DXVECTOR3* m_pPosition = nullptr;//これを戻すとエラーが
