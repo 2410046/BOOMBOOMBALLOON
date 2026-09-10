@@ -272,6 +272,7 @@
     <ClInclude Include="Source\DirectX\CDirectX11.h" />
     <ClInclude Include="Source\DirectX\CDirectX9.h" />
     <ClInclude Include="Source\Global.h" />
+    <ClInclude Include="Source\IDData.h" />
     <ClInclude Include="Source\Main\CMain.h" />
     <ClInclude Include="Source\MathUtility.h" />
     <ClInclude Include="Source\MyMacro.h" />

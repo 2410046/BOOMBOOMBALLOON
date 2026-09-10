@@ -95,8 +95,6 @@ void CShotManager::Update(
                         !shot->GetFlag();
                 }),
             m_Shots.end());
-
-
 }
 
 

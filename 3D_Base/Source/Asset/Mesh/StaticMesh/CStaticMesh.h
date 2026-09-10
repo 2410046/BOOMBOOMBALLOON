@@ -143,9 +143,9 @@ public:
 	}
 
 	// Diffuse 色を外部から設定
-	void SetDiffuse(float r, float g, float b, float a)
+	void SetDiffuse(D3DXVECTOR4 rgba)
 	{
-		m_Diffuse = D3DXVECTOR4(r, g, b, a);
+		m_Diffuse = rgba;
 
 		// 全マテリアルに反映（必要に応じて1個だけ反映でもOK）
 		for (DWORD i = 0; i < m_NumAttr; ++i)
@@ -169,9 +169,9 @@ public:
 	}
 
 	// Specular 色
-	void SetSpecular(float r, float g, float b, float a)
+	void SetSpecular(D3DXVECTOR4 rgba)
 	{
-		m_Specular = D3DXVECTOR4(r, g, b, a);
+		m_Specular = rgba;
 		for (DWORD i = 0; i < m_NumAttr; ++i)
 		{
 			DWORD matID = m_AttrID[i];

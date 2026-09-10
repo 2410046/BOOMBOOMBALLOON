@@ -3,6 +3,8 @@
 #include "Reaction/CReaction.h"
 #include "Collision/CreateCollider/CreateCollider.h"
 #include "Collision/CollisionManager/CollisionManager.h"
+#include "IDData.h"
+
 /**************************************************
 *   キャラクタークラス
 **/

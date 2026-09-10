@@ -5,7 +5,6 @@ CBalloon::CBalloon()
 	, m_MoveState(enMoveState::Idle)
 	, m_pTracking(nullptr)
 {
-	//m_vScale = D3DXVECTOR3(0.001f, 0.001f, 0.001f);
 	m_vScale = D3DXVECTOR3(0.001f, 0.001f, 0.001f);
 	m_vPosition = D3DXVECTOR3(0.1f, 1.f, 7.5f);
 }
@@ -76,58 +75,15 @@ void CBalloon::Update()
 	default:
 		break;
 	}
-	////---------------------------------
-	//// プレイヤーの後
-	////---------------------------------
-	//// 前方向（X+）を基準方向として設定
-	//D3DXVECTOR3 forward(1.0f, 0.0f, 0.f);
-
-	//// クォータニオンを回転行列へ変換
-	//D3DXMATRIX matRot;
-	//D3DXMatrixRotationQuaternion(&matRot, &m_vQuaternion);
-
-	//// 基準となる前方向を回転させ、実際の進行方向を求める
-	//D3DXVECTOR3 dir;
-	//D3DXVec3TransformNormal(
-	//	&dir,
-	//	&forward,
-	//	&matRot);
-
-	//// 進行方向を正規化して、方向のみを取得
-	//D3DXVec3Normalize(&dir, &dir);
-
-	////ライフの数分風船を配置する（プレイヤーを囲む）
-	//for (int i = 1;i <= m_Life;i++)
-	//{
-
-	//}
-
-	//switch (m_MoveState)
-	//{
-	//case enMoveState::App:
-	//{
-	//	m_Scale += 0.0001f;
-	//	if (m_Scale >= 0.5f)
-	//	{
-	//		m_Scale = 0.5f;
-	//		m_MoveState = enMoveState::Idle;
-	//	}
-	//	//サイズを設定
-	//	m_vScale = D3DXVECTOR3(m_Scale, m_Scale, m_Scale);
-	//}
-	//break;
-	//case enMoveState::Idle:
-	//	//コントローラー操作
-	//	//m_vPosition.y += 1.5f;
-	//	CCharacter::Update();
-	//	break;
-	//}
-
 CCharacter::Update();
 }
 //描画関数
 void CBalloon::Draw(const CCamera* pCamera)
 {
+	const auto& param = s_IDTable[m_ID];
+	//色の設定
+	//m_pMesh->SetDiffuse(param.Color);
+	m_pMesh->SetAmbient(param.Color);
 	CCharacter::Draw(pCamera);
 }
 

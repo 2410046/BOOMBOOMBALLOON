@@ -3,6 +3,8 @@
 #include "MathUtility.h"
 #include <algorithm>
 #include "Reaction/CReactionApply/CReactionFactory.h"
+#include "CMeshObject/CTracking/CShot/CShot.h"	    //ショットクラス
+
 namespace
 {
 	//カプセルのサイズ
@@ -86,17 +88,14 @@ void CPlayer::Update()
 
 		if (m_angle >= D3DX_PI * 2.0f)
 		{
-			m_Life -= 1;
-			if (m_Life <= 0)
-			{
-				m_Life = 0;
-			}
+			m_Life = std::clamp(m_Life - 1, 0, 5);
 			m_MoveState = enMoveState::Invincible;
 			m_angle = 0.f;
 		}
 		break;
 	case enMoveState::Invincible://無敵状態
 		//コントローラー操作
+		m_MoveState = enMoveState::Live;
 		Controller();
 		CCharacter::Update();
 
@@ -118,6 +117,10 @@ void CPlayer::Update()
 void CPlayer::Draw(
 	const CCamera* pCamera)
 {
+	const auto& param = s_IDTable[m_ID];
+	//色の設定
+	m_pMesh->SetDiffuse(param.Color);
+	//m_pMesh->SetAmbient(param.Color);
 	CCharacter::Draw(pCamera);
 }
 
@@ -252,7 +255,8 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		if (!other || other == this)
 			return;
 		//ダウン状態は無視
-		if (m_MoveState == enMoveState::Down)
+		if (m_MoveState == enMoveState::Down
+			/* || m_MoveState == enMoveState::Invincible*/)
 		{
 			return;
 		}
@@ -260,12 +264,12 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		auto& BoostOther = other->m_pReaction;
 
 		//風船が多いほどスコアの量が上がる
-		//ブースト状態
+		//ブースト状態じゃなくてもふうせんへる
 		if (m_pReaction->Play(m_pReaction,CReaction::Boost))
 		{
 			//プレイヤーは風船とスコアを1つ取得する
 			m_Life = std::clamp(m_Life + 1, 0, 5);
-			m_pReaction->Stop();//リアクションを終わらせる
+			m_pReaction->Stop();//リアクションを終わらせるこれが原因の一部か
 		}
 		//相手がブースト状態の場合
 		else if (BoostOther->Play(BoostOther,CReaction::Boost))
@@ -288,10 +292,10 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		break;
 	//case CollisionBase::Cloud://雲に接触した場合
 	//{
-	//	//m_MoveState = enMoveState::Down;
 	//	//ノックバック
 	//	CReaction::ReactionParam param;
 	//	param.to = GetPosition();
+	//	//param.from = GetPosition();
 	//	m_pReaction = CReactionFactory::Create(CReaction::KnockBack);
 	//	m_pReaction->Apply(param);
 	//}
@@ -299,8 +303,20 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 
 	case CollisionBase::Shot://ショットに当たった瞬間
 	{
-		//自分のショットに当たってもなるのでそれは調整しよう
-		m_MoveState = enMoveState::Down;//ダウン状態
+		auto* shot =
+			dynamic_cast<CShot*>(pCollider->GetListener());
+
+		if (shot == nullptr)
+		{
+			return;
+		}
+		// 自分が発射したShotなら無視
+		if (shot->GetID() == m_ID)
+		{
+			return;
+		}
+		// 相手のShotならダウン
+		m_MoveState = enMoveState::Down;
 	}
 	break;
 	default:
@@ -308,3 +324,27 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 	}
 	
 }
+//const std::vector<RhythmData> s_RhythmTable =
+//{
+//	//Aタイプ
+//   RhythmData(D3DXVECTOR4(0,1,0,1), CSoundManager::enList::SE_C_Low,
+//	CEffect::enList::AppA, CEffect::enList::DeleteA),
+//	//Bタイプ
+//   RhythmData(D3DXVECTOR4(1,0,0,1), CSoundManager::enList::SE_C,
+//   CEffect::enList::AppB, CEffect::enList::DeleteB),
+//   //Xタイプ
+//   RhythmData(D3DXVECTOR4(0,0,1,1), CSoundManager::enList::SE_C,
+//   CEffect::enList::AppX, CEffect::enList::DeleteX),
+//   //Yタイプ
+//   RhythmData(D3DXVECTOR4(1,1,0,1), CSoundManager::enList::SE_C_High,
+//   CEffect::enList::AppY, CEffect::enList::DeleteY)
+//};
+
+	//音符の出現中の場合
+//if (GetState(enState::Live))
+//{
+//	const auto& param = s_RhythmTable[m_ID];
+//	//色の設定
+//	m_pMesh->SetAmbient(param.Color);
+//	CStaticMeshObject::Draw(pCamera);
+//}

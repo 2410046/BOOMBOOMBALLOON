@@ -1,11 +1,11 @@
 #include "CShot.h"
 #include "Reaction/CReactionApply/CReactionFactory.h"
 
-//class CPlayer;
+
 namespace
 {
 	//当たり判定
-	constexpr float radius = 0.2f;
+	constexpr float radius = 0.4f;
 }
 CShot::CShot()
 	: m_ShotFlag( false )
@@ -53,8 +53,6 @@ void CShot::Init(CTracking* pTracking)
 
 	// 生存
 	m_ShotFlag = true;
-
-
 }
 //動作関数
 void CShot::Update()
@@ -91,7 +89,9 @@ void CShot::Draw(const CCamera* pCamera)
 	{
 		return;
 	}
-
+	const auto& param = s_IDTable[m_ID];
+	//色の設定
+	m_pMesh->SetAmbient(param.Color);
 	CCharacter::Draw(pCamera);
 }
 

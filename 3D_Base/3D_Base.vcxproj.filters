@@ -593,6 +593,9 @@
     <ClInclude Include="Source\CGameObject\CMeshObject\CTracking\CTrackingManager\CTrackingManager.h">
       <Filter>Source\GameObject\StaticMeshObject\Character\CTracking\CTrackingManager</Filter>
     </ClInclude>
+    <ClInclude Include="Source\IDData.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Data\Shader\Sprite3D.hlsl">
