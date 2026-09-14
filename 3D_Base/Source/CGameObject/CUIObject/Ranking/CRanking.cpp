@@ -39,7 +39,7 @@ CRanking::CRanking()
 {
        //スプライトを接続
        AttachSprite(
-           *CSpriteManager::GetSprite2D("Number"));
+           *CSpriteManager::GetSprite2D(L"Scores"));
        // ランキング位置初期化（画面外からスタート）
        m_PosXList.resize(m_MaxRanking, -20.0f);
        //パターン番号

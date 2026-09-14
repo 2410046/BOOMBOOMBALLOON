@@ -256,7 +256,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 			return;
 		//ダウン状態は無視
 		if (m_MoveState == enMoveState::Down
-			/* || m_MoveState == enMoveState::Invincible*/)
+			|| m_MoveState == enMoveState::Invincible)
 		{
 			return;
 		}
@@ -264,20 +264,16 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		auto& BoostOther = other->m_pReaction;
 
 		//風船が多いほどスコアの量が上がる
-		//ブースト状態じゃなくてもふうせんへる
-		if (m_pReaction->Play(m_pReaction,CReaction::Boost))
+		//ブースト状態
+		if (m_pReaction&&m_pReaction->Play(CReaction::Boost))
 		{
+			m_pReaction->Stop();//リアクションを終わらせる
 			//プレイヤーは風船とスコアを1つ取得する
 			m_Life = std::clamp(m_Life + 1, 0, 5);
-			m_pReaction->Stop();//リアクションを終わらせるこれが原因の一部か
+			//相手のプレイヤーをダウンx状態に
+			other->m_MoveState = enMoveState::Down;
 		}
-		//相手がブースト状態の場合
-		else if (BoostOther->Play(BoostOther,CReaction::Boost))
-		{
-			//自身の風船を失いスコアが減少
-			m_MoveState = enMoveState::Down;
-		}
-		else
+		else//お互いブーストじゃない場合		
 		{
 			//ノックバック
 			CReaction::ReactionParam param;
@@ -288,7 +284,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 
 		}
 	}
-
+	//相手もブースト状態ならノックバックにしたい
 		break;
 	//case CollisionBase::Cloud://雲に接触した場合
 	//{
@@ -324,27 +320,3 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 	}
 	
 }
-//const std::vector<RhythmData> s_RhythmTable =
-//{
-//	//Aタイプ
-//   RhythmData(D3DXVECTOR4(0,1,0,1), CSoundManager::enList::SE_C_Low,
-//	CEffect::enList::AppA, CEffect::enList::DeleteA),
-//	//Bタイプ
-//   RhythmData(D3DXVECTOR4(1,0,0,1), CSoundManager::enList::SE_C,
-//   CEffect::enList::AppB, CEffect::enList::DeleteB),
-//   //Xタイプ
-//   RhythmData(D3DXVECTOR4(0,0,1,1), CSoundManager::enList::SE_C,
-//   CEffect::enList::AppX, CEffect::enList::DeleteX),
-//   //Yタイプ
-//   RhythmData(D3DXVECTOR4(1,1,0,1), CSoundManager::enList::SE_C_High,
-//   CEffect::enList::AppY, CEffect::enList::DeleteY)
-//};
-
-	//音符の出現中の場合
-//if (GetState(enState::Live))
-//{
-//	const auto& param = s_RhythmTable[m_ID];
-//	//色の設定
-//	m_pMesh->SetAmbient(param.Color);
-//	CStaticMeshObject::Draw(pCamera);
-//}

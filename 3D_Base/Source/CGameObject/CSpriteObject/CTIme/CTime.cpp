@@ -7,7 +7,7 @@ CTime::CTime()
 
 {
     //スプライトを接続
-    AttachSprite(*CSpriteManager::GetSprite3D("Time"));
+   // AttachSprite(*CSpriteManager::GetSprite3D("Time"));
     //リセット
     Reset();
 }

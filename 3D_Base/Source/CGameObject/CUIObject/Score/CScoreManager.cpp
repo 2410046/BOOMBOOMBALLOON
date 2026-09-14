@@ -32,7 +32,7 @@ void CScoreManager::NewScore(int ID)
      // スコアオブジェクト生成
      auto score = std::make_unique<CScore>();
      //スプライトを接続
-     score->AttachSprite(*CSpriteManager::GetSprite2D("Number"));
+     score->AttachSprite(*CSpriteManager::GetSprite2D(L"Scores"));
      //IDを設定する
      score->SetID(ID);
      //座標を設定

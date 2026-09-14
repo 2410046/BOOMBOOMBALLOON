@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Camera/CCamera.h"		
 #include "Asset/SoundManager/CSoundManager.h"
+#include "Asset/AssetManager/AssetManager.h"
+
 /**************************************************
 *	ゲームオブジェクトクラス.
 **/

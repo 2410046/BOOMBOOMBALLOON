@@ -24,16 +24,16 @@ public:
     //ロード関数
     static HRESULT LoadData();
     //スタティックメッシュの情報を取得
-    static CStaticMesh* GetStatic(std::string name);
+    static CStaticMesh* GetStatic(std::wstring name);
 
     //スキンメッシュの情報を取得
-    static CSkinMesh* GetSkin(std::string name);
+    static CSkinMesh* GetSkin(std::wstring name);
 
     //スプライト2Dの情報を取得
-    static CSprite2D* GetSprite2D(std::string name);
+    static CSprite2D* GetSprite2D(std::wstring name);
 
     //スプライト3Dの情報を取得
-    static CSprite3D* GetSprite3D(std::string name);
+    static CSprite3D* GetSprite3D(std::wstring name);
     
 private:
     HWND                        m_hWnd;

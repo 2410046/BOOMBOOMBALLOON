@@ -17,10 +17,6 @@ HRESULT AssetManager::Create(HWND hWnd)
 	{
 		return E_POINTER;
 	}
-	if (FAILED(CMeshManager::GetInstance()->Create()))
-	{
-		return E_POINTER;
-	}
 	if (FAILED(CEffect::GetInstance()->Create()))
 	{
 		return E_POINTER;
@@ -39,30 +35,26 @@ HRESULT AssetManager::LoadData()
 	{
 		return E_FAIL;
 	}
-	if (FAILED(CMeshManager::GetInstance()->LoadData()))
-	{
-		return E_FAIL;
-	}
 	return S_OK;
 }
 
 //スタティックメッシュの情報を取得
-CStaticMesh* AssetManager::GetStatic(std::string name)
+CStaticMesh* AssetManager::GetStatic(std::wstring name)
 {
 	return CMeshManager::GetInstance()->GetStatic(name);
 }
 //スキンメッシュの情報を取得
-CSkinMesh* AssetManager::GetSkin(std::string name)
+CSkinMesh* AssetManager::GetSkin(std::wstring name)
 {
 	return CMeshManager::GetInstance()->GetSkin(name);
 }
 //スプライト2Dの情報を取得
-CSprite2D* AssetManager::GetSprite2D(std::string name)
+CSprite2D* AssetManager::GetSprite2D(std::wstring name)
 {
 	return CSpriteManager::GetInstance()->GetSprite2D(name);
 }
 //スプライト3Dの情報を取得
-CSprite3D* AssetManager::GetSprite3D(std::string name)
+CSprite3D* AssetManager::GetSprite3D(std::wstring name)
 {
 	return CSpriteManager::GetInstance()->GetSprite3D(name);
 }

@@ -38,7 +38,7 @@ void CShot::Init(CTracking* pTracking)
 	m_vQuaternion =
 		pTracking->GetQuaternion();
 
-	AttachMesh(*AssetManager::GetStatic("Shot"));
+	AttachMesh(*AssetManager::GetStatic(L"Asset\\Shot"));
 
 	// プレイヤーID
 	m_ID = pTracking->GetID();

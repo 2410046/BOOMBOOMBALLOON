@@ -12,8 +12,7 @@ INT WINAPI WinMain(
 	_In_ HINSTANCE hInstance,	//インスタンス番号（ウィンドウの番号）.
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ PSTR lpCmdLine,
-	_In_ INT nCmdShow)
-{
+	_In_ INT nCmdShow){
 	CMain* pCMain = new CMain();	//初期化＆クラス宣言.
 
 	if (pCMain != nullptr)

@@ -43,7 +43,7 @@ HRESULT CTitle::LoadData()
 {
 	//背景の画像の読み込み、座標の設定
 	m_pBack->AttachSprite(
-		*CSpriteManager::GetSprite3D("TitleBack"));
+		*CSpriteManager::GetSprite3D(L"Title"));
 	m_pBack->SetPosition(Back_Pos);
 
 	//選択肢の画像の読み込み、パターン番号の設定、座標の設定
@@ -54,7 +54,7 @@ HRESULT CTitle::LoadData()
 			= D3DXVECTOR3(600.f, 400.f + i * 100.f, 0.f);	
 
 		m_pSelect[i]->AttachSprite(
-			*CSpriteManager::GetSprite2D("SelectText"));
+			*CSpriteManager::GetSprite2D(L"Text"));
 		m_pSelect[i]->SetPatternNo(0, i);
 		m_pSelect[i]->SetPosition(Sell_Pos);
 	}

@@ -32,7 +32,7 @@ CCloud::~CCloud()
 void CCloud::LoadData()
 {
 	//メッシュを接続
-	AttachMesh(*AssetManager::GetStatic("Cloud"));
+	AttachMesh(*AssetManager::GetStatic(L"Asset\\Cloud"));
 	//m_pMesh->SetAmbient(D3DXVECTOR4(0, 0, 1, 1));
 }
 //ステージの移動制限

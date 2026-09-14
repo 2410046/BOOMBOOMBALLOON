@@ -12,7 +12,9 @@ namespace
 	static const D3DXVECTOR3 Light_Pos  
 		= D3DXVECTOR3( 1.f, 1.f, -1.f );	//ライト座標
 	 //選択肢の数
-	 constexpr int SellCount = 2;           
+	constexpr int SellCount = 2;
+	//プレイヤーの最大人数
+	constexpr int PlayerCount = 4;
 
 }
 //コンストラクタ.
@@ -38,6 +40,13 @@ void CSelect::Create()
 		auto sel = std::make_unique<CSelectUI>();
 		m_pSelect.push_back(std::move(sel));
 	}
+
+	for (int i = 0; i < PlayerCount; ++i)//選択肢の数
+	{
+		//選択肢の生成
+		auto active = std::make_unique<CUIObject>();
+		m_pActive.push_back(std::move(active));
+	}
 }
 //ロード関数
 HRESULT CSelect::LoadData()
@@ -45,7 +54,7 @@ HRESULT CSelect::LoadData()
 
 	//背景の画像の読み込み、座標の設定
 	m_pBack->AttachSprite(
-		*CSpriteManager::GetSprite3D("SelectBack"));
+		*CSpriteManager::GetSprite3D(L"Select"));
 	m_pBack->SetPosition(Back_Pos);
 
 	//選択肢の画像の読み込み、パターン番号の設定、座標の設定
@@ -56,10 +65,23 @@ HRESULT CSelect::LoadData()
 			= D3DXVECTOR3(600.f, 400.f + i * 100.f, 0.f);
 
 		m_pSelect[i]->AttachSprite(
-			*CSpriteManager::GetSprite2D("SelectText"));
+			*CSpriteManager::GetSprite2D(L"Text"));
 		m_pSelect[i]->SetPatternNo(0, i);
 		m_pSelect[i]->SetPosition(Sell_Pos);
 	}
+
+	for (int i = 0; i < m_pActive.size(); ++i)
+	{
+		//選択肢の座標
+		const D3DXVECTOR3 Sell_Pos
+			= D3DXVECTOR3(100.f + i * 300.f, 300.f, 0.f);
+
+		m_pActive[i]->AttachSprite(
+			*CSpriteManager::GetSprite2D(L"ActiveUser"));
+		m_pActive[i]->SetPatternNo(0, 0);
+		m_pActive[i]->SetPosition(Sell_Pos);
+	}
+
 	// カメラの座標や角度の設定
 	CCamera::GetInstance()->SetCamera(Camera_Pos, Look_Pos);
 	//ライトの設定
@@ -95,7 +117,7 @@ void CSelect::Update()
 				i, m_Select, [](int i) { return i; });
 		}
 		//プレイヤーの人数選択
-		//PlayerSelect();
+		PlayerActive();
 	}
 	else	//決定
 	{
@@ -143,6 +165,11 @@ void CSelect::Draw()
 		m_pSelect[i]->Draw();
 	}
 
+	for (size_t i = 0; i < m_pActive.size(); ++i)
+	{
+		m_pActive[i]->Draw();
+	}
+
 	//フェードの描画
 	CFade::GetInstance()->Draw(camera);
 
@@ -151,10 +178,10 @@ void CSelect::Draw()
 }
 
  //プレイヤーの人数選択
-void CSelect::PlayerSelect()
+void CSelect::PlayerActive()
 {
 	// 最大プレイヤー数
-	static constexpr int Max_Player = 2;  
+	static constexpr int Max_Player = 4;  
 	// 操作対象となるプレイヤー番号（0番コントローラ）
 	static constexpr int Player_Index = 0;
 	// XInputのシングルトンからプレイヤーのゲームパッドを取得
@@ -169,7 +196,22 @@ void CSelect::PlayerSelect()
 		if (pPad->IsControllerConnected(i))
 		{
 			m_PadCount++;
+
+
 		}
+	}
+	for (int i = 0; i < m_pActive.size(); ++i)
+	{
+		//if (m_PadCount == 0)
+		//{
+		//	return;
+		//}
+
+		if (i == m_PadCount)//
+		{
+			m_pActive[i]->SetPatternNo(0, i+1);
+		}
+
 	}
 	 //プレイヤー人数を決定
 	CGameData::GetInstance()->SetPlayNo(m_PadCount);

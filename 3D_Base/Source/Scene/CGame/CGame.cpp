@@ -63,7 +63,7 @@ HRESULT CGame::LoadData()
 	//CTrackingManager::GetInstance()->Init();
 
 	//メッシュの読み込み
-	m_pSky->AttachMesh(*AssetManager::GetStatic("Sky01"));
+	m_pSky->AttachMesh(*AssetManager::GetStatic(L"Sky\\Sky1"));
 	//座標の読み込み
 	m_pSky->SetPosition(Sky_Pos);
 	// プレイヤーの数

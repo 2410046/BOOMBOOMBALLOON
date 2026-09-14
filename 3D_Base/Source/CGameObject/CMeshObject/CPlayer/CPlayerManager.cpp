@@ -24,7 +24,7 @@ void CPlayerManager::NewPlayer(int ID)
     //プレイヤーのオブジェクト生成
     auto player = std::make_unique<CPlayer>();
     //メッシュの接続
-    player->AttachMesh(*AssetManager::GetStatic("Player01"));
+    player->AttachMesh(*AssetManager::GetStatic(L"Player\\Player01"));
     //プレイヤーIDの設定
     player->SetID(ID);
     //サイズを設定

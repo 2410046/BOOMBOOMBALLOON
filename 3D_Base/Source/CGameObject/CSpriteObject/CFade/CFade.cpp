@@ -6,7 +6,8 @@ CFade::CFade()
     : m_Alpha( 0.f )
 {
     //スプライトを接続
-    AttachSprite(*CSpriteManager::GetSprite3D("Fade"));
+    AttachSprite(*AssetManager::GetSprite3D(L"Black"));
+  
 }
 //デストラクタ
 CFade::~CFade()

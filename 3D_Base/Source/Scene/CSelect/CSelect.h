@@ -2,7 +2,7 @@
 #include "CScene.h"
 #include"CGameObject/CUIObject/SelectUI/CSelectUI.h"
 #include"Scene/SelectText/CSelectText.h"  //選択肢の関数
-
+#include"CGameObject/CMeshObject/CCharacter.h"
 /********************************************************************************
 *	セレクトクラス.
 **/
@@ -28,9 +28,11 @@ public:
 
 protected:
     //プレイヤーの人数関数
-    void PlayerSelect();
+    void PlayerActive();
 private:
     std::unique_ptr<CSpriteObject>     m_pBack;         //背景クラス]
 
     std::vector<std::unique_ptr<CSelectUI>> m_pSelect;  //選択肢テキストクラス
+    std::vector<std::unique_ptr<CUIObject>> m_pActive;  //アクティブプレイヤークラス
+    std::vector<std::unique_ptr<CCharacter>> m_pPlayer;  //プレイヤーリアクションクラス
 };

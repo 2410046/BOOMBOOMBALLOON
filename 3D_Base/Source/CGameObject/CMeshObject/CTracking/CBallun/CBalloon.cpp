@@ -21,7 +21,7 @@ void CBalloon::Init(CTracking* pTracking)
 	}
 
 	//m_pTracking = pTracking;
-	AttachMesh(*AssetManager::GetStatic("Balloon"));
+	AttachMesh(*AssetManager::GetStatic(L"Asset\\Balloon"));
 
 	// プレイヤーの現在位置を取得
 	SetPosition(
