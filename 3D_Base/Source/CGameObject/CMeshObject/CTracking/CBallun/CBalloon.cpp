@@ -68,14 +68,14 @@ void CBalloon::Update()
 
 	case enMoveState::Idle:
 	{
-		//CCharacter::Update();
+	//	CCharacter::Update();
 	}
 	break;
 
 	default:
 		break;
 	}
-CCharacter::Update();
+CCharacter::UpDown();
 }
 //描画関数
 void CBalloon::Draw(const CCamera* pCamera)

@@ -19,7 +19,7 @@ HRESULT SceneManager::NewScene(HWND hWnd)
 {
     m_hWnd = hWnd;
     //最初はタイトルシーン
-    NextScene(enList::Title);//Title
+    NextScene(enList::Select);//Title
     return S_OK;
 }
 

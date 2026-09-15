@@ -13,8 +13,10 @@ namespace
     //----------------------------------------------------
     const D3DXVECTOR3 SCORE_POS[] =
     {
-        {1100.f, 40.f, 0.f}, // ID : 0
-        { 200.f, 40.f, 0.f}  // ID : 1
+        {90.f, 40.f, 0.f}, // ID : 0
+        {300.f, 40.f, 0.f},  // ID : 1
+        {900.f, 40.f, 0.f},  // ID : 2
+        {1110.f, 40.f, 0.f},  // ID : 3
     };
 
     //----------------------------------------------------
@@ -23,7 +25,8 @@ namespace
     const D3DXVECTOR3 COMBO_POS[] =
     {
         {900.f, 40.f, 0.f}, // ID : 0
-        { 10.f, 40.f, 0.f}  // ID : 1
+        {800.f, 40.f, 0.f},  // ID : 1
+        {700.f, 40.f, 0.f},  // ID : 2
     };
 }
 // IDを指定してスコアを生成
@@ -36,7 +39,7 @@ void CScoreManager::NewScore(int ID)
      //IDを設定する
      score->SetID(ID);
      //座標を設定
-     score->SetPos(SCORE_POS[ID], COMBO_POS[ID]);
+     score->SetPos(SCORE_POS[ID]);
      //スコアの登録
      m_Scores.emplace_back(std::move(score));
 

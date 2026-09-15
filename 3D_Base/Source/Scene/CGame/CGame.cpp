@@ -49,19 +49,13 @@ void CGame::Create()
 	m_PlayerCount = CGameData::GetInstance()->PlayerNo();
 	// スカイのインスタンス生成
 	m_pSky      = std::make_unique<CStaticMeshObject>();
-	//プレイヤーのインスタンス生成
-	m_pPlayer	= std::make_unique<CPlayerManager>();
 	//雲のインスタンス生成
 	m_pCloud	= std::make_unique<CCloud>();
-
 }
 
 //ロード関数.
 HRESULT CGame::LoadData()
 {
-	//初期化
-	//CTrackingManager::GetInstance()->Init();
-
 	//メッシュの読み込み
 	m_pSky->AttachMesh(*AssetManager::GetStatic(L"Sky\\Sky1"));
 	//座標の読み込み
@@ -70,9 +64,9 @@ HRESULT CGame::LoadData()
 	for (int p = 0; p < m_PlayerCount; ++p)
 	{
 		//プレイヤーの生成
-		m_pPlayer->NewPlayer(p);
+		m_pPlayer.NewPlayer(p);
 		//スコアの生成
-		//m_pScores->NewScore(p);
+		m_pScores.NewScore(p);
 	}
 	m_pCloud->LoadData();
 	//時間のリセット
@@ -99,12 +93,13 @@ void CGame::Update()
 	//CTime::GetInstance()->Update();
 
 	CReactionManager::GetInstance()->Update();
-	m_pPlayer->Update();
 
-//	m_pScores->Update();
+	m_pPlayer.Update();
+	m_pScores.Update();
+	m_Shot.Update(m_pPlayer.GetShotFlags());
+	m_Balloon.Update(m_pPlayer.GetLifes());
+
 	CollisionManager::GetInstance()->Update();
-	m_ShotManager.Update(m_pPlayer->GetShotFlags());
-	m_BalloonManager.Update(m_pPlayer->GetLifes());
 	//スカイの動作関数
 	Sky();
     //シーン遷移
@@ -123,12 +118,12 @@ void CGame::Draw()
 
 	m_pSky->Draw(camera);
 
-	m_pPlayer->Draw(camera);
 	m_pCloud->Draw(camera);
-	//m_pScores->Draw();
 
-	m_ShotManager.Draw(camera);
-	m_BalloonManager.Draw(camera);
+	m_pPlayer.Draw(camera);
+	m_pScores.Draw();
+	m_Shot.Draw(camera);
+	m_Balloon.Draw(camera);
 
 	//CTime::GetInstance()->Draw(camera);
 

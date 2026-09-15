@@ -90,10 +90,9 @@ void CScore::ResultScore()
 {
 }
 //スコアとコンボの座標を取得
-void CScore::SetPos(D3DXVECTOR3 pos, D3DXVECTOR3 Compos)
+void CScore::SetPos(D3DXVECTOR3 pos)
 {
     m_Pos = pos; 
-    m_ComPos = Compos;
 }
 //スコアが増えた時のアニメーション
 void CScore::AddAnime()

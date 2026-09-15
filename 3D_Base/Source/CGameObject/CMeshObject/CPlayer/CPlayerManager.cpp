@@ -9,8 +9,10 @@ namespace
     // IDごとのプレイヤーの位置
     const D3DXVECTOR3 Player_Pos[] =
     {
-        {  0.1f, 1.f, 11.5f }, // ID : 0
-        {  0.1f, 1.f, 7.5f }, // ID : 1
+        {  -7.f, 1.f, 5.5f }, // ID : 0
+        {  -9.f, 1.f, 14.5f }, // ID : 1
+        {  7.f, 1.f, 5.5f }, // ID : 2
+        {  7.f, 1.f, 14.5f }, // ID : 2
     };
     //プレイヤーのサイズ
     constexpr float Player_Scale = 0.02f;

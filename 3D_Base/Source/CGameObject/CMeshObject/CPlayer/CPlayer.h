@@ -15,7 +15,6 @@ public:
 		App = 0,		// 出現
 		Live,			// 生存状態
 		Boost,			// ブースト状態
-		ShotIN,		    // 射撃状態
 		Shot,			// 射撃状態
 		Down,			// ダウン状態
 		Invincible,	    // 無敵状態

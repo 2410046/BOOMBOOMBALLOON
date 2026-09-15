@@ -26,6 +26,8 @@ CPlayer::CPlayer()
 	//カプセルの当たり判定
 	m_pCollider = CreateCollider::CreateCaupsule(
 		radius, height, this, CollisionBase::Player);
+	m_vQuaternion
+		= D3DXQUATERNION(0.0f, 0.7071068f, 0.0f, 0.7071068f);
 }
 //デストラクタ
 CPlayer::~CPlayer()
@@ -54,7 +56,7 @@ void CPlayer::Update()
 	case enMoveState::Live:
 		//コントローラー操作
 		Controller();
-		CCharacter::Update();
+		CCharacter::UpDown();
 		break;
 	case enMoveState::Boost:		//ブースト状態
 	{
@@ -97,8 +99,8 @@ void CPlayer::Update()
 		//コントローラー操作
 		m_MoveState = enMoveState::Live;
 		Controller();
-		CCharacter::Update();
-
+		CCharacter::UpDown();
+		
 		break;
 	default:
 		break;

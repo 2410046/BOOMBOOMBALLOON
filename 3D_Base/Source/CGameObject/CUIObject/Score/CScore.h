@@ -26,7 +26,7 @@ public:
 	void ResultScore();
 	//スコアとコンボの座標を取得
 	void SetPos(
-		D3DXVECTOR3 pos, D3DXVECTOR3 Compos);
+		D3DXVECTOR3 pos);
 public:
 	void SetID(int id) { m_ID = id; }
 	int GetID() const { return m_ID; }

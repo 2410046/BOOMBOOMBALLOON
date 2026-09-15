@@ -22,6 +22,8 @@ public:
 	int  GetID()const { return m_ID; }
 	//IDの設定
 	void SetID(int id) { m_ID = id; }
+	//オブジェクトを上下させる
+	void UpDown();
 protected:
 	int		m_ID;			//ID
 	float	m_Speed;	//移動速度

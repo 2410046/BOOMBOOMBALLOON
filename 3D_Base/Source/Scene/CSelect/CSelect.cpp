@@ -46,12 +46,16 @@ void CSelect::Create()
 		//選択肢の生成
 		auto active = std::make_unique<CUIObject>();
 		m_pActive.push_back(std::move(active));
+
+		//選択肢の生成
+		auto player = std::make_unique<CPlayer>();
+		m_pPlayer.push_back(std::move(player));
 	}
+
 }
 //ロード関数
 HRESULT CSelect::LoadData()
 {
-
 	//背景の画像の読み込み、座標の設定
 	m_pBack->AttachSprite(
 		*CSpriteManager::GetSprite3D(L"Select"));
@@ -72,14 +76,24 @@ HRESULT CSelect::LoadData()
 
 	for (int i = 0; i < m_pActive.size(); ++i)
 	{
-		//選択肢の座標
-		const D3DXVECTOR3 Sell_Pos
-			= D3DXVECTOR3(100.f + i * 300.f, 300.f, 0.f);
+		//プレイヤー表記の座標
+		const D3DXVECTOR3 Active_Pos
+			= D3DXVECTOR3(100.f + i * 300.f, 100.f, 0.f);
+		//プレイヤーの座標
+		const D3DXVECTOR3 Player_Pos
+			= D3DXVECTOR3(-5.f + (i * 3.1f), 1.f, 7.f);
 
 		m_pActive[i]->AttachSprite(
 			*CSpriteManager::GetSprite2D(L"ActiveUser"));
 		m_pActive[i]->SetPatternNo(0, 0);
-		m_pActive[i]->SetPosition(Sell_Pos);
+		m_pActive[i]->SetPosition(Active_Pos);
+
+		m_pPlayer[i]->AttachMesh(
+			*CMeshManager::GetStatic(L"Player\\Player01"));
+		m_pPlayer[i]->SetPosition(Player_Pos);
+		m_pPlayer[i]->SetScale(0.01f, 0.01f, 0.01f);
+		m_pPlayer[i]->SetID(i);
+
 	}
 
 	// カメラの座標や角度の設定
@@ -101,6 +115,7 @@ void CSelect::Update()
 
 	//選択肢の設定
 	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
+
 
 	//--------------------
 	// シーン遷移
@@ -157,7 +172,7 @@ void CSelect::Draw()
 
 	CDirectX11::GetInstance()->SetDepth(false);
 
-	m_pBack->Draw(camera);
+	//m_pBack->Draw(camera);
 
 	//選択肢の描画
 	for (size_t i = 0; i < m_pSelect.size(); ++i)
@@ -168,6 +183,7 @@ void CSelect::Draw()
 	for (size_t i = 0; i < m_pActive.size(); ++i)
 	{
 		m_pActive[i]->Draw();
+		m_pPlayer[i]->Draw(camera);
 	}
 
 	//フェードの描画
@@ -181,38 +197,50 @@ void CSelect::Draw()
 void CSelect::PlayerActive()
 {
 	// 最大プレイヤー数
-	static constexpr int Max_Player = 4;  
-	// 操作対象となるプレイヤー番号（0番コントローラ）
+	static constexpr int Max_Player = 4;
+
+	// 操作対象となるプレイヤー番号
+	// 0番コントローラーを使用
 	static constexpr int Player_Index = 0;
-	// XInputのシングルトンからプレイヤーのゲームパッドを取得
+
+	// XInputのシングルトンからゲームパッドを取得
 	CXInput* pPad = CXInput::GetInstance(Player_Index);
 
-	//接続したコントローラーの数
+	// 現在接続されているコントローラーの数
 	int m_PadCount = 0;
 
-	// コントローラーの接続をチェック
-	for (int i = 0; i < Max_Player; i++) 
+	// 各プレイヤーのコントローラー接続状態を確認
+	for (int i = 0; i < Max_Player; i++)
 	{
+		// コントローラーが接続されている場合
 		if (pPad->IsControllerConnected(i))
 		{
+			// 接続されているコントローラー数を加算
 			m_PadCount++;
-
-
 		}
 	}
+
+	// プレイヤーの表示状態を更新
 	for (int i = 0; i < m_pActive.size(); ++i)
 	{
-		//if (m_PadCount == 0)
-		//{
-		//	return;
-		//}
-
-		if (i == m_PadCount)//
+		// 接続されているコントローラー数と
+		// プレイヤー番号が一致した場合
+		if (i < m_PadCount)
 		{
-			m_pActive[i]->SetPatternNo(0, i+1);
+			// 該当するプレイヤーの表示パターンを変更
+			// i + 1 はプレイヤー番号（P1～P4）
+			m_pActive[i]->SetPatternNo(0, i + 1);
+			//プレイヤーを動かす
+			m_pPlayer[i]->UpDown();
 		}
-
+		else
+		{
+			// 接続されていないプレイヤーをCOM
+			m_pActive[i]->SetPatternNo(0, 0);
+		}
 	}
-	 //プレイヤー人数を決定
+
+	// 接続されているコントローラー数を
+	// プレイする人数としてゲームデータに設定
 	CGameData::GetInstance()->SetPlayNo(m_PadCount);
 }
