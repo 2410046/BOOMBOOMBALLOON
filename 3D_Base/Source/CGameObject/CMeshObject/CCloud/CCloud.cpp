@@ -35,9 +35,15 @@ void CCloud::LoadData()
 	AttachMesh(*AssetManager::GetStatic(L"Asset\\Cloud"));
 	//m_pMesh->SetAmbient(D3DXVECTOR4(0, 0, 1, 1));
 }
-//ステージの移動制限
+//更新関数
 void CCloud::Update()
 {
      CCharacter::Update();
+}
+//描画関数
+void CCloud::Draw(CCamera* camera)
+{
+	m_pMesh->SetAmbient(D3DXVECTOR4(0.f,1.f,1.f,0.f));
+	CCharacter::Draw(camera);
 }
 

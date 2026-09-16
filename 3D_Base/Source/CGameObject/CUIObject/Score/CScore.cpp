@@ -34,8 +34,6 @@ CScore::CScore()
     m_Patten = m_ID;
     //ランキングをリセット
     CRanking::GetInstance()->Reset();
-    //コンボ座標
-    m_ComPos = D3DXVECTOR3(0.f,0.f,0.f);
 }
 
 CScore::~CScore()
@@ -60,7 +58,7 @@ void CScore::Update()
         m_DisplayScore += step; // 表示スコア更新
     }
     //スコアが増えた時のアニメーション
-    AddAnime();
+   // AddAnime();
 
 }
 //描画関数

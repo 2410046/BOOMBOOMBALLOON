@@ -132,7 +132,7 @@ void CSelect::Update()
 				i, m_Select, [](int i) { return i; });
 		}
 		//プレイヤーの人数選択
-		PlayerActive();
+		//PlayerActive();
 	}
 	else	//決定
 	{

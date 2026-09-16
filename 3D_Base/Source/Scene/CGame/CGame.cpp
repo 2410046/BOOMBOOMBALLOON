@@ -46,7 +46,8 @@ CGame::~CGame()
 void CGame::Create()
 {
 	//プレイヤー人数の取得
-	m_PlayerCount = CGameData::GetInstance()->PlayerNo();
+	//m_PlayerCount = CGameData::GetInstance()->PlayerNo();
+	m_PlayerCount = 4;
 	// スカイのインスタンス生成
 	m_pSky      = std::make_unique<CStaticMeshObject>();
 	//雲のインスタンス生成

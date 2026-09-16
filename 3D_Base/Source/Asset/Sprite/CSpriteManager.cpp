@@ -71,7 +71,7 @@ HRESULT CSpriteManager::CreateSprite2D()
   
     CSprite2D::SPRITE_STATE SSLogo   = { 900.f, 150.f, 500.f, 400.f, 500.f, 115.f };
     CSprite2D::SPRITE_STATE SSMode   = { 215.f, 50.f , 226.f, 129.f , 226.f, 42.f };
-    CSprite2D::SPRITE_STATE SSNumber = { 42.f, 42.f, 320.f, 136.f, 32.f, 46.f };
+    CSprite2D::SPRITE_STATE SSNumber = { 42.f, 42.f, 550.f, 364.f, 58.f, 91.f };
     CSprite2D::SPRITE_STATE SSActive = { 142.f, 80.f, 423.f, 427.f, 423.f, 85.f };
 
     // スプライトのデータリスト

@@ -25,8 +25,7 @@ public:
 	//ゲーム終了時のスコア
 	void ResultScore();
 	//スコアとコンボの座標を取得
-	void SetPos(
-		D3DXVECTOR3 pos);
+	void SetPos(D3DXVECTOR3 pos);
 public:
 	void SetID(int id) { m_ID = id; }
 	int GetID() const { return m_ID; }
@@ -45,7 +44,6 @@ private:
 	int         m_PrevScore;    // 前回のスコア（変化検知や更新判定用）
 private:        
 	D3DXVECTOR3 m_Pos;			  //スコアの描画位置
-	D3DXVECTOR3 m_ComPos;		  //コンボの描画位置
 };
 
 
