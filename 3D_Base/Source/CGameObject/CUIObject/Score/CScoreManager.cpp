@@ -18,16 +18,6 @@ namespace
         {900.f, 40.f, 0.f},  // ID : 2
         {1110.f, 40.f, 0.f},  // ID : 3
     };
-
-    //----------------------------------------------------
-    // IDごとのコンボ表示位置
-    //----------------------------------------------------
-    const D3DXVECTOR3 COMBO_POS[] =
-    {
-        {900.f, 40.f, 0.f}, // ID : 0
-        {800.f, 40.f, 0.f},  // ID : 1
-        {700.f, 40.f, 0.f},  // ID : 2
-    };
 }
 // IDを指定してスコアを生成
 void CScoreManager::NewScore(int ID)
@@ -45,11 +35,14 @@ void CScoreManager::NewScore(int ID)
 
 }
 //更新関数
-void CScoreManager::Update()
+void CScoreManager::Update(const std::vector<bool>& hit,
+    const std::vector<bool>& down)
 {
     for (auto& score : m_Scores)
     {
         score->Update();
+
+       // score->AddScore();
     }
 }
 //描画関数

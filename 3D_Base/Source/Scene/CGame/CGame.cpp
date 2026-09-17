@@ -96,11 +96,19 @@ void CGame::Update()
 	CReactionManager::GetInstance()->Update();
 
 	m_pPlayer.Update();
-	m_pScores.Update();
-	m_Shot.Update(m_pPlayer.GetShotFlags());
-	m_Balloon.Update(m_pPlayer.GetLifes());
+
+
+	m_Shot.Update(
+		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Shot));
+
+	m_Balloon.Update(
+		m_pPlayer.GetLifes());
 
 	CollisionManager::GetInstance()->Update();
+
+	m_pScores.Update(
+		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Hit),
+		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Down));
 	//スカイの動作関数
 	Sky();
     //シーン遷移

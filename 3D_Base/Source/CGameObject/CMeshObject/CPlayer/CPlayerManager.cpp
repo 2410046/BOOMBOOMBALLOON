@@ -95,7 +95,7 @@ CPlayer* CPlayerManager::GetPlayer(int index)
 * すべてのプレイヤーのShotフラグ取得
 ********************************************************************************/
 std::vector<bool>
-CPlayerManager::GetShotFlags() const
+CPlayerManager::GetMoveStates(CPlayer::enMoveState state) const
 {
     std::vector<bool> result;
 
@@ -108,7 +108,7 @@ CPlayerManager::GetShotFlags() const
         }
 
         result.push_back(
-            player->GetShot());
+            player->GetMoveState(state));
     }
 
     return result;
@@ -135,21 +135,21 @@ CPlayerManager::GetLifes() const
 /********************************************************************************
 * Shotフラグ取得
 ********************************************************************************/
-bool CPlayerManager::GetShotFlag(
-    int ID) const
-{
-    if (ID < 0 ||
-        ID >= static_cast<int>(
-            m_Players.size()))
-    {
-        return false;
-    }
-
-    if (m_Players[ID] == nullptr)
-    {
-        return false;
-    }
-
-    return m_Players[ID]->GetShot();
-}
+//bool CPlayerManager::GetShotFlag(
+//    int ID) const
+//{
+//    if (ID < 0 ||
+//        ID >= static_cast<int>(
+//            m_Players.size()))
+//    {
+//        return false;
+//    }
+//
+//    if (m_Players[ID] == nullptr)
+//    {
+//        return false;
+//    }
+//
+//    return m_Players[ID]->GetShot();
+//}
 

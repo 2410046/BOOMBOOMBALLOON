@@ -77,7 +77,9 @@ void CPlayer::Update()
 		m_MoveState = enMoveState::Live;		//一瞬で切り替える
 	}
 		break;
-
+	case enMoveState::Hit://ヒット状態
+		m_MoveState = enMoveState::Live;
+		break;
 	case enMoveState::Down://ダウン状態
 
 		m_angle += 0.1f; // 回転速度
@@ -269,6 +271,8 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		//ブースト状態
 		if (m_pReaction&&m_pReaction->Play(CReaction::Boost))
 		{
+			m_MoveState = enMoveState::Hit;//当てた
+
 			m_pReaction->Stop();//リアクションを終わらせる
 			//プレイヤーは風船とスコアを1つ取得する
 			m_Life = std::clamp(m_Life + 1, 0, 5);
@@ -315,6 +319,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		}
 		// 相手のShotならダウン
 		m_MoveState = enMoveState::Down;
+		//ほかのプレイヤーに自分のショットが当たったらスコア
 	}
 	break;
 	default:

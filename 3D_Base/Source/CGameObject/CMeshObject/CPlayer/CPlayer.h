@@ -15,7 +15,10 @@ public:
 		App = 0,		// 出現
 		Live,			// 生存状態
 		Boost,			// ブースト状態
+
 		Shot,			// 射撃状態
+		CoolTime,		// クールタイム
+		Hit,			// 当てた
 		Down,			// ダウン状態
 		Invincible,	    // 無敵状態
 	};
@@ -31,8 +34,12 @@ public:
 	virtual void Draw(
 		const CCamera* pCamera ) override;
 public:
-	//ショット状態の取得
-	bool GetShot() { return m_MoveState == enMoveState::Shot; }
+	//状態を取得
+	bool GetMoveState(enMoveState state) const
+	{
+		return m_MoveState == state;
+		//return (m_MoveState & state) != 0;
+	}
 	//ライフを取得
 	int  GetLife() { return m_Life; }
 protected:

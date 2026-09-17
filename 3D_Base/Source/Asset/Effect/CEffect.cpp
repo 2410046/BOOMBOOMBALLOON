@@ -68,10 +68,10 @@ HRESULT CEffect::LoadData()
 		{ enList::DeleteB,	u"Data\\Effekseer\\deleteB.efk"	},
 		{ enList::DeleteX,	u"Data\\Effekseer\\deleteX.efk"	},
 		{ enList::DeleteY,	u"Data\\Effekseer\\deleteY.efk"	},
-		{ enList::AppA,		u"Data\\Effekseer\\AppA.efk"	},
-		{ enList::AppB,		u"Data\\Effekseer\\AppB.efk"	},
-		{ enList::AppX,		u"Data\\Effekseer\\AppX.efk"	},
-		{ enList::AppY,		u"Data\\Effekseer\\AppY.efk"	},
+		{ enList::AppA,		u"Data\\Effekseer\\Boost1.efk"	},
+		{ enList::AppB,		u"Data\\Effekseer\\Boost2.efk"	},
+		{ enList::AppX,		u"Data\\Effekseer\\Boost3.efk"	},
+		{ enList::AppY,		u"Data\\Effekseer\\Boost4.efk"	},
 	};
 	//配列の最大要素数を算出（配列全体のサイズ／配列１つ分のサイズ）
 	int list_max = sizeof(EList) / sizeof(EList[0]);

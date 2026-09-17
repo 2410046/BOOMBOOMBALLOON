@@ -18,7 +18,8 @@ public:
     // スコアの生成
     void NewScore(int ID);
     // 動作関数
-    void Update();
+    void Update(const std::vector<bool>& hit,
+        const std::vector<bool>& down);
     // 描画関数
     void Draw();
     //プレイヤーIDを指定してスコアを追加
