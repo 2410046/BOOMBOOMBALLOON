@@ -42,7 +42,7 @@ private:
 	CShotManager    m_Shot;		        //ショット
 	CBalloonManager m_Balloon;          //バルーン
 private:
-	float m_RotY;					   // SkyのY座標
+	float m_angle;					   // SkyのY座標
 	int   m_PadButton[2] = { -1, -1 }; // コントローラーが押しているボタン(0:Pad0, 1:Pad1)
 	int	  m_PlayerCount;			   // プレイヤーの人数
 };

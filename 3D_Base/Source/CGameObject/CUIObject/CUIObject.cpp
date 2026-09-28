@@ -5,6 +5,7 @@ CUIObject::CUIObject()
 	, m_PatternNo	()
 	, m_Alpha		( 1 )
 	, m_Patten		( 0 )
+	, m_ID(0)
 {
 }
 

@@ -71,7 +71,7 @@ HRESULT CSpriteManager::CreateSprite2D()
   
     CSprite2D::SPRITE_STATE SSLogo   = { 900.f, 150.f, 500.f, 400.f, 500.f, 115.f };
     CSprite2D::SPRITE_STATE SSMode   = { 215.f, 50.f , 226.f, 129.f , 226.f, 42.f };
-    CSprite2D::SPRITE_STATE SSNumber = { 42.f, 42.f, 550.f, 364.f, 58.f, 91.f };
+    CSprite2D::SPRITE_STATE SSNumber = { 42.f, 42.f, 590.f, 364.f, 59.f, 90.f };
     CSprite2D::SPRITE_STATE SSActive = { 142.f, 80.f, 423.f, 427.f, 423.f, 85.f };
 
     // スプライトのデータリスト
@@ -82,7 +82,7 @@ HRESULT CSpriteManager::CreateSprite2D()
         { L"ModeText", SSMode   },
 
         { L"ScoreText",SSText   },
-        { L"Scores",   SSNumber },
+        { L"Number",   SSNumber },
         { L"ActiveUser", SSActive },
     };
     // データを登録

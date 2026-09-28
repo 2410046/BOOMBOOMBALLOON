@@ -10,7 +10,7 @@ namespace
 	static const D3DXVECTOR3 Sky_Pos   
 		= D3DXVECTOR3(0.f, -1.f, 11.f);		//スカイ座標
 	static const D3DXVECTOR3 Camera_Pos 
-		= D3DXVECTOR3(0.0f, 11.0f, -2.0f);	//カメラ座標
+		= D3DXVECTOR3(0.0f, 9.0f, -2.0f);	//カメラ座標
 	static const D3DXVECTOR3 Look_Pos   
 		= D3DXVECTOR3(0.0f, 2.0f, 10.0f);	//カメラの方向座標
 	static const D3DXVECTOR3 Light_Pos  
@@ -31,7 +31,7 @@ namespace
 //コンストラクタ.
 CGame::CGame()
 	: CScene				()
-	, m_RotY				( 2.f )
+	, m_angle				( -1.59f )
 	, m_PlayerCount			( 0 )
 {
 }
@@ -61,6 +61,15 @@ HRESULT CGame::LoadData()
 	m_pSky->AttachMesh(*AssetManager::GetStatic(L"Sky\\Sky1"));
 	//座標の読み込み
 	m_pSky->SetPosition(Sky_Pos);
+	D3DXQUATERNION quaternion;
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&quaternion,
+		-D3DX_PI / 1.99f,  // 左90度
+		0.0f,
+		0.0f);
+
+	m_pSky->SetQuaternion(quaternion);
 	// プレイヤーの数
 	for (int p = 0; p < m_PlayerCount; ++p)
 	{
@@ -92,11 +101,9 @@ void CGame::Release()
 void CGame::Update()
 {
 	//CTime::GetInstance()->Update();
-
 	CReactionManager::GetInstance()->Update();
 
 	m_pPlayer.Update();
-
 
 	m_Shot.Update(
 		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Shot));
@@ -109,10 +116,12 @@ void CGame::Update()
 	m_pScores.Update(
 		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Hit),
 		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Down));
+
 	//スカイの動作関数
 	Sky();
     //シーン遷移
 	Next();
+
 }
 
 
@@ -143,9 +152,25 @@ void CGame::Draw()
 //スカイの動作
 void CGame::Sky()
 {
-	constexpr float m_Speed = 0.002f;	//スピード
-	m_RotY += m_Speed;              // 毎フレーム少しずつ加算
-	m_pSky->SetRotation(0.f, m_RotY, 0.f); // Y軸回転
+	constexpr float Speed = 0.1f;
+	constexpr float MaxAngle = D3DX_PI / 2.0f;
+
+	m_angle += Speed;
+
+	if (m_angle >= MaxAngle)
+	{
+		m_angle = MaxAngle;
+	}
+
+	D3DXQUATERNION quaternion;
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&quaternion,
+		m_angle,
+		0.0f,
+		0.0f);
+
+	m_pSky->SetQuaternion(quaternion);
 }
 
 //シーン遷移

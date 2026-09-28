@@ -59,12 +59,14 @@ public:
 	const D3DXVECTOR3& GetScale() const {
 		return m_vScale;
 	}
-
+	//クオータニオンを取得
+	D3DXQUATERNION GetQuaternion() const { return m_vQuaternion; };
+	//クオータニオンを設定
+	void SetQuaternion(D3DXQUATERNION Quaternion) {
+		m_vQuaternion = Quaternion;
+	}
 	const D3DXMATRIX& GetWorldMatrix() const;
 
-	D3DXQUATERNION GetQuaternion() const { return m_vQuaternion; };
-protected://protectedは子クラスのみアクセス可能.
-	int m_Tag=0;
 protected:
 	D3DXVECTOR3	m_vPosition;
 	D3DXVECTOR3	m_vRotation;

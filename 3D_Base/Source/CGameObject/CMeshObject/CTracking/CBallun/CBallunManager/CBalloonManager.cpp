@@ -47,59 +47,6 @@ void CBalloonManager::NewBalloon(CTracking* pTracking)
 void CBalloonManager::Update(
     const std::vector<int>& lifes)
 {
-    ////========================================================
-    //// Balloon数をPlayer数に合わせる
-    ////========================================================
-
-    //while (m_Balloons.size() <
-    //    m_Tracking.size())
-    //{
-    //    m_Balloons.emplace_back(
-    //        std::make_unique<CBallun>());
-    //}
-
-
-    ////========================================================
-    //// Playerごと
-    ////========================================================
-
-    //for (int i = 0;
-    //    i < static_cast<int>(
-    //        m_Tracking.size());
-    //    ++i)
-    //{
-    //    if (!m_Balloons[i])
-    //    {
-    //        continue;
-    //    }
-
-
-    //    if (m_Tracking[i] == nullptr)
-    //    {
-    //        continue;
-    //    }
-
-
-    //    if (i >= static_cast<int>(
-    //        hitFlags.size()))
-    //    {
-    //        continue;
-    //    }
-
-
-    //    if (i >= static_cast<int>(
-    //        lives.size()))
-    //    {
-    //        continue;
-    //    }
-
-
-        //====================================================
-        // Tracking
-        //====================================================
-
-        //D3DXVECTOR3 position =
-        //    m_Tracking[i]->GetPosition();
     for (int playerID = 0;
         playerID < static_cast<int>(lifes.size());
         ++playerID)
@@ -165,23 +112,6 @@ void CBalloonManager::Update(
             playerID,
             pTracking,
             lifeCount);
-
-
-        //// プレイヤーの残機数
-        //int lifeCount = lifes[playerID];
-
-        //// 必要な風船を生成
-        //for (int i = 0; i < lifeCount; ++i)
-        //{
-        //    NewBalloon(pTracking);
-        //}
-
-        //// このプレイヤーの風船を配置
-        //UpdateTracking(
-        //    playerID,
-        //    pTracking,
-        //    lifeCount);
-
     }
 
     for (auto& balloon : m_Balloons)

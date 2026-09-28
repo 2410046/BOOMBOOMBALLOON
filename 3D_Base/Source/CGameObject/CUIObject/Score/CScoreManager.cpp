@@ -25,7 +25,7 @@ void CScoreManager::NewScore(int ID)
      // スコアオブジェクト生成
      auto score = std::make_unique<CScore>();
      //スプライトを接続
-     score->AttachSprite(*CSpriteManager::GetSprite2D(L"Scores"));
+     score->AttachSprite(*CSpriteManager::GetSprite2D(L"Number"));
      //IDを設定する
      score->SetID(ID);
      //座標を設定
@@ -38,11 +38,17 @@ void CScoreManager::NewScore(int ID)
 void CScoreManager::Update(const std::vector<bool>& hit,
     const std::vector<bool>& down)
 {
+
     for (auto& score : m_Scores)
     {
         score->Update();
 
-       // score->AddScore();
+        const int playerNo = score->GetID();
+        //スコアを増減する
+        score->Fluctuation(
+            hit[playerNo],
+            down[playerNo]
+        );
     }
 }
 //描画関数
@@ -51,23 +57,6 @@ void CScoreManager::Draw()
     for (auto& score : m_Scores)
     {
         score->Draw();
-    }
-}
-
-//プレイヤーIDを指定してスコアを追加
-void CScoreManager::AddScore(int ID, int i, bool Attack)
-{
-    if (ID >= 0 && ID < static_cast<int>(m_Scores.size())) 
-    {
-        m_Scores[ID]->AddScore(i, Attack);  // 特定のプレイヤーのスコアを追加する
-    }
-}
-//プレイヤーIDを指定してスコアを減少
-void CScoreManager::DropScore(int ID, int i, bool Rhythm)
-{
-    if (ID >= 0 && ID < static_cast<int>(m_Scores.size())) 
-    {
-        m_Scores[ID]->DropScore(i, Rhythm);  // 特定のプレイヤーのスコアを減少する
     }
 }
 // プレイヤーIDから対応するスコアオブジェクトを取得

@@ -22,7 +22,6 @@ namespace
 CScore::CScore()
     : m_Score        ( 0 )
     , m_DisplayScore ( m_Score )   
-    , m_ID           ( 0 )
     , m_UpdateCounter( 0 )
     , m_Scale        ( 0.8f )
     , m_TargetScale  ( 0.8f ) 
@@ -56,9 +55,11 @@ void CScore::Update()
         int step = std::clamp(diff, -1, 1);
 
         m_DisplayScore += step; // 表示スコア更新
+
+        m_Score = std::clamp(m_Score + 1, 0, Max);
     }
     //スコアが増えた時のアニメーション
-   // AddAnime();
+     AddAnime();
 
 }
 //描画関数
@@ -69,20 +70,24 @@ void CScore::Draw()
     // 数字を描画（m_vPosition は変更しない）
     Number(m_Pos,m_DisplayScore, Space);
 }
-
-//スコアを減少
-void CScore::DropScore(int i,bool Rhythm)
+//スコアの増減
+void CScore::Fluctuation(bool Hit, bool Down)
 {
-        // スコアを減らす
-        m_Score = std::clamp(m_Score - i, 0, m_Score);
+    // プレイヤーが当てたら
+    if (Hit)
+    {
+        m_Score += 20;
+    }
+
+    // プレイヤーが当てられたら
+    if (Down)
+    {
+        m_Score -= 20;
+    }
+
+    m_Score = std::clamp(m_Score, 0, Max);
 }
 
-//スコアを追加
-void CScore::AddScore(int i, bool Attack)
-{
-    //スコアにボーナスを加算
-    m_Score = std::clamp(m_Score + i,0, Max);
-}
 //ゲーム終了時のスコア
 void CScore::ResultScore()
 {

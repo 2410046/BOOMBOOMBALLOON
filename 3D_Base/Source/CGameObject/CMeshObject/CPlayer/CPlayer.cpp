@@ -81,6 +81,10 @@ void CPlayer::Update()
 		m_MoveState = enMoveState::Live;
 		break;
 	case enMoveState::Down://ダウン状態
+		m_Life = std::clamp(m_Life - 1, 0, 5);
+		m_MoveState = enMoveState::Invincible;
+		break;
+	case enMoveState::Invincible://無敵状態
 
 		m_angle += 0.1f; // 回転速度
 
@@ -92,17 +96,13 @@ void CPlayer::Update()
 
 		if (m_angle >= D3DX_PI * 2.0f)
 		{
-			m_Life = std::clamp(m_Life - 1, 0, 5);
-			m_MoveState = enMoveState::Invincible;
+			//コントローラー操作
+			Controller();
+			CCharacter::UpDown();
 			m_angle = 0.f;
-		}
-		break;
-	case enMoveState::Invincible://無敵状態
-		//コントローラー操作
-		m_MoveState = enMoveState::Live;
-		Controller();
-		CCharacter::UpDown();
-		
+			//無敵時間開始
+			m_MoveState = enMoveState::Live;
+		}	
 		break;
 	default:
 		break;
