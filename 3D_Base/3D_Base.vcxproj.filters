@@ -202,6 +202,9 @@
     <Filter Include="Source\Asset\CSpriteManager">
       <UniqueIdentifier>{4d824f7c-6a0b-4d78-8cd4-3c4e53e170d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Asset\CEffect\CEffectPlay">
+      <UniqueIdentifier>{9953609b-a715-48b0-8536-a2ff938d4934}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -595,6 +598,12 @@
     </ClInclude>
     <ClInclude Include="Source\IDData.h">
       <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CCount.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Asset\Effect\CEffectPlay.h">
+      <Filter>Source\Asset\CEffect\CEffectPlay</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

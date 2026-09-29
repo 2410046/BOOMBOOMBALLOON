@@ -60,7 +60,7 @@ void CScore::Update()
     }
     //スコアが増えた時のアニメーション
      AddAnime();
-
+//スコアが５００たまるごとにライフを増やすとかやろう
 }
 //描画関数
 void CScore::Draw()
