@@ -55,8 +55,6 @@ protected:
 	enMoveState	m_MoveState;	//移動状態
 	float       m_StateTime;	//状態の開始時間
 	//キーボード
-	float       m_angle = 0.0f;
 	int         m_Life;			//ライフの数
-
 	std::shared_ptr<CReaction>	m_pReaction;	//当たり判定
 };

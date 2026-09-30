@@ -34,3 +34,23 @@ void CCharacter::UpDown()
 	// 上下にふわふわ動く
 	m_vPosition.y = 1.f + (float)(sin(t) * 0.3f);
 }
+
+bool CCharacter::Turn(float Speed,float Max)
+{
+	if (m_angle >= Max)
+	{
+		m_angle = Max;
+		return true;
+	}
+
+	m_angle += Speed; // 回転速度
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&m_vQuaternion,
+		m_angle,
+		0.0f,
+		0.0f);
+
+
+	return false;
+}

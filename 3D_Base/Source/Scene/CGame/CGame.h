@@ -35,14 +35,13 @@ private:
 	void Next();
 private:
 	std::unique_ptr<CCloud>			           m_pCloud;	   //雲クラス
-	std::unique_ptr<CStaticMeshObject>		   m_pSky;		   //スカイクラス
+	std::unique_ptr<CCharacter>		           m_pSky;		   //スカイクラス
 	
 	CPlayerManager  m_pPlayer;	        //プレイヤー
 	CScoreManager	m_pScores;	        //スコア
 	CShotManager    m_Shot;		        //ショット
 	CBalloonManager m_Balloon;          //バルーン
 private:
-	float m_angle;					   // SkyのY座標
 	int   m_PadButton[2] = { -1, -1 }; // コントローラーが押しているボタン(0:Pad0, 1:Pad1)
 	int	  m_PlayerCount;			   // プレイヤーの人数
 };

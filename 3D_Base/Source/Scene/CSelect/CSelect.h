@@ -31,7 +31,7 @@ protected:
     //プレイヤーの人数関数
     void PlayerActive();
 private:
-    std::unique_ptr<CSpriteObject>     m_pBack;         //背景クラス]
+    std::unique_ptr<CStaticMeshObject>		m_pSky;		   //スカイクラス
 
     std::vector<std::unique_ptr<CSelectUI>> m_pSelect;  //選択肢テキストクラス
     std::vector<std::unique_ptr<CUIObject>> m_pActive;  //アクティブプレイヤークラス

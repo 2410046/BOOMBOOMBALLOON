@@ -32,7 +32,7 @@ CSelect::~CSelect()
 void CSelect::Create()
 {
 	////スプライトのインスタンス作成.
-	m_pBack   = std::make_unique<CSpriteObject>();
+	m_pSky   = std::make_unique<CStaticMeshObject>();
 
 	for (int i = 0; i < SellCount; ++i)//選択肢の数
 	{
@@ -57,10 +57,17 @@ void CSelect::Create()
 HRESULT CSelect::LoadData()
 {
 	//背景の画像の読み込み、座標の設定
-	m_pBack->AttachSprite(
-		*CSpriteManager::GetSprite3D(L"Select"));
-	m_pBack->SetPosition(Back_Pos);
+	m_pSky->AttachMesh(
+		*AssetManager::GetStatic(L"Sky\\Sky1"));
 
+	D3DXQUATERNION quaternion;
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&quaternion,
+		-D3DX_PI / 1.99f,  // 左90度
+		0.0f,
+		0.0f);
+	m_pSky->SetQuaternion(quaternion);
 	//選択肢の画像の読み込み、パターン番号の設定、座標の設定
 	for (int i = 0; i < m_pSelect.size(); ++i)
 	{
@@ -69,7 +76,7 @@ HRESULT CSelect::LoadData()
 			= D3DXVECTOR3(600.f, 400.f + i * 100.f, 0.f);
 
 		m_pSelect[i]->AttachSprite(
-			*CSpriteManager::GetSprite2D(L"Text"));
+			*AssetManager::GetSprite2D(L"Text"));
 		m_pSelect[i]->SetPatternNo(0, i);
 		m_pSelect[i]->SetPosition(Sell_Pos);
 	}
@@ -84,12 +91,12 @@ HRESULT CSelect::LoadData()
 			= D3DXVECTOR3(-5.f + (i * 3.1f), 1.f, 7.f);
 
 		m_pActive[i]->AttachSprite(
-			*CSpriteManager::GetSprite2D(L"ActiveUser"));
+			*AssetManager::GetSprite2D(L"ActiveUser"));
 		m_pActive[i]->SetPatternNo(0, 0);
 		m_pActive[i]->SetPosition(Active_Pos);
 
 		m_pPlayer[i]->AttachMesh(
-			*CMeshManager::GetStatic(L"Player\\Player01"));
+			*AssetManager::GetStatic(L"Player\\Player01"));
 		m_pPlayer[i]->SetPosition(Player_Pos);
 		m_pPlayer[i]->SetScale(0.01f, 0.01f, 0.01f);
 		m_pPlayer[i]->SetID(i);
@@ -116,7 +123,7 @@ void CSelect::Update()
 	//選択肢の設定
 	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
 
-
+	CCamera::GetInstance()->Update();
 	//--------------------
 	// シーン遷移
 	//--------------------
@@ -131,8 +138,9 @@ void CSelect::Update()
 			m_pSelect[i]->SellState(
 				i, m_Select, [](int i) { return i; });
 		}
+
 		//プレイヤーの人数選択
-		//PlayerActive();
+		PlayerActive();
 	}
 	else	//決定
 	{
@@ -172,7 +180,7 @@ void CSelect::Draw()
 
 	CDirectX11::GetInstance()->SetDepth(false);
 
-	//m_pBack->Draw(camera);
+	m_pSky->Draw(camera);
 
 	//選択肢の描画
 	for (size_t i = 0; i < m_pSelect.size(); ++i)
@@ -230,14 +238,19 @@ void CSelect::PlayerActive()
 			// 該当するプレイヤーの表示パターンを変更
 			// i + 1 はプレイヤー番号（P1～P4）
 			m_pActive[i]->SetPatternNo(0, i + 1);
+			//回転
+			m_pPlayer[i]->Turn();
 			//プレイヤーを動かす
-			m_pPlayer[i]->UpDown();
+			//m_pPlayer[i]->UpDown();
 		}
 		else
 		{
+			//プレイヤーを動かす
+			//m_pPlayer[i]->UpDown();
 			// 接続されていないプレイヤーをCOM
 			m_pActive[i]->SetPatternNo(0, 0);
 		}
+
 	}
 
 	// 接続されているコントローラー数を

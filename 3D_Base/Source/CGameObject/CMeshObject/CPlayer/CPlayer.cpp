@@ -28,6 +28,7 @@ CPlayer::CPlayer()
 		radius, height, this, CollisionBase::Player);
 	m_vQuaternion
 		= D3DXQUATERNION(0.0f, 0.7071068f, 0.0f, 0.7071068f);
+	m_angle = 0.f;
 }
 //デストラクタ
 CPlayer::~CPlayer()
@@ -85,21 +86,12 @@ void CPlayer::Update()
 		m_MoveState = enMoveState::Invincible;
 		break;
 	case enMoveState::Invincible://無敵状態
-
-		m_angle += 0.1f; // 回転速度
-
-		D3DXQuaternionRotationYawPitchRoll(
-			&m_vQuaternion,
-			m_angle,
-			0.0f,
-			0.0f);
-
-		if (m_angle >= D3DX_PI * 2.0f)
+		if (CCharacter::Turn())
 		{
+			m_angle = 0.f;
 			//コントローラー操作
 			Controller();
 			CCharacter::UpDown();
-			m_angle = 0.f;
 			//無敵時間開始
 			m_MoveState = enMoveState::Live;
 		}	
@@ -259,8 +251,8 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		if (!other || other == this)
 			return;
 		//ダウン状態は無視
-		if (m_MoveState == enMoveState::Down
-			|| m_MoveState == enMoveState::Invincible)
+		if (other->m_MoveState == enMoveState::Down
+			|| other->m_MoveState == enMoveState::Invincible)
 		{
 			return;
 		}
@@ -305,6 +297,13 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 
 	case CollisionBase::Shot://ショットに当たった瞬間
 	{
+		//ダウン状態は無視
+		if (m_MoveState == enMoveState::Down
+			||m_MoveState == enMoveState::Invincible)
+		{
+			return;
+		}
+
 		auto* shot =
 			dynamic_cast<CShot*>(pCollider->GetListener());
 

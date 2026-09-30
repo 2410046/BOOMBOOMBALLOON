@@ -24,10 +24,13 @@ public:
 	void SetID(int id) { m_ID = id; }
 	//オブジェクトを上下させる
 	void UpDown();
+	//オブジェクトを回転
+	bool Turn(float Speed = 0.1f,float Max = D3DX_PI * 2.0f);
 protected:
 	int		m_ID;			//ID
 	float	m_Speed;	//移動速度
 	D3DXQUATERNION m_Quat;
 	float t = 0.f;
 	float m_Scale;
+	float m_angle = -1.59f;
 };

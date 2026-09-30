@@ -1,6 +1,7 @@
 ﻿#include "CScore.h"
 #include "CGameObject/CUIObject/Ranking/CRanking.h"
 #include <algorithm>
+#include "CCount.h"
 namespace
 {
 
@@ -41,6 +42,14 @@ CScore::~CScore()
 //動作関数
 void CScore::Update()
 {
+    //5秒に1増える
+    CountUpdate();
+    //スコアは4つあるのに１Pしか増えない。ResetCountを消すとせいじょうにかどうするが1秒に1回増えずに連続で増える
+    if (MaxCount(1.f) >= 1.0f)
+    {
+        m_Score = std::clamp(m_Score + 1, 0, Max);
+        ResetCount();
+    }
 
     // ===== 表示スコアの加算アニメーション =====
     m_UpdateCounter++; // フレームカウント
@@ -56,7 +65,6 @@ void CScore::Update()
 
         m_DisplayScore += step; // 表示スコア更新
 
-        m_Score = std::clamp(m_Score + 1, 0, Max);
     }
     //スコアが増えた時のアニメーション
      AddAnime();

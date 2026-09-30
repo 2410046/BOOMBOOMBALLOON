@@ -31,7 +31,6 @@ namespace
 //コンストラクタ.
 CGame::CGame()
 	: CScene				()
-	, m_angle				( -1.59f )
 	, m_PlayerCount			( 0 )
 {
 }
@@ -49,7 +48,7 @@ void CGame::Create()
 	//m_PlayerCount = CGameData::GetInstance()->PlayerNo();
 	m_PlayerCount = 4;
 	// スカイのインスタンス生成
-	m_pSky      = std::make_unique<CStaticMeshObject>();
+	m_pSky      = std::make_unique<CCharacter>();
 	//雲のインスタンス生成
 	m_pCloud	= std::make_unique<CCloud>();
 }
@@ -68,7 +67,6 @@ HRESULT CGame::LoadData()
 		-D3DX_PI / 1.99f,  // 左90度
 		0.0f,
 		0.0f);
-
 	m_pSky->SetQuaternion(quaternion);
 	// プレイヤーの数
 	for (int p = 0; p < m_PlayerCount; ++p)
@@ -116,7 +114,6 @@ void CGame::Update()
 	m_pScores.Update(
 		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Hit),
 		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Down));
-
 	//スカイの動作関数
 	Sky();
     //シーン遷移
@@ -152,25 +149,13 @@ void CGame::Draw()
 //スカイの動作
 void CGame::Sky()
 {
-	constexpr float Speed = 0.1f;
+	//縦に動きながら、横にゆっくり回転
+	constexpr float YSpeed = 0.0001f;
+	constexpr float XSpeed = 0.01f;
 	constexpr float MaxAngle = D3DX_PI / 2.0f;
 
-	m_angle += Speed;
-
-	if (m_angle >= MaxAngle)
-	{
-		m_angle = MaxAngle;
-	}
-
-	D3DXQUATERNION quaternion;
-
-	D3DXQuaternionRotationYawPitchRoll(
-		&quaternion,
-		m_angle,
-		0.0f,
-		0.0f);
-
-	m_pSky->SetQuaternion(quaternion);
+	m_pSky->UpDown();
+	m_pSky->Turn(XSpeed, MaxAngle);
 }
 
 //シーン遷移
