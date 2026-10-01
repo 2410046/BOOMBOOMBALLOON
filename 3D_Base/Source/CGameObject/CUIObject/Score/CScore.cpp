@@ -43,12 +43,12 @@ CScore::~CScore()
 void CScore::Update()
 {
     //5秒に1増える
-    CountUpdate();
-    //スコアは4つあるのに１Pしか増えない。ResetCountを消すとせいじょうにかどうするが1秒に1回増えずに連続で増える
-    if (MaxCount(1.f) >= 1.0f)
+   CountUpdate(m_Count);
+    //スコアはプレイヤー4人分あるのに１Pしか増えない。ResetCountを消すとせいじょうにかどうするが1秒に1回増えずに連続で増える
+    if (MaxCount(m_Count, 1.0f) >= 1.0f)
     {
         m_Score = std::clamp(m_Score + 1, 0, Max);
-        ResetCount();
+        ResetCount(m_Count);
     }
 
     // ===== 表示スコアの加算アニメーション =====
@@ -99,6 +99,8 @@ void CScore::Fluctuation(bool Hit, bool Down)
 //ゲーム終了時のスコア
 void CScore::ResultScore()
 {
+    //ランキングに登録
+    CRanking::GetInstance()->Register(m_ID, m_Score);
 }
 //スコアとコンボの座標を取得
 void CScore::SetPos(D3DXVECTOR3 pos)

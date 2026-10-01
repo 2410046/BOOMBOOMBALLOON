@@ -29,7 +29,7 @@ public:
     virtual ~CRanking() override;
    //スコアランキングに登録処理
     void Register(
-        int ID,int score,int combo,int miss);
+        int ID,int score);
     //動作関数
     virtual void Update();
     //描画関数
@@ -37,10 +37,6 @@ public:
     //リセット
     void Reset();
 protected:
-    //ランキングを読みこむ
-    void ReadRank();
-    //ランキングを保存する
-    void SaveRank();
     //ランキングを動かす
     void RankingMove();
 
@@ -48,11 +44,6 @@ protected:
 
 private:
     std::vector<int>    m_MyScore;        //スコア配列
-    size_t              m_MaxRanking;     //最大ランキング
-    int                 m_RegisterScore;  //登録するスコア
-    const char*         RankFile;         // ランキングファイル
-    std::vector<float>  m_PosXList;       // 各順位のX座標
-    int                 m_NextMoveRank;   // 次に動かす順位
     float               m_AnimationTimer; // アニメタイマー
     std::vector<enData> m_ScoreList;      //スコアリスト
 

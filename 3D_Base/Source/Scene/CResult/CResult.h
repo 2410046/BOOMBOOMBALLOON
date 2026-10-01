@@ -2,6 +2,8 @@
 #include"CScene.h"  
 #include"CGameObject/CUIObject/SelectUI/CSelectUI.h"
 #include"Scene/SelectText/CSelectText.h"  //選択肢の関数
+#include"CGameObject/CMeshObject/CStaticMeshObject.h"
+#include"CGameObject/CMeshObject/CPlayer/CPlayer.h"
 /********************************************************************************
 *	リザルトクラス.
 **/
@@ -25,8 +27,10 @@ public:
     void    Draw()     override;
 
 private:
-	std::unique_ptr<CSpriteObject> m_pBack;					//背景クラス
-	std::vector<std::unique_ptr<CSelectUI>> m_pSelect;		//選択肢テキストクラス
-	std::vector<std::unique_ptr<CUIObject>> m_pScoreText;	//スコアテキストクラス
-    int	  m_PlayerCount;			       // プレイヤーの人数
+    std::vector<std::unique_ptr<CSelectUI>> m_pSelect;		//選択肢テキストクラス
+    std::vector<std::unique_ptr<CUIObject>> m_pScoreText;	//スコアテキストクラス
+    std::unique_ptr<CStaticMeshObject>		m_pSky;		   //スカイクラス
+
+    std::vector<std::unique_ptr<CPlayer>> m_pPlayer;  //プレイヤーリアクションクラス
+    int m_PlayerCount;
 };

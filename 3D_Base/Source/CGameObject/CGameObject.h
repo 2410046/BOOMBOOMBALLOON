@@ -74,4 +74,6 @@ protected:
 	mutable D3DXMATRIX m_WorldTrans;
 
 	D3DXQUATERNION m_vQuaternion;	//クォータニオンの回転
+
+	float m_Count;
 };

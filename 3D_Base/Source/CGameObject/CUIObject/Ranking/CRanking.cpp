@@ -51,34 +51,16 @@ CRanking::~CRanking()
 }
 
 //スコアの追加と登録処理
-void CRanking::Register(
-    int ID, int score, int combo, int miss)
-{   
-    // ランキングファイル名を設定
-    RankFile = CGameData::GetRank();
-    // ランキングファイルを読み込む
-    ReadRank();
-
+void CRanking::Register(int ID, int score)
+{
     //--------------------------------------------------------
     // 新しいスコアデータ作成
     //--------------------------------------------------------
     // プレイヤーID・スコア・コンボ・ミス数をまとめて保存
-    enData newData{ ID, score, combo, miss };
-    
+    enData newData{ ID, score };
+
     // スコアリストに追加
     m_ScoreList.push_back(newData);
-
-  // 直前に登録したスコアなら処理終了
-     if (score == m_RegisterScore)
-     {
-         return;
-     }
-
-  // 既にランキングに存在するスコアも無視
-    if (std::find(m_MyScore.begin(), m_MyScore.end(), score) != m_MyScore.end())
-    {
-        return;
-    }
 
     // スコア配列に追加（ランキング用）
     m_MyScore.push_back(score);
@@ -86,14 +68,13 @@ void CRanking::Register(
     // スコアを降順で並び替え（高い順）
     std::sort(m_MyScore.begin(), m_MyScore.end(), std::greater<int>());
 
-      // 最大ランキング数を超えた場合
-      // 余分なスコアを削除
-    if (m_MyScore.size() > m_MaxRanking)
-    {
-        m_MyScore.resize(m_MaxRanking);
-    }
+    // 最大ランキング数を超えた場合
+    // 余分なスコアを削除
+    //if (m_MyScore.size() > m_MaxRanking)
+    //{
+    //    m_MyScore.resize(m_MaxRanking);
+    //}
     // 更新されたランキングをファイルに保存
-    SaveRank();
 }
 //動作関数
 void CRanking::Update()

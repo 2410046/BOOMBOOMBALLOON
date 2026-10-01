@@ -4,6 +4,7 @@
 
 CTime::CTime()
     : m_MaxTime(0)
+    , m_FrameTime(timeGetTime() / 1000.0f)
 
 {
     //スプライトを接続

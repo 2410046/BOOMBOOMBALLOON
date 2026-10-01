@@ -1,5 +1,5 @@
 ﻿#include "CGame.h"
-#include "CGameObject/CSpriteObject/CTIme/CTime.h"		//タイムクラス
+#include "CGameObject/CSpriteObject/CTime/CTime.h"		//タイムクラス
 #include "Scene/SelectText/CSelectText.h"               //選択肢の関数
 #include "Collision/CollisionManager/CollisionManager.h"
 #include "CMeshObject/CTracking/CTrackingManager/CTrackingManager.h"
@@ -162,14 +162,15 @@ void CGame::Sky()
 void CGame::Next()
 {
 	//時間が来たら
-	if (CTime::GetInstance()->MaxTime(CGameData::GetLimit()))
+	if (CTime::GetInstance()->MaxTime(CGameData::GetLimit())
+		|| GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		//音楽を停止
 		CSoundManager::Stop(CSoundManager::enList(CGameData::BGMNo()));
 		//エフェクトをすべて止める
 		CEffect::StopAll();
 		//スコアをファイルに保存
-		//m_pScores->ResultScore();
+		m_pScores.ResultScore();
 		//リザルトに遷移
 		SceneManager::GetInstance()->NextScene(SceneManager::Result);
 	}
