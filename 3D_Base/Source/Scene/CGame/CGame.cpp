@@ -84,7 +84,7 @@ HRESULT CGame::LoadData()
 	//ライトの設定
 	CCamera::GetInstance()->SetLight(Light_Pos);
 	//音楽を再生
-	CSoundManager::PlayLoop(CSoundManager::enList(CGameData::BGMNo()));
+	CSoundManager::PlayLoop(CSoundManager::enList(CSoundManager::Mouning));
 	return S_OK;
 }
 //解放関数.

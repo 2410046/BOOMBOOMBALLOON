@@ -238,15 +238,15 @@ void CSelect::PlayerActive()
 			// 該当するプレイヤーの表示パターンを変更
 			// i + 1 はプレイヤー番号（P1～P4）
 			m_pActive[i]->SetPatternNo(0, i + 1);
-			//回転
-			m_pPlayer[i]->Turn();
-			//プレイヤーを動かす
-			//m_pPlayer[i]->UpDown();
+			m_pPlayer[i]->Turn(true);
+
 		}
 		else
 		{
+
 			//プレイヤーを動かす
-			//m_pPlayer[i]->UpDown();
+			m_pPlayer[i]->UpDown();
+			//回転
 			// 接続されていないプレイヤーをCOM
 			m_pActive[i]->SetPatternNo(0, 0);
 		}

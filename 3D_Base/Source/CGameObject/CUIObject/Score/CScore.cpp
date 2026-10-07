@@ -100,7 +100,7 @@ void CScore::Fluctuation(bool Hit, bool Down)
 void CScore::ResultScore()
 {
     //ランキングに登録
-    CRanking::GetInstance()->Register(m_ID, m_Score);
+   // CRanking::GetInstance()->Register(m_ID, m_Score);
 }
 //スコアとコンボの座標を取得
 void CScore::SetPos(D3DXVECTOR3 pos)

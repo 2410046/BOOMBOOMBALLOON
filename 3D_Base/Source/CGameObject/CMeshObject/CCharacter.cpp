@@ -34,8 +34,8 @@ void CCharacter::UpDown()
 	// 上下にふわふわ動く
 	m_vPosition.y = 1.f + (float)(sin(t) * 0.3f);
 }
-
-bool CCharacter::Turn(float Speed,float Max)
+//回転
+bool CCharacter::Turn(float Speed,float Max,bool Loop)
 {
 	if (m_angle >= Max)
 	{
@@ -50,7 +50,5 @@ bool CCharacter::Turn(float Speed,float Max)
 		m_angle,
 		0.0f,
 		0.0f);
-
-
 	return false;
 }

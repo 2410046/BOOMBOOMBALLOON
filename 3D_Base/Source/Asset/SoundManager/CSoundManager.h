@@ -14,10 +14,8 @@ public:
 	enum enList
 	{
 		//BGM
-		BGM1,	//ローファイ少女は今日も寝不足
-		BGM2,	//シャイニングスター
-		BGM3,	//スーパースター
 		Title,
+		Mouning,
 		Select,
 		Result,
 		//音が増えたら「ここ」に追加してください.

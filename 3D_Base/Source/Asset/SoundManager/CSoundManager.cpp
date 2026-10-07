@@ -33,11 +33,10 @@ bool CSoundManager::Load( HWND hWnd )
 	};
 	SoundList SList[] =
 	{
-		{ enList::BGM1,			_T("BGM\\BGM1.mp3"),   _T("BGM1")	},
-
-		{ enList::Title ,		_T("BGM\\Title.mp3"),  _T("Title")	},
-		{ enList::Select,		_T("BGM\\Select.mp3"), _T("Select")	},
-		{ enList::Result,		_T("BGM\\Result.mp3"), _T("Result")	},
+		{ enList::Title ,		_T("BGM\\Title.mp3"),      _T("Title")	},
+		{ enList::Mouning,		_T("BGM\\MouningGame.mp3"),_T("Mouning")},
+		{ enList::Select,		_T("BGM\\Select.mp3"),     _T("Select")	},
+		{ enList::Result,		_T("BGM\\Result.mp3"),     _T("Result")	},
 	};
 	//配列の最大要素数を算出 (配列全体のサイズ/配列1つ分のサイズ).
 	int list_max = sizeof( SList ) / sizeof( SList[0] );
