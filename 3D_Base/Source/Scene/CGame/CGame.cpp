@@ -166,7 +166,7 @@ void CGame::Next()
 		|| GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		//音楽を停止
-		CSoundManager::Stop(CSoundManager::enList(CGameData::BGMNo()));
+		CSoundManager::Stop(CSoundManager::enList::Mouning);
 		//エフェクトをすべて止める
 		CEffect::StopAll();
 		//スコアをファイルに保存

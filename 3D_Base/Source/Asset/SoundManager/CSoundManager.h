@@ -16,6 +16,7 @@ public:
 		//BGM
 		Title,
 		Mouning,
+		Night,
 		Select,
 		Result,
 		//音が増えたら「ここ」に追加してください.

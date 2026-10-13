@@ -2,7 +2,7 @@
 #include "CScene.h"
 #include"CGameObject/CUIObject/SelectUI/CSelectUI.h"
 #include"Scene/SelectText/CSelectText.h"  //選択肢の関数
-#include"CGameObject/CMeshObject/CCharacter.h"
+#include"CGameObject/CMeshObject/CStaticMeshObject.h"
 #include"CGameObject/CMeshObject/CPlayer/CPlayer.h"
 /********************************************************************************
 *	セレクトクラス.

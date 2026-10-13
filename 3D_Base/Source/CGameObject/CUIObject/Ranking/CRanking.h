@@ -16,8 +16,6 @@ public:
     {
         int ID = 0;                 //プレイヤーのID
         int MyScore = 0;            //プレイヤーのスコア
-        int MyCombo = 0;            //プレイヤーの最大コンボ
-        int MyMiss = 0;             //プレイヤーのミス
         // デフォルトコンストラクタ
         enData() = default;
     };

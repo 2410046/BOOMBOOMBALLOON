@@ -31,7 +31,7 @@ CSelect::~CSelect()
 //構成関数
 void CSelect::Create()
 {
-	////スプライトのインスタンス作成.
+	////メッシュのインスタンス作成.
 	m_pSky   = std::make_unique<CStaticMeshObject>();
 
 	for (int i = 0; i < SellCount; ++i)//選択肢の数
@@ -56,7 +56,7 @@ void CSelect::Create()
 //ロード関数
 HRESULT CSelect::LoadData()
 {
-	//背景の画像の読み込み、座標の設定
+	//スカイの読み込み、座標の設定
 	m_pSky->AttachMesh(
 		*AssetManager::GetStatic(L"Sky\\Sky1"));
 

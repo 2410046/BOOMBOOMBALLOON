@@ -27,8 +27,8 @@ CTitle::~CTitle()
 //構成関数
 void CTitle::Create()
 {
-	//背景の生成
-	m_pBack = std::make_unique<CSpriteObject>();
+	//メッシュのインスタンス作成.
+	m_pSky = std::make_unique<CCharacter>();
 	for (int i = 0; i < SellCount; ++i)//選択肢の数
 	{
 		//選択肢の生成
@@ -41,10 +41,19 @@ void CTitle::Create()
 //ロード関数
 HRESULT CTitle::LoadData()
 {
-	//背景の画像の読み込み、座標の設定
-	m_pBack->AttachSprite(
-		*CSpriteManager::GetSprite3D(L"Title"));
-	m_pBack->SetPosition(Back_Pos);
+	//スカイの読み込み、座標の設定
+	m_pSky->AttachMesh(
+		*AssetManager::GetStatic(L"Sky\\TitleSky"));
+
+	D3DXQUATERNION quaternion;
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&quaternion,
+		-D3DX_PI / 3.f,  // 左90度
+		0.0f,
+		0.0f);
+
+	m_pSky->SetQuaternion(quaternion);
 
 	//選択肢の画像の読み込み、パターン番号の設定、座標の設定
 	for (int i = 0; i < m_pSelect.size(); ++i)
@@ -93,6 +102,7 @@ void CTitle::Update()
 			m_pSelect[i]->SellState(
 				i, m_Select,[](int i) { return i; });
 		}
+		Sky();
 	}
 	else  //決定
 	{
@@ -100,7 +110,7 @@ void CTitle::Update()
 		if (CFade::GetInstance()->FadeOut())
 		{
 			//音楽を停止
-			CSoundManager::Stop(CSoundManager::enList(3));
+			CSoundManager::Stop(CSoundManager::enList::Title);
 
 			// 選択内容に応じて遷移先を分岐
 			switch (m_Select)
@@ -132,7 +142,7 @@ void CTitle::Draw()
 
 	CDirectX11::GetInstance()->SetDepth(false);
 	//背景の描画
-	m_pBack->Draw(camera);
+	m_pSky->Draw(camera);
 
 	//選択肢の描画
 	for (size_t i = 0; i < m_pSelect.size(); ++i)
@@ -145,4 +155,27 @@ void CTitle::Draw()
 
 	CDirectX11::GetInstance()->SetDepth(true);
 
+}
+//スカイの動作
+void CTitle::Sky()
+{
+	//縦に動きながら、横にゆっくり回転
+	constexpr float YSpeed = 0.0001f;
+	constexpr float XSpeed = 0.01f;
+	constexpr float MaxAngle = D3DX_PI / 2.0f;
+	//if (m_angle >= Max)
+	//{
+	//	m_angle = Max;
+	//}
+	D3DXQUATERNION Quaternion;
+	m_angle -= XSpeed; // 回転速度
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&Quaternion,
+		0.f,
+		m_angle,
+		0.0f);
+	//m_pSky->SetQuaternion(Quaternion);
+	m_pSky->UpDown();
+	//m_pSky->Turn(XSpeed, MaxAngle);
 }

@@ -8,7 +8,7 @@ namespace
     constexpr float RankRaw = 70.f;   // 各順位の縦間隔
     constexpr float RankY = 150.f;  // ランキング開始Y座標
 
-    constexpr float BaseX = 850.f; // 表示開始X座標
+    constexpr float BaseX = 50.f; // 表示開始X座標
     constexpr float BaseY = 210.f; // 表示開始Y座標
     constexpr float RawX = 190.f; // 各項目の横間隔
     constexpr float RawY = 120.f; // 各項目の縦間隔
@@ -38,7 +38,7 @@ CRanking::CRanking()
 {
        //スプライトを接続
        AttachSprite(
-           *CSpriteManager::GetSprite2D(L"Scores"));
+           *AssetManager::GetSprite2D(L"Number"));
        // ランキング位置初期化（画面外からスタート）
        //m_PosXList.resize(m_MaxRanking, -20.0f);
        //パターン番号
@@ -62,10 +62,10 @@ void CRanking::Register(int ID, int score)
     m_ScoreList.push_back(newData);
 
     // スコア配列に追加（ランキング用）
-    m_MyScore.push_back(score);
+  //  m_MyScore.push_back(score);
 
     // スコアを降順で並び替え（高い順）
-    std::sort(m_MyScore.begin(), m_MyScore.end(), std::greater<int>());
+  //  std::sort(m_MyScore.begin(), m_MyScore.end(), std::greater<int>());
 
     // 最大ランキング数を超えた場合
     // 余分なスコアを削除
@@ -138,27 +138,22 @@ void CRanking::Draw()
     //--------------------------------------------------
     // プレイヤーのスコアを描画
     //--------------------------------------------------
-        //for (size_t i = 0; i < m_ScoreList.size(); ++i)
-        //{
-        //    // プレイヤーごとのデータ取得
-        //    const enData& data = m_ScoreList[i];
-        //    // 表示内容（コンボ・ミス・スコア）
-        //    int values[] 
-        //        = { data.MyCombo,data.MyMiss,data.MyScore };
+        for (size_t i = 0; i < m_ScoreList.size(); ++i)
+        {
+            // プレイヤーごとのデータ取得
+            const enData& data = m_ScoreList[i];
+            // 表示内容（コンボ・ミス・スコア）
+            int values = data.MyScore;
 
-        //    //スコア、コンボ、ミスの描画
-        //    for (int j = 0; j < 3; ++j)
-        //    {
-        //        // プレイヤーごとに表示パターン変更
-        //        m_Patten = data.ID;
-        //        D3DXVECTOR3 pos =  D3DXVECTOR3(
-        //                BaseX + i * RawX, BaseY + j * RawY, 0.f);
-        //        //スコア、コンボ、ミスは点滅しない
-        //        m_pSprite->SetAlpha(alpha); 
-        //        // 数値描画
-        //        Number(pos, values[j], Space);
-        //    }
-        //}
+            //スコアの描画
+                // プレイヤーごとに表示パターン変更
+              m_Patten = data.ID;
+                D3DXVECTOR3 pos =  D3DXVECTOR3(
+                        BaseX + i * RawX, BaseY, 0.f);
+                //スコア、コンボ、ミスは点滅しない
+                // 数値描画
+                Number(pos, values, Space);
+        }
 }
 
 

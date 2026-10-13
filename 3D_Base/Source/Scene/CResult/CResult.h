@@ -32,5 +32,4 @@ private:
     std::unique_ptr<CStaticMeshObject>		m_pSky;		   //スカイクラス
 
     std::vector<std::unique_ptr<CPlayer>> m_pPlayer;  //プレイヤーリアクションクラス
-    int m_PlayerCount;
 };

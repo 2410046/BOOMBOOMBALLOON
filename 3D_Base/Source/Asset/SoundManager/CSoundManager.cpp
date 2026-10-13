@@ -35,8 +35,9 @@ bool CSoundManager::Load( HWND hWnd )
 	{
 		{ enList::Title ,		_T("BGM\\Title.mp3"),      _T("Title")	},
 		{ enList::Mouning,		_T("BGM\\MouningGame.mp3"),_T("Mouning")},
+		{ enList::Night,		_T("BGM\\NightGame.mp3"),_T("Night")},
 		{ enList::Select,		_T("BGM\\Select.mp3"),     _T("Select")	},
-		{ enList::Result,		_T("BGM\\Result.mp3"),     _T("Result")	},
+		{ enList::Result,		_T("BGM\\空と虹.mp3"),     _T("Result")	},
 	};
 	//配列の最大要素数を算出 (配列全体のサイズ/配列1つ分のサイズ).
 	int list_max = sizeof( SList ) / sizeof( SList[0] );

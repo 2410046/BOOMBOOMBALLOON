@@ -1,7 +1,8 @@
 ﻿#pragma once
 #include "CScene.h"
 #include"Scene/SelectText/CSelectText.h"  //選択肢の関数
-
+//#include"CGameObject/CMeshObject/CStaticMeshObject.h"
+#include"CGameObject/CMeshObject/CCharacter.h"
 /********************************************************************************
 *	タイトルクラス.
 **/
@@ -24,10 +25,13 @@ public:
     void    Update()   override;
     //描画関数
     void    Draw()     override;
-
+private:
+    //スカイの動作
+    void    Sky();
 private:
     //スプライトオブジェクト
-    std::unique_ptr<CSpriteObject>          m_pBack;    //背景クラス
-
+    std::unique_ptr<CCharacter>		m_pSky;		   //スカイクラス
     std::vector<std::unique_ptr<CSelectUI>> m_pSelect;  //選択肢テキストクラス
+    std::unique_ptr<CSelectUI> m_pLogo;  //選択肢テキストクラス
+    float m_angle = 0.f;
 };

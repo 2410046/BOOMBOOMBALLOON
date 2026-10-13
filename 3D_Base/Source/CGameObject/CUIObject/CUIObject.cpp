@@ -51,7 +51,7 @@ void CUIObject::Number(
 	const POINTS PatternMax = m_pSprite->GetPatternMax();
 
 	char buf[16];
-	// 例: digitCount = 6 → "%06d"
+	//digitCount = 6 → "%06d"
 	char format[16];
 	sprintf_s(format, "%%0%dd", digitCount);
 	sprintf_s(buf, format, Score);
