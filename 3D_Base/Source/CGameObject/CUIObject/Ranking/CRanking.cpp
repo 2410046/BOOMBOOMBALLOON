@@ -43,6 +43,7 @@ CRanking::CRanking()
        //m_PosXList.resize(m_MaxRanking, -20.0f);
        //パターン番号
        m_Patten = 2;
+       //axaxaxaxaxaxaxxaxxaxxaxaxx10/14
 }
 
 CRanking::~CRanking()
