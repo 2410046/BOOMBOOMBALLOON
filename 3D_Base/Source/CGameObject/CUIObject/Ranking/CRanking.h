@@ -16,6 +16,8 @@ public:
     {
         int ID = 0;                 //プレイヤーのID
         int MyScore = 0;            //プレイヤーのスコア
+        int DisplayScore = 0;       //プレイヤーのスコア(表示用)
+        bool CoundEnd    = false;   //カウント終了
         // デフォルトコンストラクタ
         enData() = default;
     };
@@ -34,15 +36,21 @@ public:
     virtual void Draw() override;
     //リセット
     void Reset();
+    //順位の取得
+    int GetRank(int index) const;
+    //カウント終了を取得
+    bool GetCountEnd(int index) const;
+    //ID取得
+    int GetPlayerID(int index) const;
+    // 座標交換
+    void SwapPosition(int playerID, int targetID);
 protected:
-    //ランキングを動かす
-    void RankingMove();
-
-    size_t GetList()const { return m_ScoreList.size(); }
-
+    void ConfirmRank(int playerID);
 private:
-    std::vector<int>    m_MyScore;        //スコア配列
+    D3DXVECTOR3 m_PlayerPos[4];
     float               m_AnimationTimer; // アニメタイマー
     std::vector<enData> m_ScoreList;      //スコアリスト
-
+    std::vector<float>  m_PosXList;       // 各順位のX座標
+    // 順位確定済みのプレイヤー数
+    int m_ConfirmCount = 0;
 };

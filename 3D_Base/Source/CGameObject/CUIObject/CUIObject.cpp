@@ -31,7 +31,7 @@ void CUIObject::Draw()
 	m_pSprite->SetPosition( m_vPosition );
 	m_pSprite->SetRotation( m_vRotation );
 	m_pSprite->SetScale( m_vScale );
-	//m_pSprite->SetAlpha(m_Alpha);
+	m_pSprite->SetAlpha(m_Alpha);
 	//パターン番号を設定
 	m_pSprite->SetPatternNo( m_PatternNo.x, m_PatternNo.y );
 

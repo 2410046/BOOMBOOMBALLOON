@@ -29,7 +29,8 @@ public:
 private:
     std::vector<std::unique_ptr<CSelectUI>> m_pSelect;		//選択肢テキストクラス
     std::vector<std::unique_ptr<CUIObject>> m_pScoreText;	//スコアテキストクラス
-    std::unique_ptr<CStaticMeshObject>		m_pSky;		   //スカイクラス
+    std::vector<std::unique_ptr<CUIObject>> m_pRank;	    //ランキング画像クラス
+    std::unique_ptr<CStaticMeshObject>		m_pSky;		    //スカイクラス
 
     std::vector<std::unique_ptr<CPlayer>> m_pPlayer;  //プレイヤーリアクションクラス
 };

@@ -73,6 +73,7 @@ HRESULT CSpriteManager::CreateSprite2D()
     CSprite2D::SPRITE_STATE SSMode   = { 215.f, 50.f , 226.f, 129.f , 226.f, 42.f };
     CSprite2D::SPRITE_STATE SSNumber = { 42.f, 42.f, 590.f, 364.f, 59.f, 90.f };
     CSprite2D::SPRITE_STATE SSActive = { 142.f, 80.f, 423.f, 427.f, 423.f, 85.f };
+    CSprite2D::SPRITE_STATE SSRank = { 403.f, 554.f, 1612.f, 554.f, 403.f, 554.f };
 
     // スプライトのデータリスト
     Sprite2DData DataList[] =
@@ -81,9 +82,11 @@ HRESULT CSpriteManager::CreateSprite2D()
         { L"Logo",     SSLogo   },
         { L"ModeText", SSMode   },
 
-        { L"ScoreText",SSText   },
-        { L"Number",   SSNumber },
+        { L"ScoreText",  SSText   },
+        { L"Number",     SSNumber },
         { L"ActiveUser", SSActive },
+        { L"Rank",       SSRank },
+        
     };
     // データを登録
     for (const auto& data : DataList)
