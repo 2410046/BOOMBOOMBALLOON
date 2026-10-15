@@ -71,9 +71,12 @@ void CBalloon::Update()
 	//	CCharacter::Update();
 	}
 	break;
-
 	default:
 		break;
+	}
+	if (m_Life <= 0)
+	{
+		m_MoveState = enMoveState::App;
 	}
 CCharacter::UpDown();
 }

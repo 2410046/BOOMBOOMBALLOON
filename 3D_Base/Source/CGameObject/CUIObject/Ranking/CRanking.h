@@ -48,9 +48,7 @@ protected:
     void ConfirmRank(int playerID);
 private:
     D3DXVECTOR3 m_PlayerPos[4];
-    float               m_AnimationTimer; // アニメタイマー
     std::vector<enData> m_ScoreList;      //スコアリスト
-    std::vector<float>  m_PosXList;       // 各順位のX座標
     // 順位確定済みのプレイヤー数
     int m_ConfirmCount = 0;
 };

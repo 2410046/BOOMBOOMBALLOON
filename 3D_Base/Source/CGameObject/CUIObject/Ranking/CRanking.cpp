@@ -23,13 +23,7 @@ namespace
 
 }
 CRanking::CRanking()
-  //  : m_MyScore       ( )         // スコア配列
-    //, m_MaxRanking    ( 5 )       // 最大ランキング数
-    //, m_RegisterScore ( -1 )      // 直前登録スコア
-    //, m_PosXList      ( )         // 各順位のX座標
-    //, m_NextMoveRank  ( 0 )       // 次に動かす順位
-    : m_AnimationTimer( 0.f )     // アニメタイマー
-    , m_ScoreList     ( )         // 詳細スコアリスト
+    : m_ScoreList     ( )         // 詳細スコアリスト
 {
        //スプライトを接続
        AttachSprite(
@@ -175,8 +169,7 @@ void CRanking::Draw()
         //スコアの描画
        // プレイヤーごとに表示パターン変更
         m_Patten = data.ID;
-        //D3DXVECTOR3 pos = D3DXVECTOR3(
-        //    BaseX + i * RawX, BaseY, 0.f);
+
         D3DXVECTOR3 pos = m_PlayerPos[data.ID];
         // 数値描画
         Number(pos, data.DisplayScore, Space);
@@ -251,7 +244,6 @@ int CRanking::GetPlayerID(int index) const
 //シーン遷移のときまた同じ場所に戻す
 void CRanking::Reset()
 {
-    m_AnimationTimer = 0.0f;
     m_ScoreList.clear();
     m_ConfirmCount = 0;
 

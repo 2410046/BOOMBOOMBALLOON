@@ -20,7 +20,7 @@ namespace
 CPlayer::CPlayer()
 	: m_MoveState		( enMoveState::App )
 	, m_StateTime		( 5.f )
-	, m_Life			( 5 )
+	, m_Life			( 3 )
 
 {	
 	//カプセルの当たり判定
@@ -48,6 +48,7 @@ void CPlayer::Update()
 		if (m_Scale>=Base_Size)
 		{
 			m_Scale = Base_Size;
+			m_Life = 3;
 			m_MoveState = enMoveState::Live;
 		}
 		//サイズを設定
@@ -83,7 +84,15 @@ void CPlayer::Update()
 		break;
 	case enMoveState::Down://ダウン状態
 		m_Life = std::clamp(m_Life - 1, 0, 5);
-		m_MoveState = enMoveState::Invincible;
+		if (m_Life <= 0)
+		{
+			m_MoveState = enMoveState::Dead;
+		}
+		else
+		{
+			m_MoveState = enMoveState::Invincible;
+		}
+	
 		break;
 	case enMoveState::Invincible://無敵状態
 		if (CCharacter::Turn())
@@ -95,6 +104,22 @@ void CPlayer::Update()
 			//無敵時間開始
 			m_MoveState = enMoveState::Live;
 		}	
+		break;
+	case enMoveState::Dead://死亡状態
+		//if (CCharacter::Turn())
+		//{
+			//m_angle = 0.f;
+			//クール時間開始
+			//プレイヤーのサイズを小さくする
+			m_Scale -= Size_Speed;
+			if (m_Scale <= 0.f)
+			{
+				m_Scale = 0.f;
+				//スコアを半分減らす
+				m_MoveState = enMoveState::App;
+			}
+			m_vScale = D3DXVECTOR3(m_Scale, m_Scale, m_Scale);
+		//}
 		break;
 	default:
 		break;
@@ -263,6 +288,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		//ブースト状態
 		if (m_pReaction&&m_pReaction->Play(CReaction::Boost))
 		{
+			//スコアを増やす
 			m_MoveState = enMoveState::Hit;//当てた
 
 			m_pReaction->Stop();//リアクションを終わらせる
@@ -306,18 +332,22 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 
 		auto* shot =
 			dynamic_cast<CShot*>(pCollider->GetListener());
-
-		if (shot == nullptr)
-		{
-			return;
-		}
 		// 自分が発射したShotなら無視
-		if (shot->GetID() == m_ID)
+		if (shot == nullptr|| shot->GetID() == m_ID)
 		{
 			return;
 		}
-		// 相手のShotならダウン
-		m_MoveState = enMoveState::Down;
+		//ブースト状態
+		if (m_pReaction && m_pReaction->Play(CReaction::Boost))
+		{
+			shot->SetFlag(false);//ショットが消える
+		}
+		else 
+		{
+			// 相手のShotならダウン
+			//スコアを減らす
+			m_MoveState = enMoveState::Down;
+		}
 		//ほかのプレイヤーに自分のショットが当たったらスコア
 	}
 	break;

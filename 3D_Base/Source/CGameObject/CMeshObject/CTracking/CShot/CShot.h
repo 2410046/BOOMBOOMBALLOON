@@ -25,6 +25,7 @@ public:
 		int ID);
 
 	bool GetFlag()const { return m_ShotFlag; }
+	void SetFlag(bool flag) { m_ShotFlag=flag; }
 	virtual void OnCollision(CollisionBase* base)override ;
 private:
 	std::shared_ptr<CReaction>	m_pReaction;	//当たり判定

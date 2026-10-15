@@ -43,7 +43,7 @@ HRESULT CTitle::LoadData()
 {
 	//スカイの読み込み、座標の設定
 	m_pSky->AttachMesh(
-		*AssetManager::GetStatic(L"Sky\\TitleSky"));
+		*AssetManager::GetStatic(L"Sky\\TestSky"));
 
 	D3DXQUATERNION quaternion;
 
@@ -163,10 +163,10 @@ void CTitle::Sky()
 	constexpr float YSpeed = 0.0001f;
 	constexpr float XSpeed = 0.01f;
 	constexpr float MaxAngle = D3DX_PI / 2.0f;
-	//if (m_angle >= Max)
-	//{
-	//	m_angle = Max;
-	//}
+	if (m_angle >= MaxAngle)
+	{
+		m_angle = 0;
+	}
 	D3DXQUATERNION Quaternion;
 	m_angle -= XSpeed; // 回転速度
 
@@ -175,7 +175,7 @@ void CTitle::Sky()
 		0.f,
 		m_angle,
 		0.0f);
-	//m_pSky->SetQuaternion(Quaternion);
-	m_pSky->UpDown();
+	m_pSky->SetQuaternion(Quaternion);
+	//m_pSky->UpDown();
 	//m_pSky->Turn(XSpeed, MaxAngle);
 }

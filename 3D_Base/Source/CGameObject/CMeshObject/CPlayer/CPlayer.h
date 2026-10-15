@@ -21,6 +21,7 @@ public:
 		Hit,			// 当てた
 		Down,			// ダウン状態
 		Invincible,	    // 無敵状態
+		Dead,	        // 死亡状態
 	};
 
 public:
@@ -57,4 +58,5 @@ protected:
 	//キーボード
 	int         m_Life;			//ライフの数
 	std::shared_ptr<CReaction>	m_pReaction;	//当たり判定
+
 };
