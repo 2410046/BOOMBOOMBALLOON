@@ -25,7 +25,7 @@ public://public:外部からアクセス可能.
 	~CSound();
 
 	//音声ファイルを開く.
-	bool Open( LPCTSTR sFName, LPCTSTR sAlias, HWND hWnd );
+	bool Open( LPCTSTR sFName, HWND hWnd );
 
 	//音声ファイルを閉じる.
 	bool Close();

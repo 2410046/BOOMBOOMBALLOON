@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <memory>
 #include"Singleton.h"
+#include <string>
 class CScene;       //シーンクラス
 /********************************************************************************
 *	シーンマネージャークラス
@@ -8,15 +9,6 @@ class CScene;       //シーンクラス
 class SceneManager
     :public Singleton<SceneManager>
 {
-public:
-    // シーンリスト列挙型.
-    enum enList
-    {
-        Title,		// タイトル.
-        Select,     // セレクト
-        Game,		// メイン
-        Result,		// リザルト.
-    };
 private:
     friend class Singleton<SceneManager>;
     SceneManager();
@@ -31,10 +23,16 @@ public:
     // 現在のシーンを解放
     void Release();                
     // シーン切り替え
-    void NextScene(enList scene);
+    void NextScene(const std::string& scene);
 private:
+    //シーンの管理データつかわんかも
+    struct SceneData
+    {
+        std::string Name;              //シーンの名前
+        std::unique_ptr<CScene>	pScene;  //シーン
+    };
     //シーンの種類
-    void SceneList(enList scene);
+    void SceneList(const std::string& scene);
 private:
     std::unique_ptr<CScene>		m_pScene;
     HWND                        m_hWnd;

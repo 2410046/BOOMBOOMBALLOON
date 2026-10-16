@@ -47,10 +47,12 @@ void CSelect::Create()
 		auto active = std::make_unique<CUIObject>();
 		m_pActive.push_back(std::move(active));
 
-		//選択肢の生成
+		//プレイヤーの生成
 		auto player = std::make_unique<CPlayer>();
 		m_pPlayer.push_back(std::move(player));
 	}
+
+	m_pBack = std::make_unique<CSpriteObject>();
 
 }
 //ロード関数
@@ -58,7 +60,9 @@ HRESULT CSelect::LoadData()
 {
 	//スカイの読み込み、座標の設定
 	m_pSky->AttachMesh(
-		*AssetManager::GetStatic(L"Sky\\Sky1"));
+		*AssetManager::GetStatic(L"Sky\\TestSky"));
+	m_pBack->AttachSprite(
+		*AssetManager::GetSprite3D(L"TestSky"));
 
 	D3DXQUATERNION quaternion;
 
@@ -102,7 +106,7 @@ HRESULT CSelect::LoadData()
 		m_pPlayer[i]->SetID(i);
 
 	}
-
+	m_pBack->SetPosition(0.f,0.f,10.f);
 	// カメラの座標や角度の設定
 	CCamera::GetInstance()->SetCamera(Camera_Pos, Look_Pos);
 	//ライトの設定
@@ -118,7 +122,7 @@ void CSelect::Release()
 void CSelect::Update()
 {
 	//BGMをループ再生する
-	CSoundManager::PlayLoop(CSoundManager::enList::Select);
+	CSoundManager::PlayLoop(_T("BGM\\Select"));
 
 	//選択肢の設定
 	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
@@ -141,6 +145,8 @@ void CSelect::Update()
 
 		//プレイヤーの人数選択
 		PlayerActive();
+
+		Sky();
 	}
 	else	//決定
 	{
@@ -148,26 +154,24 @@ void CSelect::Update()
 		if (CFade::GetInstance()->FadeOut())
 		{
 			//音楽を停止
-			CSoundManager::Stop(CSoundManager::enList::Select);
+			CSoundManager::Stop(_T("BGM\\Select"));
 
 			// 選択内容に応じて遷移先を分岐
 			switch (m_Select)
 			{
 			case 0:
 				//タイトルシーンに遷移
-				SceneManager::GetInstance()->NextScene(SceneManager::Title);
+				SceneManager::GetInstance()->NextScene("Title");
 				break;
 			case 1:
 				//ゲームシーンに遷移
-				SceneManager::GetInstance()->NextScene(SceneManager::Game);
+				SceneManager::GetInstance()->NextScene("Game");
 				break;
 			}
 			//選択可能
 			m_Start = false;
 		}
 	}
-
-
 }
 //描画関数
 void CSelect::Draw()
@@ -180,8 +184,8 @@ void CSelect::Draw()
 
 	CDirectX11::GetInstance()->SetDepth(false);
 
-	m_pSky->Draw(camera);
-
+	//m_pSky->Draw(camera);
+	m_pBack->Draw(camera);
 	//選択肢の描画
 	for (size_t i = 0; i < m_pSelect.size(); ++i)
 	{
@@ -256,4 +260,27 @@ void CSelect::PlayerActive()
 	// 接続されているコントローラー数を
 	// プレイする人数としてゲームデータに設定
 	CGameData::GetInstance()->SetPlayNo(m_PadCount);
+}
+//スカイの動作
+void CSelect::Sky()
+{
+	//縦に動きながら、横にゆっくり回転
+	constexpr float YSpeed = 0.0001f;
+	constexpr float XSpeed = 0.01f;
+	constexpr float MaxAngle = D3DX_PI / 2.0f;
+	if (m_angle >= MaxAngle)
+	{
+		m_angle = 0;
+	}
+	D3DXQUATERNION Quaternion;
+	m_angle -= XSpeed; // 回転速度
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&Quaternion,
+		0.f,
+		m_angle,
+		0.0f);
+	m_pSky->SetQuaternion(Quaternion);
+	//m_pSky->UpDown();
+	//m_pSky->Turn(XSpeed, MaxAngle);
 }

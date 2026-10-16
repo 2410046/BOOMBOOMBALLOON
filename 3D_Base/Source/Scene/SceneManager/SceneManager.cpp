@@ -19,7 +19,7 @@ HRESULT SceneManager::NewScene(HWND hWnd)
 {
     m_hWnd = hWnd;
     //最初はタイトルシーン
-    NextScene(enList::Select);//Title
+    NextScene("Title");//Title
     return S_OK;
 }
 
@@ -52,7 +52,7 @@ void SceneManager::Release()
 }
 
 // 現在のシーンを更新
-void SceneManager::NextScene(enList scene)
+void SceneManager::NextScene(const std::string& scene)
 {
     if (m_pScene != nullptr)
     {
@@ -69,16 +69,34 @@ void SceneManager::NextScene(enList scene)
     }
 }
 //シーンの種類
-void SceneManager::SceneList(enList scene)
+void SceneManager::SceneList(const std::string& scene)
 {
-    //シーン作成
-    switch (scene)
+
+
+    //// シーン作成
+    //SceneData DataName[]
+    //{
+    //    {"Title" ,std::make_unique<CTitle>()},
+    //    {"Select",std::make_unique<CSelect>()},
+    //    {"Game"  ,std::make_unique<CGame>()},
+    //    {"Result",std::make_unique<CResult>()},
+    //};
+
+
+    if (scene == "Title")
     {
-    case Title:		m_pScene = std::make_unique<CTitle>();	break;//タイトル
-    case Select:	m_pScene = std::make_unique<CSelect>();	break;//セレクト
-    case Game:      m_pScene = std::make_unique<CGame>();	break;//ゲーム
-    case Result:	m_pScene = std::make_unique<CResult>();	break;//リザルト
-    default:
-        break;
+        m_pScene = std::make_unique<CTitle>();
+    }
+    else if (scene == "Select")
+    {
+        m_pScene = std::make_unique<CSelect>();
+    }
+    else if (scene == "Game")
+    {
+        m_pScene = std::make_unique<CGame>();
+    }
+    else if (scene == "Result")
+    {
+        m_pScene = std::make_unique<CResult>();
     }
 }

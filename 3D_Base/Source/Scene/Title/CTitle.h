@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "CScene.h"
 #include"Scene/SelectText/CSelectText.h"  //選択肢の関数
-//#include"CGameObject/CMeshObject/CStaticMeshObject.h"
 #include"CGameObject/CMeshObject/CCharacter.h"
 /********************************************************************************
 *	タイトルクラス.
@@ -32,6 +31,6 @@ private:
     //スプライトオブジェクト
     std::unique_ptr<CCharacter>		m_pSky;		   //スカイクラス
     std::vector<std::unique_ptr<CSelectUI>> m_pSelect;  //選択肢テキストクラス
-    std::unique_ptr<CSelectUI> m_pLogo;  //選択肢テキストクラス
-    float m_angle = 0.f;
+    std::unique_ptr<CUIObject> m_pLogo;  //選択肢テキストクラス
+    float m_angle;
 };

@@ -41,20 +41,20 @@ class CEffect
 	: public Singleton<CEffect>
 {
 public:
-	////エフェクト種類列挙型
-	enum enList
-	{
-		DeleteA,			//音符Aで使用
-		DeleteB,			//音符Bで使用
-		DeleteX,			//音符Xで使用
-		DeleteY,			//音符Yで使用
-		AppA,
-		AppB,
-		AppX,
-		AppY,
-		Max				//最大数
+	//////エフェクト種類列挙型
+	//enum enList
+	//{
+	//	DeleteA,			//音符Aで使用
+	//	DeleteB,			//音符Bで使用
+	//	DeleteX,			//音符Xで使用
+	//	DeleteY,			//音符Yで使用
+	//	AppA,
+	//	AppB,
+	//	AppX,
+	//	AppY,
+	//	Max				//最大数
 
-	};
+	//};
 private:
 	friend class Singleton<CEffect>;
 	CEffect();
@@ -80,7 +80,7 @@ public:
 	// 制御系
 	//-----------------------------------
 	//再生
-	static ::EsHandle Play(enList listNo, const D3DXVECTOR3& pos);
+	static ::EsHandle Play(const std::wstring& Name, const D3DXVECTOR3& pos);
 	//停止
 	static void Stop(::EsHandle handle);
 	//全て停止
@@ -111,8 +111,8 @@ private:
 	::EsManagerRef		m_pManager;
 	::EsRendererRef		m_pRenderer;
 	//エフェクトの種類ごとに必要
-	::EsEffectRef		m_pEffect[enList::Max];
+	//::EsEffectRef		m_pEffect[enList::Max];
 	//エフェクトの種類ごとに必要
-	//std::unordered_map<std::string, ::EsEffectRef> m_pEffect;
+	std::unordered_map<std::wstring, ::EsEffectRef> m_pEffect;
 };
 

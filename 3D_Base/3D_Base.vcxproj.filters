@@ -440,9 +440,6 @@
     <ClInclude Include="Source\CGameObject\CSpriteObject\CTIme\CTime.h">
       <Filter>Source\GameObject\SpriteObject\UI\CTime</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CGameObject\CSpriteObject\CFade\CFade.h">
-      <Filter>Source\GameObject\SpriteObject\UI\CFade</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CGameObject\CUIObject\CUIObject.h">
       <Filter>Source\GameObject\UIObject</Filter>
     </ClInclude>
@@ -604,6 +601,9 @@
     </ClInclude>
     <ClInclude Include="Source\Asset\Effect\CEffectPlay.h">
       <Filter>Source\Asset\CEffect\CEffectPlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CGameObject\CSpriteObject\CFade\CFade.h">
+      <Filter>Source\GameObject\SpriteObject\UI\CFade</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
