@@ -93,7 +93,7 @@ void CTitle::Release()
 void CTitle::Update()
 {
 	//BGMをループ再生する
-	CSoundManager::PlayLoop("Title");
+	CSoundManager::PlayLoop(_T("BGM\\Title"));
 	//選択肢の設定
 	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
 
@@ -128,7 +128,7 @@ void CTitle::Update()
 		if (CFade::GetInstance()->FadeOut())
 		{
 			//音楽を停止
-			CSoundManager::Stop("Title");
+			CSoundManager::Stop(_T("BGM\\Title"));
 
 			// 選択内容に応じて遷移先を分岐
 			switch (m_Select)

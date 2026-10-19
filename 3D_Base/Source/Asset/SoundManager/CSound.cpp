@@ -18,25 +18,24 @@ CSound::~CSound()
 //================================================================================
 //  音声ファイルを開く関数.
 //================================================================================
-bool CSound::Open( LPCTSTR sFileName, HWND hWnd )
+bool CSound::Open(LPCTSTR sFileName, HWND hWnd)
 {
 	static const std::wstring TEX_DIR = L"Data\\Sound\\";
 	static const std::wstring TEX_MP3 = L".mp3";
-	std::wstring fullPath = TEX_DIR + sFileName + TEX_MP3;
+	std::wstring fullPath = TEX_DIR + sFileName+ TEX_MP3;
 	//初期設定.
-	SetInitParam(sFileName, hWnd );
+	SetInitParam(sFileName, hWnd);
 
 	//コマンド.
 	TCHAR cmd[STR_BUFF_MAX] = _T("");
 
-	wsprintf( cmd, _T("open %s alias %s"), fullPath.c_str(), m_sAlias);
+	wsprintf(cmd, _T("open %s alias %s"), fullPath.c_str(), m_sAlias);
 
-	if( mciSendString( cmd, nullptr, 0, m_hWnd ) == 0 ){
+	if (mciSendString(cmd, nullptr, 0, m_hWnd) == 0) {
 		return true;
 	}
 	return false;
 }
-
 //================================================================================
 //  音声ファイルを開く関数.
 //================================================================================

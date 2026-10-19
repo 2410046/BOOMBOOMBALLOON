@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "CCamera.h"
 #include "Singleton.h"
+#include <string>
+#include <unordered_map>
+#include <memory>
 //警告についてのコード分析を無効にする。4005:再定義
 #pragma warning(disable:4005)
 
@@ -11,26 +14,26 @@
 #include "EffekseerRendererDX11.h"
 
 #ifdef _DEBUG
-	#pragma comment(lib,"Effekseerd.lib")
-	#pragma comment(lib,"EffekseerRendererDX11d.lib")
+#pragma comment(lib,"Effekseerd.lib")
+#pragma comment(lib,"EffekseerRendererDX11d.lib")
 #else//#ifdef _DEBUG
-	#pragma comment(lib,"Effekseer.lib")
-	#pragma comment(lib,"EffekseerRendererDX11.lib")
+#pragma comment(lib,"Effekseer.lib")
+#pragma comment(lib,"EffekseerRendererDX11.lib")
 #endif//#ifdef _DEBUG
 
 //エイリアスを用意
 //※コードが横に長くなって読みづらいため
 namespace {
 	namespace Es = ::Effekseer;
-	using EsManagerRef	= ::Es::ManagerRef;
-	using EsManager		= ::Es::Manager;
-	using EsEffectRef	= ::Es::EffectRef;
-	using EsEffect		= ::Es::Effect;
-	using EsVec3		= ::Es::Vector3D;
-	using EsMatrix		= ::Es::Matrix44;
-	using EsHandle		= ::Es::Handle;
+	using EsManagerRef = ::Es::ManagerRef;
+	using EsManager = ::Es::Manager;
+	using EsEffectRef = ::Es::EffectRef;
+	using EsEffect = ::Es::Effect;
+	using EsVec3 = ::Es::Vector3D;
+	using EsMatrix = ::Es::Matrix44;
+	using EsHandle = ::Es::Handle;
 	using EsRendererRef = ::EffekseerRendererDX11::RendererRef;
-	using EsRenderer	= ::EffekseerRendererDX11::Renderer;
+	using EsRenderer = ::EffekseerRendererDX11::Renderer;
 };
 
 /**************************************************
@@ -41,20 +44,20 @@ class CEffect
 	: public Singleton<CEffect>
 {
 public:
-	//////エフェクト種類列挙型
-	//enum enList
-	//{
-	//	DeleteA,			//音符Aで使用
-	//	DeleteB,			//音符Bで使用
-	//	DeleteX,			//音符Xで使用
-	//	DeleteY,			//音符Yで使用
-	//	AppA,
-	//	AppB,
-	//	AppX,
-	//	AppY,
-	//	Max				//最大数
+	////エフェクト種類列挙型
+	enum enList
+	{
+		DeleteA,			//音符Aで使用
+		DeleteB,			//音符Bで使用
+		DeleteX,			//音符Xで使用
+		DeleteY,			//音符Yで使用
+		AppA,
+		AppB,
+		AppX,
+		AppY,
+		Max				//最大数
 
-	//};
+	};
 private:
 	friend class Singleton<CEffect>;
 	CEffect();
@@ -80,7 +83,7 @@ public:
 	// 制御系
 	//-----------------------------------
 	//再生
-	static ::EsHandle Play(const std::wstring& Name, const D3DXVECTOR3& pos);
+	static ::EsHandle Play(const std::u16string& fileName, const D3DXVECTOR3& pos);
 	//停止
 	static void Stop(::EsHandle handle);
 	//全て停止
@@ -111,8 +114,7 @@ private:
 	::EsManagerRef		m_pManager;
 	::EsRendererRef		m_pRenderer;
 	//エフェクトの種類ごとに必要
-	//::EsEffectRef		m_pEffect[enList::Max];
-	//エフェクトの種類ごとに必要
-	std::unordered_map<std::wstring, ::EsEffectRef> m_pEffect;
+	std::unordered_map<std::u16string, EsEffectRef> m_pEffect;
+	//std::unordered_map<std::string, ::EsEffectRef> m_pEffect;
 };
 

@@ -6,10 +6,10 @@ constexpr int RENDER_SPRITE_MAX = 8000;
 constexpr int EFFECT_INSTANCE_MAX = 1000;
 
 CEffect::CEffect()
-	: m_pManager	( nullptr )
-	, m_pRenderer	( nullptr )
+	: m_pManager(nullptr)
+	, m_pRenderer(nullptr)
 
-	, m_pEffect		()
+	, m_pEffect()
 {
 }
 
@@ -30,11 +30,6 @@ HRESULT CEffect::Create()
 {
 	//エフェクトのマネージャーの作成
 	m_pManager = ::EsManager::Create(RENDER_SPRITE_MAX);
-	if (m_pManager == nullptr)
-	{
-		_ASSERT_EXPR(false, L"EsManager::Create failed");
-		return E_FAIL;
-	}
 
 	//エフェクトのレンダラーの作成
 	m_pRenderer = ::EsRenderer::Create(
@@ -60,40 +55,41 @@ HRESULT CEffect::Create()
 //データ読み込み
 HRESULT CEffect::LoadData()
 {
-	// ファイル名
-	const char16_t* path[]
+	// ファイルパス
+	static const std::u16string TEX_DIR = u"Data\\Effekseer\\";
+	static const std::u16string TEX_EFK = u".efk";
+
+	struct EffectList
 	{
-		u"Data\\Effekseer\\deleteA.efk"
-		//u"deleteA",
-		//u"deleteB",
-		//u"deleteX",
-		//u"deleteY",
-		//u"Boost1",
-		//u"Boost2",
-		//u"Boost3",
-		//u"Boost4",
+		std::string listNo;				//enList列挙型を設定
+		const char16_t path[256];	//ファイルの名前(パス付き)
 	};
 
-	const char16_t* TEX_DIR = u"Data\\Effekseer\\";
-	const char16_t* TEX_EFK = u".efk";
+	const char16_t* fileName[] =
+	{
+		u"deleteA",
+		u"deleteB",
+		u"deleteX",
+		u"deleteY",
+		u"Boost1",
+		u"Boost2",
+		u"Boost3",
+		u"Boost4",
+	};
 
-	int list_max = sizeof(path) / sizeof(path[0]);
+	//配列の最大要素数を算出（配列全体のサイズ／配列１つ分のサイズ）
+	int list_max = sizeof(fileName) / sizeof(fileName[0]);
 
 	for (int i = 0; i < list_max; i++)
 	{
-		// 再生用のキー
-		std::wstring index = std::to_wstring(i);
-
-		// ファイルパスを作成
-		std::u16string EffectPath =
-			std::u16string(TEX_DIR) + path[i] + TEX_EFK;
-
+	
+		std::u16string path 
+			= TEX_DIR + fileName[i] + TEX_EFK;
 		// エフェクトの読み込み
-		m_pEffect[index] = ::EsEffect::Create(
-			m_pManager,
-			EffectPath.c_str());
+		m_pEffect[fileName[i]] =
+			::EsEffect::Create(m_pManager, path.c_str());
 
-		if (m_pEffect[index] == nullptr)
+		if (m_pEffect[fileName[i]] == nullptr)
 		{
 			_ASSERT_EXPR(false, L"CEffect::LoadData()");
 			return E_FAIL;
@@ -103,46 +99,9 @@ HRESULT CEffect::LoadData()
 	return S_OK;
 }
 
-
-	//struct EffectList
-	//{
-	//	enList listNo;				//enList列挙型を設定
-	//	const char16_t path[256];	//ファイルの名前(パス付き)
-	//};
-
-	//EffectList EList[] =
-	//{
-	//	//u""は、UTF-16エンコーディングの文字列リテラルで、const char16_t* に代入可能
-	//	{ enList::DeleteA,	u"Data\\Effekseer\\deleteA.efk"	},
-	//	{ enList::DeleteB,	u"Data\\Effekseer\\deleteB.efk"	},
-	//	{ enList::DeleteX,	u"Data\\Effekseer\\deleteX.efk"	},
-	//	{ enList::DeleteY,	u"Data\\Effekseer\\deleteY.efk"	},
-	//	{ enList::AppA,		u"Data\\Effekseer\\Boost1.efk"	},
-	//	{ enList::AppB,		u"Data\\Effekseer\\Boost2.efk"	},
-	//	{ enList::AppX,		u"Data\\Effekseer\\Boost3.efk"	},
-	//	{ enList::AppY,		u"Data\\Effekseer\\Boost4.efk"	},
-	//};
-	////配列の最大要素数を算出（配列全体のサイズ／配列１つ分のサイズ）
-	//int list_max = sizeof(EList) / sizeof(EList[0]);
-	//for (int i = 0; i < list_max; i++)
-	//{
-	//	int listNo = EList[i].listNo;
-	//	//エフェクトの読み込み
-	//	m_pEffect[listNo] =
-	//		::EsEffect::Create(m_pManager, EList[i].path);
-
-	//	if (m_pEffect[listNo] == nullptr) {
-	//		_ASSERT_EXPR(false, L"CEffect::LoadData()");
-	//		return E_FAIL;
-	//	}
-	//}
-
-	//return S_OK;
-
-
 //描画
 void CEffect::Draw(
-	const CCamera*pCamera)
+	const CCamera* pCamera)
 {
 	if (m_pRenderer == nullptr || m_pManager == nullptr)
 		return;
@@ -174,10 +133,10 @@ void CEffect::Draw(
 	m_pRenderer->EndRendering();
 }
 //再生
-::EsHandle CEffect::Play(const std::wstring& Name, const D3DXVECTOR3& pos)
+::EsHandle CEffect::Play(const std::u16string& fileName, const D3DXVECTOR3& pos)
 {
 	CEffect* pE = CEffect::GetInstance();
-	return pE->m_pManager->Play(pE->m_pEffect[Name], pos.x, pos.y, pos.z);
+	return pE->m_pManager->Play(pE->m_pEffect.at(fileName), pos.x, pos.y, pos.z);
 }
 //停止
 void CEffect::Stop(::EsHandle handle)
