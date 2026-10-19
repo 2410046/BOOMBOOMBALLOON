@@ -67,3 +67,87 @@ void CSoundManager::Release()
 		}
 	}
 }
+
+//#include "CSoundManager.h"
+//#include "MyMacro.h"
+//
+//CSoundManager::CSoundManager()
+//	: m_pSound()
+//{
+//}
+//
+//CSoundManager::~CSoundManager()
+//{
+//	Release();
+//}
+//// サウンド読み込み
+//bool CSoundManager::Load(HWND hWnd)
+//{
+//	// サウンドのパス
+//	const TCHAR* path[]
+//	{
+//		_T("BGM\\Title.mp3"),
+//		_T("BGM\\MouningGame.mp3"),
+//		_T("BGM\\NightGame.mp3"),
+//		_T("BGM\\Select.mp3"),
+//		_T("BGM\\空と虹.mp3"),
+//	};
+//
+//	const int list_max = sizeof(path) / sizeof(path[0]);
+//
+//	for (int i = 0; i < list_max; i++)
+//	{
+//		std::wstring key = path[i];
+//
+//		// 二重読み込み防止
+//		if (m_pSound.find(key) != m_pSound.end())
+//		{
+//			continue;
+//		}
+//
+//		auto* pSound = new CSound();
+//
+//		if (!pSound->Open(
+//			path[i],
+//			hWnd))
+//		{
+//			delete pSound;
+//			return false;
+//		}
+//
+//		m_pSound[key] = pSound;
+//	}
+//
+//	return true;
+//}
+//
+//// サウンド取得
+//CSound* CSoundManager::GetSound(LPCTSTR alias)
+//{
+//	if (alias == nullptr)
+//	{
+//		return nullptr;
+//	}
+//
+//	auto it = m_pSound.find(alias);
+//
+//	if (it == m_pSound.end())
+//	{
+//		return nullptr;
+//	}
+//
+//	return it->second;
+//}
+//
+//
+//// 解放
+//void CSoundManager::Release()
+//{
+//	for (auto& sound : m_pSound)
+//	{
+//		sound.second->Close();
+//		SAFE_DELETE(sound.second);
+//	}
+//
+//	m_pSound.clear();
+//}

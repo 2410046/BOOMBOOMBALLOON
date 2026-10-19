@@ -172,6 +172,6 @@ void CGame::Next()
 		//スコアをファイルに保存
 		m_pScores.ResultScore();
 		//リザルトに遷移
-		SceneManager::GetInstance()->NextScene(SceneManager::Result);
+		SceneManager::GetInstance()->NextScene("Result");
 	}
 }

@@ -3,15 +3,15 @@
 // 定数定義
 namespace
 {
-	static const D3DXVECTOR3 Back_Pos  
+	static const D3DXVECTOR3 Back_Pos
 		= D3DXVECTOR3(-0.1f, 1.5f, 20.f);	//背景座標
 	static const D3DXVECTOR3 Camera_Pos
 		= D3DXVECTOR3(0.0f, 1.0f, -2.0f);	//カメラ座標
-	static const D3DXVECTOR3 Look_Pos   
+	static const D3DXVECTOR3 Look_Pos
 		= D3DXVECTOR3(0.0f, 1.0f, 10.0f);	//カメラの方向座標
-	static const D3DXVECTOR3 Light_Pos  
-		= D3DXVECTOR3( 1.f, 1.f, -1.f );	//ライト座標
-	 //選択肢の数
+	static const D3DXVECTOR3 Light_Pos
+		= D3DXVECTOR3(1.f, 1.f, -1.f);	//ライト座標
+	//選択肢の数
 	constexpr int SellCount = 2;
 	//プレイヤーの最大人数
 	constexpr int PlayerCount = 4;
@@ -19,7 +19,7 @@ namespace
 }
 //コンストラクタ.
 CSelect::CSelect()
-	: CScene			(  )
+	: CScene()
 {
 }
 //デストラクタ.
@@ -32,7 +32,7 @@ CSelect::~CSelect()
 void CSelect::Create()
 {
 	////メッシュのインスタンス作成.
-	m_pSky   = std::make_unique<CStaticMeshObject>();
+	m_pSky = std::make_unique<CStaticMeshObject>();
 
 	for (int i = 0; i < SellCount; ++i)//選択肢の数
 	{
@@ -47,10 +47,12 @@ void CSelect::Create()
 		auto active = std::make_unique<CUIObject>();
 		m_pActive.push_back(std::move(active));
 
-		//選択肢の生成
+		//プレイヤーの生成
 		auto player = std::make_unique<CPlayer>();
 		m_pPlayer.push_back(std::move(player));
 	}
+
+	m_pBack = std::make_unique<CSpriteObject>();
 
 }
 //ロード関数
@@ -59,6 +61,8 @@ HRESULT CSelect::LoadData()
 	//スカイの読み込み、座標の設定
 	m_pSky->AttachMesh(
 		*AssetManager::GetStatic(L"Sky\\Sky1"));
+	//m_pBack->AttachSprite(
+		//*AssetManager::GetSprite3D(L"TestSky"));
 
 	D3DXQUATERNION quaternion;
 
@@ -102,7 +106,7 @@ HRESULT CSelect::LoadData()
 		m_pPlayer[i]->SetID(i);
 
 	}
-
+	m_pBack->SetPosition(0.f, 0.f, 10.f);
 	// カメラの座標や角度の設定
 	CCamera::GetInstance()->SetCamera(Camera_Pos, Look_Pos);
 	//ライトの設定
@@ -155,11 +159,11 @@ void CSelect::Update()
 			{
 			case 0:
 				//タイトルシーンに遷移
-				SceneManager::GetInstance()->NextScene(SceneManager::Title);
+				SceneManager::GetInstance()->NextScene("Title");
 				break;
 			case 1:
 				//ゲームシーンに遷移
-				SceneManager::GetInstance()->NextScene(SceneManager::Game);
+				SceneManager::GetInstance()->NextScene("Game");
 				break;
 			}
 			//選択可能
@@ -181,7 +185,7 @@ void CSelect::Draw()
 	CDirectX11::GetInstance()->SetDepth(false);
 
 	m_pSky->Draw(camera);
-
+	m_pBack->Draw(camera);
 	//選択肢の描画
 	for (size_t i = 0; i < m_pSelect.size(); ++i)
 	{

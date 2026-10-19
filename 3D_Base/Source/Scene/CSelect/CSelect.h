@@ -3,6 +3,7 @@
 #include"CGameObject/CUIObject/SelectUI/CSelectUI.h"
 #include"Scene/SelectText/CSelectText.h"  //選択肢の関数
 #include"CGameObject/CMeshObject/CStaticMeshObject.h"
+#include "CGameObject/CSpriteObject/CSpriteObject.h"
 #include"CGameObject/CMeshObject/CPlayer/CPlayer.h"
 /********************************************************************************
 *	セレクトクラス.
@@ -30,10 +31,14 @@ public:
 protected:
     //プレイヤーの人数関数
     void PlayerActive();
+    //空関数
+    void Sky();
 private:
     std::unique_ptr<CStaticMeshObject>		m_pSky;		   //スカイクラス
+    std::unique_ptr<CSpriteObject>		m_pBack;		   //バック画像クラス
 
     std::vector<std::unique_ptr<CSelectUI>> m_pSelect;  //選択肢テキストクラス
     std::vector<std::unique_ptr<CUIObject>> m_pActive;  //アクティブプレイヤークラス
     std::vector<std::unique_ptr<CPlayer>> m_pPlayer;  //プレイヤーリアクションクラス
+    float m_angle = 0;
 };

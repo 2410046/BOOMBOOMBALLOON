@@ -1,20 +1,22 @@
 ﻿#include "CTitle.h"   //タイトルクラス
+#include <algorithm>
 // 定数定義
-namespace 
+namespace
 {
-	static const D3DXVECTOR3 Back_Pos  
+	static const D3DXVECTOR3 Back_Pos
 		= D3DXVECTOR3(-0.1f, 1.5f, 20.f);	//背景座標
 	static const D3DXVECTOR3 Camera_Pos
 		= D3DXVECTOR3(0.0f, 1.0f, -2.0f);	//カメラ座標
-	static const D3DXVECTOR3 Look_Pos   
+	static const D3DXVECTOR3 Look_Pos
 		= D3DXVECTOR3(0.0f, 1.0f, 10.0f);	//カメラの方向座標
-	static const D3DXVECTOR3 Light_Pos 
-		= D3DXVECTOR3( 1.f, 1.f, -1.f );	//ライト座標
+	static const D3DXVECTOR3 Light_Pos
+		= D3DXVECTOR3(1.f, 1.f, -1.f);	//ライト座標
 	constexpr int SellCount = 2;            //選択肢の数
 }
 //コンストラクタ.
 CTitle::CTitle()
 	: CScene()
+	, m_angle(-1.59f)
 {
 }
 //デストラクタ
@@ -29,6 +31,7 @@ void CTitle::Create()
 {
 	//メッシュのインスタンス作成.
 	m_pSky = std::make_unique<CCharacter>();
+	m_pLogo = std::make_unique<CUIObject>();
 	for (int i = 0; i < SellCount; ++i)//選択肢の数
 	{
 		//選択肢の生成
@@ -43,7 +46,7 @@ HRESULT CTitle::LoadData()
 {
 	//スカイの読み込み、座標の設定
 	m_pSky->AttachMesh(
-		*AssetManager::GetStatic(L"Sky\\TestSky"));
+		*AssetManager::GetStatic(L"Sky\\Sky"));
 
 	D3DXQUATERNION quaternion;
 
@@ -54,6 +57,11 @@ HRESULT CTitle::LoadData()
 		0.0f);
 
 	m_pSky->SetQuaternion(quaternion);
+
+	//タイトルロゴの読み込み,座標の設定
+	m_pLogo->AttachSprite(
+		*AssetManager::GetSprite2D(L"Logo"));
+	m_pLogo->SetPosition(350.f, 600.f, 0.f);
 
 	//選択肢の画像の読み込み、パターン番号の設定、座標の設定
 	for (int i = 0; i < m_pSelect.size(); ++i)
@@ -90,6 +98,16 @@ void CTitle::Update()
 	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
 
 	//--------------------
+	// ロゴを動かす
+	//--------------------
+	static float m_LogoMove = 600.f;
+	m_LogoMove--;
+	m_LogoMove =std::clamp(m_LogoMove, 100.f, 600.f);
+
+	m_pLogo->SetPosition(250.f, m_LogoMove, 0.f);
+
+
+	//--------------------
 	// シーン遷移
 	//--------------------
 	//選択中
@@ -117,7 +135,7 @@ void CTitle::Update()
 			{
 			case 0:
 				//セレクトシーンに遷移
-				SceneManager::GetInstance()->NextScene(SceneManager::Select);
+				SceneManager::GetInstance()->NextScene("Select");
 				break;
 			case 1:
 				//ゲーム終了
@@ -143,6 +161,7 @@ void CTitle::Draw()
 	CDirectX11::GetInstance()->SetDepth(false);
 	//背景の描画
 	m_pSky->Draw(camera);
+	m_pLogo->Draw();
 
 	//選択肢の描画
 	for (size_t i = 0; i < m_pSelect.size(); ++i)
@@ -160,7 +179,7 @@ void CTitle::Draw()
 void CTitle::Sky()
 {
 	//縦に動きながら、横にゆっくり回転
-	constexpr float YSpeed = 0.0001f;
+	constexpr float YSpeed = 0.001f;
 	constexpr float XSpeed = 0.01f;
 	constexpr float MaxAngle = D3DX_PI / 2.0f;
 	if (m_angle >= MaxAngle)
@@ -168,14 +187,14 @@ void CTitle::Sky()
 		m_angle = 0;
 	}
 	D3DXQUATERNION Quaternion;
-	m_angle -= XSpeed; // 回転速度
+	m_angle -= YSpeed; // 回転速度
 
 	D3DXQuaternionRotationYawPitchRoll(
 		&Quaternion,
-		0.f,
 		m_angle,
+		0.f,
 		0.0f);
 	m_pSky->SetQuaternion(Quaternion);
-	//m_pSky->UpDown();
+	m_pSky->UpDown();
 	//m_pSky->Turn(XSpeed, MaxAngle);
 }
