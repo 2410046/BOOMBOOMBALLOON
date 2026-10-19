@@ -6,11 +6,11 @@
 struct IDData
 {
 	D3DXVECTOR4           Color;	    //色
-	CEffect::enList       DeleteEffect;	//削除エフェクト
+	std::wstring           DeleteEffect;	//削除エフェクト
 
 	IDData(
 		D3DXVECTOR4 color,
-		CEffect::enList Delete)
+		std::wstring  Delete)
 		: Color(color)
 		, DeleteEffect(Delete)
 	{
@@ -21,11 +21,11 @@ inline  const
 std::vector<IDData> s_IDTable=
 {
    //ID1
-   IDData(D3DXVECTOR4(1.0f, 0.5f, 0.5f, 1.0f),CEffect::enList::DeleteA),
+   IDData(D3DXVECTOR4(1.0f, 0.5f, 0.5f, 1.0f),L"DeleteA"),
    //ID2
-   IDData(D3DXVECTOR4(0.4f, 0.8f,1,1),CEffect::enList::DeleteB),
+   IDData(D3DXVECTOR4(0.4f, 0.8f,1,1),L"DeleteB"),
    //ID3
-   IDData(D3DXVECTOR4(1,1,0,1), CEffect::enList::DeleteX),
+   IDData(D3DXVECTOR4(1,1,0,1),L"DeleteX"),
    //ID4
-   IDData(D3DXVECTOR4(0,1,0,1), CEffect::enList::DeleteY)
+   IDData(D3DXVECTOR4(0,1,0,1),L"DeleteY")
 };

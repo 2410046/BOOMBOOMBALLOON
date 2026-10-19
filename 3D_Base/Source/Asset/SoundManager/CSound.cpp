@@ -18,13 +18,13 @@ CSound::~CSound()
 //================================================================================
 //  音声ファイルを開く関数.
 //================================================================================
-bool CSound::Open( LPCTSTR sFileName, LPCTSTR sAlias, HWND hWnd )
+bool CSound::Open( LPCTSTR sFileName, HWND hWnd )
 {
 	static const std::wstring TEX_DIR = L"Data\\Sound\\";
 	static const std::wstring TEX_MP3 = L".mp3";
 	std::wstring fullPath = TEX_DIR + sFileName + TEX_MP3;
 	//初期設定.
-	SetInitParam( sAlias, hWnd );
+	SetInitParam(sFileName, hWnd );
 
 	//コマンド.
 	TCHAR cmd[STR_BUFF_MAX] = _T("");

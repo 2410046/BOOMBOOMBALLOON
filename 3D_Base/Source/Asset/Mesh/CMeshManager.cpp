@@ -41,10 +41,7 @@ CSkinMesh* CMeshManager::GetSkin(const std::wstring& name)
 CStaticMesh* CMeshManager::GetStatic_Internal(
 	const std::wstring& name)
 {
-	// ----------------------------------------
 	// すでに読み込まれているか確認
-	// ----------------------------------------
-
 	auto it = m_StaticMapList.find(name);
 
 	if (it != m_StaticMapList.end())
@@ -52,44 +49,18 @@ CStaticMesh* CMeshManager::GetStatic_Internal(
 		return it->second.get();
 	}
 
-
-	// ----------------------------------------
 	// まだ存在しないので生成
-	// ----------------------------------------
-
 	auto mesh = std::make_unique<CStaticMesh>();
 
-
-	// ----------------------------------------
 	// ファイルパスを作成
-	//
-	// 例：
-	//
-	// name
-	// "Player\\Player01"
-	//
-	// ↓
-	// Data\\Mesh\\Static\\Player\\Player01.X
-	// ----------------------------------------
-
 	std::wstring fullPath =
 		STATIC_MESH_DIR + name + MESH_X;
-
-
-	// ----------------------------------------
 	// メッシュ読み込み
-	// ----------------------------------------
-
 	if (FAILED(mesh->Init(fullPath.c_str())))
 	{
 		return nullptr;
 	}
-
-
-	// ----------------------------------------
 	// マップに保存
-	// ----------------------------------------
-
 	CStaticMesh* result = mesh.get();
 
 	m_StaticMapList[name] = std::move(mesh);

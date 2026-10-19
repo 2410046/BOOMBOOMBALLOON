@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "CScene.h"
 #include"Scene/SelectText/CSelectText.h"  //選択肢の関数
-//#include"CGameObject/CMeshObject/CStaticMeshObject.h"
 #include"CGameObject/CMeshObject/CCharacter.h"
 /********************************************************************************
 *	タイトルクラス.

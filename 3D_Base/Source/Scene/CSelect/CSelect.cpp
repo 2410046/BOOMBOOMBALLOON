@@ -145,6 +145,8 @@ void CSelect::Update()
 
 		//プレイヤーの人数選択
 		PlayerActive();
+
+		Sky();
 	}
 	else	//決定
 	{
@@ -170,8 +172,6 @@ void CSelect::Update()
 			m_Start = false;
 		}
 	}
-
-
 }
 //描画関数
 void CSelect::Draw()
@@ -260,4 +260,27 @@ void CSelect::PlayerActive()
 	// 接続されているコントローラー数を
 	// プレイする人数としてゲームデータに設定
 	CGameData::GetInstance()->SetPlayNo(m_PadCount);
+}
+//スカイの動作
+void CSelect::Sky()
+{
+	//縦に動きながら、横にゆっくり回転
+	constexpr float YSpeed = 0.0001f;
+	constexpr float XSpeed = 0.01f;
+	constexpr float MaxAngle = D3DX_PI / 2.0f;
+	if (m_angle >= MaxAngle)
+	{
+		m_angle = 0;
+	}
+	D3DXQUATERNION Quaternion;
+	m_angle -= XSpeed; // 回転速度
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&Quaternion,
+		0.f,
+		m_angle,
+		0.0f);
+	m_pSky->SetQuaternion(Quaternion);
+	//m_pSky->UpDown();
+	//m_pSky->Turn(XSpeed, MaxAngle);
 }
