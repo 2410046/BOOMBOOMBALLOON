@@ -1,25 +1,24 @@
 ﻿#include "CSoundManager.h"
 #include "MyMacro.h"
-
 CSoundManager::CSoundManager()
 	: m_pSound	()
 {
 	//インスタンス生成.
-	for( int i = 0; i < enList::max; i++ )
-	{
-		m_pSound[i] = new CSound();
-	}
+	//for( int i = 0; i < enList::max; i++ )
+	//{
+	//	m_pSound[i] = new CSound();
+	//}
 }
 
 CSoundManager::~CSoundManager()
 {
 	Release();
 
-	//インスタンス破棄.
-	for( int i = enList::max - 1; i >= 0; i-- )
-	{
-		SAFE_DELETE( m_pSound[i] );
-	}
+	////インスタンス破棄.
+	//for( int i = enList::max - 1; i >= 0; i-- )
+	//{
+	//	SAFE_DELETE( m_pSound[i] );
+	//}
 }
 
 //サウンドデータ読込関数.
@@ -27,26 +26,34 @@ bool CSoundManager::Load( HWND hWnd )
 {
 	struct SoundList
 	{
-		int listNo;				//enList列挙型を設定.
+		std::string listNo;				//enList列挙型を設定.
 		const TCHAR path[256];	//ファイルの名前(パス付き).
 		const TCHAR alias[32];	//エイリアス名.
 	};
 	SoundList SList[] =
 	{
-		{ enList::Title ,		_T("BGM\\Title.mp3"),      _T("Title")	},
-		{ enList::Mouning,		_T("BGM\\MouningGame.mp3"),_T("Mouning")},
-		{ enList::Night,		_T("BGM\\NightGame.mp3"),_T("Night")},
-		{ enList::Select,		_T("BGM\\Select.mp3"),     _T("Select")	},
-		{ enList::Result,		_T("BGM\\空と虹.mp3"),     _T("Result")	},
+		{ "Title" ,		_T("BGM\\Title"),      _T("Title")	},
+		{ "Mouning",	_T("BGM\\MouningGame"),_T("Mouning")},
+		{ "Night",		_T("BGM\\NightGame"),  _T("Night")},
+		{ "Select",		_T("BGM\\Select"),     _T("Select")	},
+		{ "Result",		_T("BGM\\空と虹"),     _T("Result")	},
 	};
 	//配列の最大要素数を算出 (配列全体のサイズ/配列1つ分のサイズ).
-	int list_max = sizeof( SList ) / sizeof( SList[0] );
-	for( int i = 0; i < list_max; i++ )
+	int list_max = sizeof(SList) / sizeof(SList[0]);
+
+	for (int i = 0; i < list_max; i++)
 	{
-		if( m_pSound[SList[i].listNo]->Open(
+		auto& pSound = m_pSound[SList[i].listNo];
+
+		if (!pSound)
+		{
+			pSound = std::make_unique<CSound>();
+		}
+
+		if (!pSound->Open(
 			SList[i].path,
 			SList[i].alias,
-			hWnd ) == false )
+			hWnd))
 		{
 			return false;
 		}
@@ -59,13 +66,21 @@ bool CSoundManager::Load( HWND hWnd )
 void CSoundManager::Release()
 {
 	//開いた時と逆順で閉じる.
-	for( int i = enList::max - 1; i >= 0; i-- )
+	//for( int i = enList::max - 1; i >= 0; i-- )
+	//{
+	//	if( m_pSound[i] != nullptr )
+	//	{
+	//		m_pSound[i]->Close();
+	//	}
+	//}
+
+	for (auto& sound : m_pSound)
 	{
-		if( m_pSound[i] != nullptr )
-		{
-			m_pSound[i]->Close();
-		}
+		sound.second->Close();
+		//SAFE_DELETE(sound.second);
 	}
+
+	m_pSound.clear();
 }
 
 //#include "CSoundManager.h"

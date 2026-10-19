@@ -84,7 +84,7 @@ HRESULT CGame::LoadData()
 	//ライトの設定
 	CCamera::GetInstance()->SetLight(Light_Pos);
 	//音楽を再生
-	CSoundManager::PlayLoop(CSoundManager::enList(CSoundManager::Mouning));
+	CSoundManager::PlayLoop("Mouning");
 	return S_OK;
 }
 //解放関数.
@@ -166,7 +166,7 @@ void CGame::Next()
 		|| GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		//音楽を停止
-		CSoundManager::Stop(CSoundManager::enList::Mouning);
+		CSoundManager::Stop("Mouning");
 		//エフェクトをすべて止める
 		CEffect::StopAll();
 		//スコアをファイルに保存

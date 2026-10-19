@@ -122,7 +122,7 @@ void CSelect::Release()
 void CSelect::Update()
 {
 	//BGMをループ再生する
-	CSoundManager::PlayLoop(CSoundManager::enList::Select);
+	CSoundManager::PlayLoop("Select");
 
 	//選択肢の設定
 	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
@@ -152,7 +152,7 @@ void CSelect::Update()
 		if (CFade::GetInstance()->FadeOut())
 		{
 			//音楽を停止
-			CSoundManager::Stop(CSoundManager::enList::Select);
+			CSoundManager::Stop("Select");
 
 			// 選択内容に応じて遷移先を分岐
 			switch (m_Select)

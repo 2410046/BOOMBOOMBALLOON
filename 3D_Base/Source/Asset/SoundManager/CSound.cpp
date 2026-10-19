@@ -21,7 +21,8 @@ CSound::~CSound()
 bool CSound::Open( LPCTSTR sFileName, LPCTSTR sAlias, HWND hWnd )
 {
 	static const std::wstring TEX_DIR = L"Data\\Sound\\";
-	std::wstring fullPath = TEX_DIR + sFileName;
+	static const std::wstring TEX_MP3 = L".mp3";
+	std::wstring fullPath = TEX_DIR + sFileName + TEX_MP3;
 	//初期設定.
 	SetInitParam( sAlias, hWnd );
 
