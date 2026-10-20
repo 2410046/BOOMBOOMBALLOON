@@ -34,7 +34,6 @@ protected:
     //空関数
     void Sky();
 private:
-    std::unique_ptr<CStaticMeshObject>		m_pSky;		   //スカイクラス
     std::unique_ptr<CSpriteObject>		m_pBack;		   //バック画像クラス
 
     std::vector<std::unique_ptr<CSelectUI>> m_pSelect;  //選択肢テキストクラス

@@ -74,6 +74,9 @@ HRESULT CSpriteManager::CreateSprite2D()
     CSprite2D::SPRITE_STATE SSActive = { 142.f, 80.f, 423.f, 427.f, 423.f, 85.f };
     CSprite2D::SPRITE_STATE SSRank   = { 403.f, 554.f, 1612.f, 554.f, 403.f, 554.f };
 
+    CSprite2D::SPRITE_STATE SSTime    = { 121.f, 145.f , 451.f, 575.f, 451.f, 575.f };
+    CSprite2D::SPRITE_STATE SSArrow   = { 20.f, 50.f,141.f, 252.f, 70.f, 252.f };
+
     // スプライトのデータリスト
     Sprite2DData DataList[] =
     {
@@ -82,6 +85,9 @@ HRESULT CSpriteManager::CreateSprite2D()
         { L"Number",     SSNumber },
         { L"ActiveUser", SSActive },
         { L"Rank",       SSRank },
+
+        { L"Time",            SSTime },
+        { L"TimeArrow",       SSArrow },
         
     };
     // データを登録
@@ -110,12 +116,14 @@ HRESULT CSpriteManager::CreateSprite3D()
         = { 18.f, 35.f, 33.f, 20.f, 33.f, 20.f };
     CSprite3D::SPRITE_STATE SSFade
         = { 1289.f, 780.f, 1280.f, 480.f, 33.f, 20.f };
-
+    CSprite3D::SPRITE_STATE SSArrow
+        = { 2.f, 5.f,141.f, 252.f, 70.f, 252.f };
     // スプライト3Dのデータリスト
     Sprite3DData DataList[] =
     {
         { L"TestSky", SSSelectBack}, //リザルト
         { L"Black" , SSFade}, //フェード
+        { L"TimeArrow",       SSArrow },
     };
 
     // データを登録

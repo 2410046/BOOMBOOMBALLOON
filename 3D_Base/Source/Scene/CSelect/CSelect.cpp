@@ -31,9 +31,6 @@ CSelect::~CSelect()
 //構成関数
 void CSelect::Create()
 {
-	////メッシュのインスタンス作成.
-	m_pSky = std::make_unique<CStaticMeshObject>();
-
 	for (int i = 0; i < SellCount; ++i)//選択肢の数
 	{
 		//選択肢の生成
@@ -58,20 +55,10 @@ void CSelect::Create()
 //ロード関数
 HRESULT CSelect::LoadData()
 {
-	//スカイの読み込み、座標の設定
-	m_pSky->AttachMesh(
-		*AssetManager::GetStatic(L"Sky\\Sky1"));
-	//m_pBack->AttachSprite(
-		//*AssetManager::GetSprite3D(L"TestSky"));
 
-	D3DXQUATERNION quaternion;
+	m_pBack->AttachSprite(
+		*AssetManager::GetSprite3D(L"TestSky"));
 
-	D3DXQuaternionRotationYawPitchRoll(
-		&quaternion,
-		-D3DX_PI / 1.99f,  // 左90度
-		0.0f,
-		0.0f);
-	m_pSky->SetQuaternion(quaternion);
 	//選択肢の画像の読み込み、パターン番号の設定、座標の設定
 	for (int i = 0; i < m_pSelect.size(); ++i)
 	{
@@ -183,8 +170,6 @@ void CSelect::Draw()
 	camera->Projection();	//プロジェクション関数
 
 	CDirectX11::GetInstance()->SetDepth(false);
-
-	m_pSky->Draw(camera);
 	m_pBack->Draw(camera);
 	//選択肢の描画
 	for (size_t i = 0; i < m_pSelect.size(); ++i)
@@ -265,22 +250,22 @@ void CSelect::PlayerActive()
 void CSelect::Sky()
 {
 	//縦に動きながら、横にゆっくり回転
-	constexpr float YSpeed = 0.0001f;
-	constexpr float XSpeed = 0.01f;
-	constexpr float MaxAngle = D3DX_PI / 2.0f;
-	if (m_angle >= MaxAngle)
-	{
-		m_angle = 0;
-	}
-	D3DXQUATERNION Quaternion;
-	m_angle -= XSpeed; // 回転速度
+	//constexpr float YSpeed = 0.0001f;
+	//constexpr float XSpeed = 0.01f;
+	//constexpr float MaxAngle = D3DX_PI / 2.0f;
+	//if (m_angle >= MaxAngle)
+	//{
+	//	m_angle = 0;
+	//}
+	//D3DXQUATERNION Quaternion;
+	//m_angle -= XSpeed; // 回転速度
 
-	D3DXQuaternionRotationYawPitchRoll(
-		&Quaternion,
-		0.f,
-		m_angle,
-		0.0f);
-	m_pSky->SetQuaternion(Quaternion);
+	//D3DXQuaternionRotationYawPitchRoll(
+	//	&Quaternion,
+	//	0.f,
+	//	m_angle,
+	//	0.0f);
+	//m_pSky->SetQuaternion(Quaternion);
 	//m_pSky->UpDown();
 	//m_pSky->Turn(XSpeed, MaxAngle);
 }

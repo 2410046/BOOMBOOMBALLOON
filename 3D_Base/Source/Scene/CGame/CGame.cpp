@@ -11,19 +11,12 @@ namespace
 		= D3DXVECTOR3(0.f, -1.f, 11.f);		//スカイ座標
 	static const D3DXVECTOR3 Camera_Pos 
 		= D3DXVECTOR3(0.0f, 9.0f, -2.0f);	//カメラ座標
+	static const D3DXVECTOR3 Time_Pos
+		= D3DXVECTOR3(600.f, 20.f, 0.f);		//タイムUI座標
 	static const D3DXVECTOR3 Look_Pos   
 		= D3DXVECTOR3(0.0f, 2.0f, 10.0f);	//カメラの方向座標
 	static const D3DXVECTOR3 Light_Pos  
 		= D3DXVECTOR3(1.f, 2.f, 0.f);		//ライト座標
-
-	//４つボタンの配置
-	static const float TablePos[4][2] =
-	{
-		{  0.f,  20.f }, // 下
-		{  20.f,  0.f }, // 右
-		{  0.f, -20.f }, // 上
-		{ -20.f,  0.f }, // 左
-	};
 
 	constexpr int ScoreTextCount = 2;	// スコアテキストの数
 	constexpr int ButtonCount    = 4;	// ボタンの数
@@ -49,6 +42,8 @@ void CGame::Create()
 	m_PlayerCount = 4;
 	// スカイのインスタンス生成
 	m_pSky      = std::make_unique<CCharacter>();
+	//時計のUIのインスタンス生成
+	m_pTimeUI   = std::make_unique<CUIObject>();
 	//雲のインスタンス生成
 	m_pCloud	= std::make_unique<CCloud>();
 }
@@ -68,6 +63,12 @@ HRESULT CGame::LoadData()
 		0.0f,
 		0.0f);
 	m_pSky->SetQuaternion(quaternion);
+
+	//タイムUIクラス
+	m_pTimeUI->AttachSprite(
+		*AssetManager::GetSprite2D(L"Time"));
+	m_pTimeUI->SetPosition(Time_Pos);
+
 	// プレイヤーの数
 	for (int p = 0; p < m_PlayerCount; ++p)
 	{
@@ -76,7 +77,7 @@ HRESULT CGame::LoadData()
 		//スコアの生成
 		m_pScores.NewScore(p);
 	}
-	m_pCloud->LoadData();
+	//m_pCloud->LoadData();
 	//時間のリセット
 	CTime::GetInstance()->Reset();
 	// カメラの座標や角度の設定
@@ -133,14 +134,15 @@ void CGame::Draw()
 
 	m_pSky->Draw(camera);
 
-	m_pCloud->Draw(camera);
 
+	//m_pCloud->Draw(camera);
 	m_pPlayer.Draw(camera);
 	m_pScores.Draw();
 	m_Shot.Draw(camera);
 	m_Balloon.Draw(camera);
+	m_pTimeUI->Draw();
 
-	//CTime::GetInstance()->Draw(camera);
+	CTime::GetInstance()->Draw(camera);
 
 	CEffect::GetInstance()->Draw(camera);
 
@@ -175,3 +177,4 @@ void CGame::Next()
 		SceneManager::GetInstance()->NextScene("Result");
 	}
 }
+//Aプレイヤーを押してほかBのプレイヤーに当ててるとBのプレイヤーが風船を失う
