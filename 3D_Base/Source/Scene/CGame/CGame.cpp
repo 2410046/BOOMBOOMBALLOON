@@ -113,7 +113,7 @@ void CGame::Update()
 	m_pPlayer.Update();
 
 	m_Shot.Update(
-		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Shot));
+		m_pPlayer.GetMoveStates(CPlayer::Shot));
 
 	m_Balloon.Update(
 		m_pPlayer.GetLifes());
@@ -121,8 +121,8 @@ void CGame::Update()
 	CollisionManager::GetInstance()->Update();
 
 	m_pScores.Update(
-		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Hit),
-		m_pPlayer.GetMoveStates(CPlayer::enMoveState::Down));
+		m_pPlayer.GetMoveStates(CPlayer::Hit),
+		m_pPlayer.GetMoveStates(CPlayer::Down));
 	//スカイの動作関数
 	Sky();
     //シーン遷移
@@ -198,5 +198,25 @@ void CGame::Next()
 		//リザルトに遷移
 		SceneManager::GetInstance()->NextScene("Result");
 	}
+
+
+	//if (!m_Start &&
+	//	(CTime::GetInstance()->MaxTime()
+	//		|| (GetAsyncKeyState(VK_RETURN) & 0x8000)))
+	//{
+	//	// エフェクトを停止
+	//	CEffect::StopAll();
+
+	//	// スコアを保存
+	//	m_pScores.ResultScore();
+
+	//	// フェードアウト開始
+	//	m_Start = true;
+
+	//	SceneManager::GetInstance()->StartTransition();
+	//}
+
+	//// 共通のシーン遷移処理
+	//SceneManager::GetInstance()->UpdateTransition(0, m_Start);
 }
 //Aプレイヤーを押してほかBのプレイヤーに当ててるとBのプレイヤーが風船を失う

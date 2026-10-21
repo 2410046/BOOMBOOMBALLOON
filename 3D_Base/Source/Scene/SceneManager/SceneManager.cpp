@@ -90,39 +90,7 @@ void SceneManager::StartTransition()
 // シーン遷移更新
 void SceneManager::UpdateTransition(int select,bool &m_Transitioning)
 {
-    //if (!m_Transitioning)
-    //    return;
 
-    //// フェードアウト完了まで待つ
-    //if (!CFade::GetInstance()->FadeOut())
-    //    return;
-
-    //// BGM停止
-    //CSoundManager::Stop(m_BGM.c_str());
-
-    //// 選択番号の範囲確認
-    //if (select < 0 ||
-    //    select >= static_cast<int>(m_NextScene.size()))
-    //{
-    //    m_Transitioning = false;
-    //    return;
-    //}
-
-    //// 遷移先を取得
-    //const std::string& nextScene = m_NextScene[select];
-
-    //if (nextScene.empty())
-    //{
-    //    // ゲーム終了
-    //    PostQuitMessage(0);
-    //}
-    //else
-    //{
-    //    // シーン切り替え
-    //    NextScene(nextScene);
-    //}
-
-    //m_Transitioning = false;
 
 
 
@@ -179,3 +147,38 @@ void SceneManager::SceneList(const std::string& scene)
         m_pScene = std::make_unique<CResult>();
     }
 }
+
+
+//if (!m_Transitioning)
+//    return;
+
+//// フェードアウト完了まで待つ
+//if (!CFade::GetInstance()->FadeOut())
+//    return;
+
+//// BGM停止
+//CSoundManager::Stop(m_BGM.c_str());
+
+//// 選択番号の範囲確認
+//if (select < 0 ||
+//    select >= static_cast<int>(m_NextScene.size()))
+//{
+//    m_Transitioning = false;
+//    return;
+//}
+
+//// 遷移先を取得
+//const std::string& nextScene = m_NextScene[select];
+
+//if (nextScene.empty())
+//{
+//    // ゲーム終了
+//    PostQuitMessage(0);
+//}
+//else
+//{
+//    // シーン切り替え
+//    NextScene(nextScene);
+//}
+
+//m_Transitioning = false;
