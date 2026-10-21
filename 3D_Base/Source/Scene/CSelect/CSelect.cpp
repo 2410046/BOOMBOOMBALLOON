@@ -99,6 +99,13 @@ HRESULT CSelect::LoadData()
 	//ライトの設定
 	CCamera::GetInstance()->SetLight(Light_Pos);
 
+	SceneManager::GetInstance()->SetTransition(
+		L"BGM\\Select",
+		{
+			"Game",  // ゲーム開始
+			"Title"  // タイトル
+		});
+
 	return S_OK;
 }
 //破棄関数
@@ -115,12 +122,11 @@ void CSelect::Update()
 	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
 
 	CCamera::GetInstance()->Update();
-	//--------------------
-	// シーン遷移
-	//--------------------
 
-	//選択中の場合
-	if (m_Start == false)
+	//--------------------
+   // 選択中
+   //--------------------
+	if (!m_Start)
 	{
 		// 選択中のインデックスに応じてスプライトの表示状態（透明度）を更新		
 		for (int i = 0; i < m_pSelect.size(); ++i)
@@ -134,31 +140,22 @@ void CSelect::Update()
 		PlayerActive();
 
 		Sky();
-	}
-	else	//決定
-	{
-		//フェードを進行
-		if (CFade::GetInstance()->FadeOut())
-		{
-			//音楽を停止
-			CSoundManager::Stop(_T("BGM\\Select"));
 
-			// 選択内容に応じて遷移先を分岐
-			switch (m_Select)
-			{
-			case 0:
-				//タイトルシーンに遷移
-				SceneManager::GetInstance()->NextScene("Title");
-				break;
-			case 1:
-				//ゲームシーンに遷移
-				SceneManager::GetInstance()->NextScene("Game");
-				break;
-			}
-			//選択可能
-			m_Start = false;
-		}
+		return;
 	}
+
+	SceneManager::GetInstance()->UpdateTransition(
+		m_Select,m_Start);
+
+
+	//else
+//{
+//	// 決定した選択番号を渡して遷移開始
+//	SceneManager::GetInstance()->StartTransition(m_Select);
+//}
+
+// シーン遷移更新
+//SceneManager::GetInstance()->UpdateTransition(m_Select);
 }
 //描画関数
 void CSelect::Draw()

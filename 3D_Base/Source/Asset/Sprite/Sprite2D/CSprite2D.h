@@ -104,8 +104,7 @@ public:
 	}
 	//最大パターン数(マス目)を取得
 	POINTS GetPatternMax() const { return m_PatternMax; }
-
-
+	//クォータニオンの回転.
 private:
 	ID3D11VertexShader*		m_pVertexShader;	//頂点シェーダ.
 	ID3D11InputLayout*		m_pVertexLayout;	//頂点レイアウト.

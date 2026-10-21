@@ -321,63 +321,58 @@ HRESULT CSprite2D::CreateSampler()
 void CSprite2D::Render()
 {
 	//ワールド行列.
-	D3DXMATRIX	mWorld;
-	D3DXMATRIX	mTrans, mRot, mScale,mCenter;
+	D3DXMATRIX mWorld;
+	D3DXMATRIX mTrans, mRot, mScale, mCenter;
 
-	//拡大縮小行列.
-	D3DXMatrixScaling( &mScale,
-		m_vScale.x, m_vScale.y, m_vScale.z );
+	// 拡大縮小
+	D3DXMatrixScaling(
+		&mScale,
+		m_vScale.x,
+		m_vScale.y,
+		m_vScale.z
+	);
 
-	//回転行列.
+	// 回転
 	D3DXMATRIX mYaw, mPitch, mRoll;
-	D3DXMatrixRotationY( &mYaw,		m_vRotation.y );
-	D3DXMatrixRotationX( &mPitch,	m_vRotation.x );
-	D3DXMatrixRotationZ( &mRoll,	m_vRotation.z );
-	mRot = mYaw * mPitch * mRoll;
-	//※Yaw, Pitch, Roll の掛ける順番を変えると結果も変わる.
 
-	//平行行列（平行移動）.
-	D3DXMatrixTranslation(&mTrans,
-		m_vPosition.x, m_vPosition.y, m_vPosition.z );
+	D3DXMatrixRotationY(&mYaw, m_vRotation.y);
+	D3DXMatrixRotationX(&mPitch, m_vRotation.x);
+	D3DXMatrixRotationZ(&mRoll, m_vRotation.z);
+
+	mRot = mYaw * mPitch * mRoll;
+
+	// 描画位置
+	D3DXMatrixTranslation(
+		&mTrans,
+		m_vPosition.x,
+		m_vPosition.y,
+		m_vPosition.z
+	);
+
+	// 画像の中心を原点に移動
 	float w = m_SpriteState.Disp.w;
 	float h = m_SpriteState.Disp.h;
-	D3DXMatrixTranslation(&mCenter, -w / 2.0f, -h / 2.0f, 0.0f);
 
+	D3DXMatrixTranslation(
+		&mCenter,
+		-w * 0.5f,
+		-h * 0.9f,
+		0.0f
+	);
 
-
-	if (m_vRotation.x != 0.0f || m_vRotation.y != 0.0f || m_vRotation.z != 0.0f)
+	// ワールド行列
+	if (m_vRotation.x != 0.0f ||
+		m_vRotation.y != 0.0f ||
+		m_vRotation.z != 0.0f)
 	{
-		// 回転しているときだけ中心補正を入れる
-	// 回転しているときだけ中心補正を入れる
-		float w = m_SpriteState.Disp.w;
-		float h = m_SpriteState.Disp.h;
-
-		// 中心を原点に移動
-		D3DXMatrixTranslation(&mCenter, -w / 2.0f, -h / 2.0f, 0.0f);
-
-		// スケールを設定
-		//m_vScale = D3DXVECTOR3(1.5f, 1.5f, 1.5f); // 横・縦2倍
-		D3DXMatrixScaling(&mScale, m_vScale.x, m_vScale.y, m_vScale.z);
-
-		// 回転行列
-		D3DXMATRIX mYaw, mPitch, mRoll;
-		D3DXMatrixRotationY(&mYaw, m_vRotation.y);
-		D3DXMatrixRotationX(&mPitch, m_vRotation.x);
-		D3DXMatrixRotationZ(&mRoll, m_vRotation.z);
-		mRot = mYaw * mPitch * mRoll;
-
-		// 平行移動行列
-		D3DXMatrixTranslation(&mTrans, m_vPosition.x, m_vPosition.y, m_vPosition.z);
-
-		// 行列の掛ける順番: 中心補正 → スケール → 回転 → 平行移動
 		mWorld = mCenter * mScale * mRot * mTrans;
-
 	}
 	else
 	{
-		// 通常（回転なし）は左上基準
 		mWorld = mScale * mRot * mTrans;
 	}
+
+
 	//使用するシェーダの登録.
 	CDirectX11::GetContext()->VSSetShader( m_pVertexShader, nullptr, 0 );
 	CDirectX11::GetContext()->PSSetShader( m_pPixelShader, nullptr, 0 );

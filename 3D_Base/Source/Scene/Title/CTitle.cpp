@@ -76,6 +76,13 @@ HRESULT CTitle::LoadData()
 		m_pSelect[i]->SetPosition(Sell_Pos);
 	}
 
+	SceneManager::GetInstance()->SetTransition(
+		L"BGM\\Title",
+		{
+			"Select",  // セレクト
+			""         //ゲーム終了
+		});
+
 	// カメラの座標や角度の設定
 	CCamera::GetInstance()->SetCamera(Camera_Pos, Look_Pos);
 	//ライトの設定
@@ -106,46 +113,28 @@ void CTitle::Update()
 
 	m_pLogo->SetPosition(250.f, m_LogoMove, 0.f);
 
-
 	//--------------------
-	// シーン遷移
-	//--------------------
-	//選択中
-	if (m_Start == false)
+	 // 選択中
+	 //--------------------
+	if (!m_Start)
 	{
 		// 選択中のインデックスに応じてスプライトの表示状態（透明度）を更新		
 		for (int i = 0; i < m_pSelect.size(); ++i)
 		{
 			//選択されたときの状態
 			m_pSelect[i]->SellState(
-				i, m_Select,[](int i) { return i; });
+				i, m_Select, [](int i) { return i; });
 		}
-		Sky();
-	}
-	else  //決定
-	{
-		//フェードが終わったら
-		if (CFade::GetInstance()->FadeOut())
-		{
-			//音楽を停止
-			CSoundManager::Stop(_T("BGM\\Title"));
 
-			// 選択内容に応じて遷移先を分岐
-			switch (m_Select)
-			{
-			case 0:
-				//セレクトシーンに遷移
-				SceneManager::GetInstance()->NextScene("Select");
-				break;
-			case 1:
-				//ゲーム終了
-				PostQuitMessage(0);
-				break;
-			}
-			//選択可能
-			m_Start = false;
-		}
+		Sky();
+
+		return;
 	}
+
+	//--------------------
+	// シーン遷移
+	//--------------------
+	SceneManager::GetInstance()->UpdateTransition(m_Select,m_Start);
 
 }
 

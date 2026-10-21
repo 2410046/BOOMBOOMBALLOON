@@ -2,6 +2,7 @@
 #include <memory>
 #include"Singleton.h"
 #include <string>
+#include <vector>
 class CScene;       //シーンクラス
 /********************************************************************************
 *	シーンマネージャークラス
@@ -24,16 +25,23 @@ public:
     void Release();
     // シーン切り替え
     void NextScene(const std::string& scene);
+    // シーン遷移設定
+    void SetTransition(
+        const std::wstring& bgm,
+        const std::vector<std::string>& nextScene);
+    // 遷移開始
+    void StartTransition();
+    // シーン遷移更新
+    void UpdateTransition(int select,bool &m_Transitioning);
 private:
-    //シーンの管理データつかわんかも
-    struct SceneData
-    {
-        std::string Name;              //シーンの名前
-        std::unique_ptr<CScene>	pScene;  //シーン
-    };
     //シーンの種類
     void SceneList(const std::string& scene);
 private:
     std::unique_ptr<CScene>		m_pScene;
     HWND                        m_hWnd;
+    std::wstring m_BGM;
+    std::vector<std::string> m_NextScene;
+
+    bool m_Transitioning;
+    int m_Select;
 };

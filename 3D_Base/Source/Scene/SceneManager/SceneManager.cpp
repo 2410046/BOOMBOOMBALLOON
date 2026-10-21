@@ -7,6 +7,8 @@
 SceneManager::SceneManager()
     : m_pScene(nullptr)
     , m_hWnd()
+    , m_Transitioning(false)
+    , m_Select( 0 )
 {
 }
 SceneManager::~SceneManager()
@@ -68,21 +70,98 @@ void SceneManager::NextScene(const std::string& scene)
         m_pScene->LoadData();
     }
 }
+// シーン遷移設定
+void SceneManager::SetTransition(
+    const std::wstring& bgm, const std::vector<std::string>& nextScene)
+{
+    m_BGM = bgm;
+  //  m_NextScene = nextScene;
+    m_NextScene =  nextScene;
+    m_Transitioning = false;
+}
+// シーン遷移開始
+void SceneManager::StartTransition()
+{
+    if (m_Transitioning)
+        return;
+
+    m_Transitioning = true;
+}
+// シーン遷移更新
+void SceneManager::UpdateTransition(int select,bool &m_Transitioning)
+{
+    //if (!m_Transitioning)
+    //    return;
+
+    //// フェードアウト完了まで待つ
+    //if (!CFade::GetInstance()->FadeOut())
+    //    return;
+
+    //// BGM停止
+    //CSoundManager::Stop(m_BGM.c_str());
+
+    //// 選択番号の範囲確認
+    //if (select < 0 ||
+    //    select >= static_cast<int>(m_NextScene.size()))
+    //{
+    //    m_Transitioning = false;
+    //    return;
+    //}
+
+    //// 遷移先を取得
+    //const std::string& nextScene = m_NextScene[select];
+
+    //if (nextScene.empty())
+    //{
+    //    // ゲーム終了
+    //    PostQuitMessage(0);
+    //}
+    //else
+    //{
+    //    // シーン切り替え
+    //    NextScene(nextScene);
+    //}
+
+    //m_Transitioning = false;
+
+
+
+    if (!m_Transitioning)
+        return;
+
+    // フェードアウトが完了するまで待つ
+    if (!CFade::GetInstance()->FadeOut())
+        return;
+
+    // BGM停止
+    CSoundManager::Stop(m_BGM.c_str());
+
+    // 選択番号の範囲確認
+    if (select < 0 ||
+        select >= static_cast<int>(m_NextScene.size()))
+    {
+        m_Transitioning = false;
+        return;
+    }
+
+    const std::string& nextScene = m_NextScene[select];
+
+    // 遷移先が空ならゲーム終了
+    if (nextScene.empty())
+    {
+        PostQuitMessage(0);
+    }
+    else
+    {
+        // シーン切り替え
+        NextScene(nextScene);
+    }
+
+    m_Transitioning = false;
+}
 //シーンの種類
 void SceneManager::SceneList(const std::string& scene)
 {
-
-
-    //// シーン作成
-    //SceneData DataName[]
-    //{
-    //    {"Title" ,std::make_unique<CTitle>()},
-    //    {"Select",std::make_unique<CSelect>()},
-    //    {"Game"  ,std::make_unique<CGame>()},
-    //    {"Result",std::make_unique<CResult>()},
-    //};
-
-
     if (scene == "Title")
     {
         m_pScene = std::make_unique<CTitle>();

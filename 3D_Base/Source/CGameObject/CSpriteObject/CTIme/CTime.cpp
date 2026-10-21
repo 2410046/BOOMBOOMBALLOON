@@ -1,22 +1,27 @@
 ﻿#include "CTime.h"
 #include <stdio.h>
 #include <iostream>
-
+#include <algorithm>
+namespace
+{
+    constexpr float m_MaxTime = 10;	// スコアテキストの数
+    // 回転速度
+    static constexpr float m_RotSpeed = 0.02f;
+    // レコード間隔
+    static constexpr float m_Space = 650.f;
+    // 補間速度
+    static constexpr float m_LerpSpeed = 0.2f;
+    // Y座標固定値
+    static constexpr float m_PosY = 350.f;
+}
 CTime::CTime()
-    : m_MaxTime(0)
-    , m_FrameTime(timeGetTime() / 1000.0f)
+    : m_FrameTime(timeGetTime() / 1000.0f)
 
 {
-
-    //constexpr float Frame_Offset_Y = 0.01f;   // 枠の微調整オフセット
-    //constexpr float Frame_Pos_X = 0.0f;       // 枠の基準X座標
-    //constexpr float Frame_Pos_Y = 7.0f;       // 枠の基準Y座標
-    //constexpr float Frame_Pos_Z = 11.0f;      // 枠のZ座標（奥行き）
-    //constexpr float Offset_Scale = 2.15f;     // オフセット補正係数
     //スプライトを接続
-    AttachSprite(*CSpriteManager::GetSprite3D(L"TimeArrow"));
-  //  m_vPosition = D3DXVECTOR3(650.f, 35.f, 0.f);
-    m_vPosition = D3DXVECTOR3(0.f, 7.f, 18.f);
+    AttachSprite(*CSpriteManager::GetSprite2D(L"TimeArrow"));
+    m_vPosition = D3DXVECTOR3(660.f, 78.f, 0.f);
+    m_vScale = D3DXVECTOR3(0.2f, 0.2f, 0.2f);
     //リセット
     Reset();
 }
@@ -47,55 +52,37 @@ void CTime::Update()
         }
     }
 
-    CSpriteObject::Update();
+    CUIObject::Update();
 
 }
 
 //ゲージの中身
-void CTime::Draw(const CCamera* pCamera)
+void CTime::Draw()
 {
-    //描画
-    //パターン番号を設定
-    m_pSprite->SetPatternNo(0, 0);
-    //m_vPosition = D3DXVECTOR3(600.f , 140.f, 0.f);
-    CSpriteObject::Draw(pCamera);
+    // 小数点以下も含めた経過時間から進行度を計算
+    float ratio = m_FrameTime / m_MaxTime;
+    ratio = std::clamp(ratio, 0.0f, 1.0f);
+
+    // 時計の針の回転
+    float angle = ratio * 360.0f;
+
+    m_vRotation = D3DXVECTOR3(
+        0.0f,
+        D3DXToRadian(180.0f),
+        D3DXToRadian(angle)
+    );
+
+    CUIObject::Draw();
 }
 //制限時間を超えたら
-bool CTime::MaxTime(int Max)
+bool CTime::MaxTime()
 {
-    //制限時間を設定
-    m_MaxTime = Max;
     //制限時間を超えたら
     if (m_Count >= m_MaxTime)
     {
         return true;
     }
     return false;
-}
-
-//ゲージの枠
-void CTime::GaugeFrame(const CCamera* pCamera)
-{
-        // ゲージ枠の描画位置設定
-    constexpr float Frame_Offset_Y = 0.01f;   // 枠の微調整オフセット
-    constexpr float Frame_Pos_X = 0.0f;       // 枠の基準X座標
-    constexpr float Frame_Pos_Y = 7.0f;       // 枠の基準Y座標
-    constexpr float Frame_Pos_Z = 11.0f;      // 枠のZ座標（奥行き）
-    constexpr float Offset_Scale = 2.15f;     // オフセット補正係数
-
-    // 枠画像のパターン設定（0行目：ゲージ枠）
-    m_pSprite->SetPatternNo(0, 0);
-
-    // 枠の表示位置設定
-    // Y位置は微調整オフセットを加えて中央に合わせる
-    m_vPosition = D3DXVECTOR3(
-        Frame_Pos_X,
-        Frame_Pos_Y + Frame_Offset_Y / Offset_Scale,
-        Frame_Pos_Z
-    );
-
-    // スプライト描画
-    CSpriteObject::Draw(pCamera);
 }
 //初期化
 void CTime::Reset()

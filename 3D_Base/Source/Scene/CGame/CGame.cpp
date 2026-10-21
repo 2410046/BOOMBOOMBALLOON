@@ -86,6 +86,14 @@ HRESULT CGame::LoadData()
 	CCamera::GetInstance()->SetLight(Light_Pos);
 	//音楽を再生
 	CSoundManager::PlayLoop(_T("BGM\\MouningGame"));
+
+	//シーン遷移設定
+	SceneManager::GetInstance()->SetTransition(
+		L"BGM\\MouningGame",
+		{
+			"Result",  // ゲーム開始
+		});
+
 	return S_OK;
 }
 //解放関数.
@@ -99,7 +107,7 @@ void CGame::Release()
 //動作関数
 void CGame::Update()
 {
-	//CTime::GetInstance()->Update();
+	CTime::GetInstance()->Update();
 	CReactionManager::GetInstance()->Update();
 
 	m_pPlayer.Update();
@@ -119,7 +127,21 @@ void CGame::Update()
 	Sky();
     //シーン遷移
 	Next();
+	//if (!m_Start && CTime::GetInstance()->MaxTime()
+	//		|| (GetAsyncKeyState(VK_RETURN) & 0x8000))
+	//{
+	//	// エフェクトをすべて停止
+	//	CEffect::StopAll();
 
+	//	// スコアをファイルに保存
+	//	m_pScores.ResultScore();
+
+	//	// フェードアウト開始
+	//    m_Start = true;
+	//}
+
+	//// 共通のシーン遷移処理
+	//SceneManager::GetInstance()->UpdateTransition(m_Select, m_Start);
 }
 
 
@@ -141,8 +163,9 @@ void CGame::Draw()
 	m_Shot.Draw(camera);
 	m_Balloon.Draw(camera);
 	m_pTimeUI->Draw();
-
-	CTime::GetInstance()->Draw(camera);
+	CDirectX11::GetInstance()->SetDepth(false);
+	CTime::GetInstance()->Draw();
+	CDirectX11::GetInstance()->SetDepth(true);
 
 	CEffect::GetInstance()->Draw(camera);
 
@@ -156,7 +179,6 @@ void CGame::Sky()
 	constexpr float XSpeed = 0.01f;
 	constexpr float MaxAngle = D3DX_PI / 2.0f;
 
-	m_pSky->UpDown();
 	m_pSky->Turn(XSpeed, MaxAngle);
 }
 
@@ -164,7 +186,7 @@ void CGame::Sky()
 void CGame::Next()
 {
 	//時間が来たら
-	if (CTime::GetInstance()->MaxTime(CGameData::GetLimit())
+	if (CTime::GetInstance()->MaxTime()
 		|| GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		//音楽を停止
