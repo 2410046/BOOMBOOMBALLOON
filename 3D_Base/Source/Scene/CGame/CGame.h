@@ -3,7 +3,7 @@
 #include "CGameObject/CMeshObject/CPlayer/CPlayerManager.h"	    //プレイヤークラス
 #include "CGameObject/CMeshObject/CTracking/CShot/CShotManager/CShotManager.h"	    //ショットクラス
 #include "CGameObject/CMeshObject/CTracking/CBallun/CBallunManager/CBalloonManager.h"//バルーンクラス
-#include "CGameObject/CMeshObject/CCloud/CCloud.h"                                  //雲クラス
+#include "CGameObject/CMeshObject/CCloud/CCloudManager/CCloudManager.h"              //雲クラス
 #include "CGameObject/CUIObject/Score/CScoreManager.h"		//スコアマネージャークラス
 
 /********************************************************************************
@@ -34,10 +34,11 @@ private:
 	//シーン遷移関数
 	void Next();
 private:
-	std::unique_ptr<CCloud>			           m_pCloud;	   //雲クラス
+
 	std::unique_ptr<CCharacter>		           m_pSky;		   //スカイクラス
 	std::unique_ptr<CUIObject>		           m_pTimeUI;	   //スカイクラス
-	
+
+	CCloudManager	m_pCloud;	        //雲
 	CPlayerManager  m_pPlayer;	        //プレイヤー
 	CScoreManager	m_pScores;	        //スコア
 	CShotManager    m_Shot;		        //ショット

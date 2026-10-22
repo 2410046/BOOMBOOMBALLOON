@@ -15,12 +15,17 @@ namespace
 	constexpr float MaxTime    = 10.f;   //指定時間
 	constexpr float Size_Speed = 0.0001f;
 	constexpr float Base_Size  = 0.01f;
+	//プレイヤーの移動制限
+	D3DXVECTOR3 m_Min = D3DXVECTOR3(-8.f,1.f,5.5f);
+	D3DXVECTOR3 m_Max = D3DXVECTOR3(7.f, 1.f, 17.5f);
+
 }
 //コンストラクタ
 CPlayer::CPlayer()
 	: m_MoveState		( enMoveState::App )
 	, m_StateTime		( 5.f )
 	, m_Life			( 3 )
+	, m_Point			( 0 )
 
 {	
 	//カプセルの当たり判定
@@ -79,11 +84,9 @@ void CPlayer::Update()
 		m_MoveState = enMoveState::Live;		//一瞬で切り替える
 	}
 		break;
-	case enMoveState::Hit://ヒット状態
-		m_MoveState = enMoveState::Live;
-		break;
 	case enMoveState::Down://ダウン状態
 		m_Life = std::clamp(m_Life - 1, 0, 5);
+		m_Point = -20;
 		if (m_Life <= 0)
 		{
 			m_MoveState = enMoveState::Dead;
@@ -106,26 +109,28 @@ void CPlayer::Update()
 		}	
 		break;
 	case enMoveState::Dead://死亡状態
-		//if (CCharacter::Turn())
-		//{
-			//m_angle = 0.f;
 			//クール時間開始
 			//プレイヤーのサイズを小さくする
 			m_Scale -= Size_Speed;
 			if (m_Scale <= 0.f)
 			{
+				m_Point = -100;
 				m_Scale = 0.f;
 				//スコアを半分減らす
 				m_MoveState = enMoveState::App;
 			}
 			m_vScale = D3DXVECTOR3(m_Scale, m_Scale, m_Scale);
-		//}
 		break;
 	default:
 		break;
 	}
-	//ノックバック中
 
+    // 移動制限
+    m_vPosition.x = std::clamp(m_vPosition.x, m_Min.x, m_Max.x);
+    m_vPosition.y = std::clamp(m_vPosition.y, m_Min.y, m_Max.y);
+    m_vPosition.z = std::clamp(m_vPosition.z, m_Min.z, m_Max.z);
+	
+	//ノックバック中
 		if (m_pReaction)
 		{
 			m_pReaction->SetPosition(&m_vPosition);
@@ -263,7 +268,6 @@ void CPlayer::Quotanion(D3DXVECTOR3 moveDir)
 		0.2f
 	);
 }
-
 //当たり判定
 void CPlayer::OnCollision(CollisionBase* pCollider)
 {
@@ -288,12 +292,11 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		//ブースト状態
 		if (m_pReaction&&m_pReaction->Play(CReaction::Boost))
 		{
-			//スコアを増やす
-			m_MoveState = enMoveState::Hit;//当てた
-
-			m_pReaction->Stop();//リアクションを終わらせる
+			m_Point = 20;
+    		m_pReaction->Stop();//リアクションを終わらせる
 			//プレイヤーは風船とスコアを1つ取得する
 			m_Life = std::clamp(m_Life + 1, 0, 5);
+
 			//相手のプレイヤーをダウンx状態に
 			other->m_MoveState = enMoveState::Down;
 		}

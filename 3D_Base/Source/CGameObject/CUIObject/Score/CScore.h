@@ -16,7 +16,7 @@ public:
 	//描画関数
 	virtual void Draw()	  override;
 	//スコアの増減
-	void Fluctuation(bool Hit,bool Down);
+	void Fluctuation(int point);
 	//ゲーム終了時のスコア
 	void ResultScore();
 	//スコアとコンボの座標を取得

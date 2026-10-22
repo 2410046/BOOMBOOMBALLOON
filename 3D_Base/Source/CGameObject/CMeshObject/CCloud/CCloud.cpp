@@ -32,7 +32,7 @@ CCloud::~CCloud()
 void CCloud::LoadData()
 {
 	//メッシュを接続
-	AttachMesh(*AssetManager::GetStatic(L"Asset\\Cloud"));
+	//AttachMesh(*AssetManager::GetStatic(L"Asset\\Cloud"));
 	//m_pMesh->SetAmbient(D3DXVECTOR4(0, 0, 1, 1));
 }
 //更新関数

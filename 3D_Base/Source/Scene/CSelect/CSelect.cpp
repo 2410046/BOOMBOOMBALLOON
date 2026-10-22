@@ -144,18 +144,8 @@ void CSelect::Update()
 		return;
 	}
 
-	SceneManager::GetInstance()->UpdateTransition(
-		m_Select,m_Start);
-
-
-	//else
-//{
-//	// 決定した選択番号を渡して遷移開始
-//	SceneManager::GetInstance()->StartTransition(m_Select);
-//}
-
-// シーン遷移更新
-//SceneManager::GetInstance()->UpdateTransition(m_Select);
+	SceneManager::GetInstance()->
+		UpdateTransition(m_Select,m_Start);
 }
 //描画関数
 void CSelect::Draw()

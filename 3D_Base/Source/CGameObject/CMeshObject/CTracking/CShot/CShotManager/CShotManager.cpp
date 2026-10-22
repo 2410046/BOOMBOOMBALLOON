@@ -8,11 +8,6 @@ CShotManager::CShotManager()
 {
 }
 
-
-//============================================================
-// Destructor
-//============================================================
-
 CShotManager::~CShotManager()
 {
     Release();
@@ -35,10 +30,6 @@ void CShotManager::NewShot(CTracking* pTracking)
     m_Shots.emplace_back(
         std::move(shot));
 }
-
-//============================================================
-// Update
-//============================================================
 
 void CShotManager::Update(
     const std::vector<bool>& shotFlags)
@@ -80,8 +71,6 @@ void CShotManager::Update(
         }
 
         shot->Update();
-
-
     }
 
     //Shotを削除
@@ -96,12 +85,7 @@ void CShotManager::Update(
                 }),
             m_Shots.end());
 }
-
-
-//============================================================
-// CreateShot
-//============================================================
-
+// Shot生成
 void CShotManager::CreateShot(
     const D3DXVECTOR3& position,
     const D3DXVECTOR3& direction,
@@ -113,11 +97,6 @@ void CShotManager::CreateShot(
     m_Shots.push_back(
         std::move(shot));
 }
-
-
-//============================================================
-// Draw
-//============================================================
 
 void CShotManager::Draw(CCamera*pCamera)
 {

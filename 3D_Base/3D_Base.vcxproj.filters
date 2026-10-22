@@ -163,9 +163,6 @@
     <Filter Include="Source\Reaction\CBoost">
       <UniqueIdentifier>{dc6498a4-50fd-406e-a6d6-344ddcd52a5a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\GameObject\StaticMeshObject\Character\CCloud">
-      <UniqueIdentifier>{0cf49058-947e-45bd-9f2c-97e6bb76e6fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Reaction\CKnockBack">
       <UniqueIdentifier>{e603a93d-fc12-4fb1-bb52-badf703f07ae}</UniqueIdentifier>
     </Filter>
@@ -190,9 +187,6 @@
     <Filter Include="Source\GameObject\StaticMeshObject\Character\CTracking\CTrackingManager">
       <UniqueIdentifier>{f1ea5456-ab3a-42ea-bf6e-ac46a24a615f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\GameObject\StaticMeshObject\Character\CCloud\CCloudManager">
-      <UniqueIdentifier>{7917327d-21aa-462f-ab67-bba2e0e25559}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\GameObject\StaticMeshObject\Character\CTracking\CBalloon">
       <UniqueIdentifier>{0c389e70-facc-4d2e-b5e0-dac537538e06}</UniqueIdentifier>
     </Filter>
@@ -204,6 +198,12 @@
     </Filter>
     <Filter Include="Source\Asset\CEffect\CEffectPlay">
       <UniqueIdentifier>{9953609b-a715-48b0-8536-a2ff938d4934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameObject\StaticMeshObject\Character\CCloud">
+      <UniqueIdentifier>{0cf49058-947e-45bd-9f2c-97e6bb76e6fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameObject\StaticMeshObject\Character\CCloud\CCloudManager">
+      <UniqueIdentifier>{4be82171-09b6-4100-96c1-2fa3a54019f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -392,6 +392,9 @@
     </ClCompile>
     <ClCompile Include="Source\CGameObject\CMeshObject\CTracking\CTrackingManager\CTrackingManager.cpp">
       <Filter>Source\GameObject\StaticMeshObject\Character\CTracking\CTrackingManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloudManager\CCloudManager.cpp">
+      <Filter>Source\GameObject\StaticMeshObject\Character\CCloud\CCloudManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -604,6 +607,9 @@
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CSpriteObject\CFade\CFade.h">
       <Filter>Source\GameObject\SpriteObject\UI\CFade</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CGameObject\CMeshObject\CCloud\CCloudManager\CCloudManager.h">
+      <Filter>Source\GameObject\StaticMeshObject\Character\CCloud\CCloudManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

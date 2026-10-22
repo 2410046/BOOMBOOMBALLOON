@@ -30,7 +30,8 @@ public:
         const std::wstring& bgm,
         const std::vector<std::string>& nextScene);
     // 遷移開始
-    void StartTransition();
+   // StartTransition(int select)
+        void StartTransition();
     // シーン遷移更新
     void UpdateTransition(int select,bool &m_Transitioning);
 private:

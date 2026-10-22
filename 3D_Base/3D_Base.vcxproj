@@ -173,6 +173,7 @@
     <ClCompile Include="Source\CGameObject\CGameObject.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CCharacter.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloud.cpp" />
+    <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloudManager\CCloudManager.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CPlayer\CPlayer.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CPlayer\CPlayerManager.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CStaticMeshObject.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="Source\CGameObject\CGameObject.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CCharacter.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CCloud\CCloud.h" />
+    <ClInclude Include="Source\CGameObject\CMeshObject\CCloud\CCloudManager\CCloudManager.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CPlayer\CPlayer.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CPlayer\CPlayerManager.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CStaticMeshObject.h" />

@@ -9,10 +9,10 @@ namespace
     // IDごとのプレイヤーの位置
     const D3DXVECTOR3 Player_Pos[] =
     {
-        {  -7.f, 1.f, 5.5f }, // ID : 0
-        {  -9.f, 1.f, 14.5f }, // ID : 1
-        {  7.f, 1.f, 5.5f }, // ID : 2
-        {  7.f, 1.f, 14.5f }, // ID : 2
+        {  -6.f, 1.f, 4.5f }, // ID : 0
+        {  -8.f, 1.f, 13.5f }, // ID : 1
+        {  6.f, 1.f, 4.5f }, // ID : 2
+        {  6.f, 1.f, 13.5f }, // ID : 2
     };
     //プレイヤーのサイズ
     constexpr float Player_Scale = 0.02f;
@@ -95,7 +95,7 @@ CPlayer* CPlayerManager::GetPlayer(int index)
 * すべてのプレイヤーのShotフラグ取得
 ********************************************************************************/
 std::vector<bool>
-CPlayerManager::GetMoveStates(CPlayer::enMoveState state) const
+CPlayerManager::GetShots() const
 {
     std::vector<bool> result;
 
@@ -108,7 +108,7 @@ CPlayerManager::GetMoveStates(CPlayer::enMoveState state) const
         }
 
         result.push_back(
-            player->GetMoveState(state));
+            player->GetShot());
     }
 
     return result;
@@ -132,24 +132,22 @@ CPlayerManager::GetLifes() const
 
     return result;
 }
-/********************************************************************************
-* Shotフラグ取得
-********************************************************************************/
-//bool CPlayerManager::GetShotFlag(
-//    int ID) const
-//{
-//    if (ID < 0 ||
-//        ID >= static_cast<int>(
-//            m_Players.size()))
-//    {
-//        return false;
-//    }
-//
-//    if (m_Players[ID] == nullptr)
-//    {
-//        return false;
-//    }
-//
-//    return m_Players[ID]->GetShot();
-//}
+//全プレイヤーのポイントを取得
+std::vector<int> CPlayerManager::GetPoints() const
+{
+    std::vector<int> result;
+
+    for (const auto& player : m_Players)
+    {
+        if (player == nullptr)
+        {
+            result.push_back(false);
+            continue;
+        }
+        result.push_back(
+            player->GetPoint());
+    }
+
+    return result;
+}
 

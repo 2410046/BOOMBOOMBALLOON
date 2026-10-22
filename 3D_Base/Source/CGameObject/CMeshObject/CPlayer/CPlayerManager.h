@@ -26,11 +26,11 @@ public:
     CPlayer* GetPlayer(int index);
 
     // 全プレイヤーのShotフラグ取得
-    std::vector<bool> GetMoveStates(CPlayer::enMoveState state) const;
+    std::vector<bool> GetShots() const;
     //全プレイヤーのライフ取得
     std::vector<int> GetLifes() const;
-    // Shotフラグ取得
-    bool GetShotFlag(int ID) const {};
+    //全プレイヤーのポイント取得
+    std::vector<int> GetPoints() const;
 private:
     std::vector<std::unique_ptr<CPlayer>> m_Players;     //プレイヤー
     //std::vector<std::unique_ptr<CTracking>> m_Tracking;  //追尾

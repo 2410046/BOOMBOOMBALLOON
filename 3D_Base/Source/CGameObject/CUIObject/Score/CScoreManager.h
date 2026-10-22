@@ -18,8 +18,7 @@ public:
     // スコアの生成
     void NewScore(int ID);
     // 動作関数
-    void Update(const std::vector<bool>& hit,
-        const std::vector<bool>& down);
+    void Update(const std::vector<int>& point);
     // 描画関数
     void Draw();
     // プレイヤーIDから対応するスコアオブジェクトを取得

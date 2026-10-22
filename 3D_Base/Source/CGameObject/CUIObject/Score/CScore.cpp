@@ -79,19 +79,10 @@ void CScore::Draw()
     Number(m_Pos,m_DisplayScore, Space);
 }
 //スコアの増減
-void CScore::Fluctuation(bool Hit, bool Down)
+void CScore::Fluctuation(int point)
 {
     // プレイヤーが当てたら
-    if (Hit)
-    {
-        m_Score += 20;
-    }
-
-    // プレイヤーが当てられたら
-    if (Down)
-    {
-        m_Score -= 20;
-    }
+    m_Score += point;
 
     m_Score = std::clamp(m_Score, 0, Max);
 }

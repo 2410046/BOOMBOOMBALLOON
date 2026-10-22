@@ -44,8 +44,6 @@ void CGame::Create()
 	m_pSky      = std::make_unique<CCharacter>();
 	//時計のUIのインスタンス生成
 	m_pTimeUI   = std::make_unique<CUIObject>();
-	//雲のインスタンス生成
-	m_pCloud	= std::make_unique<CCloud>();
 }
 
 //ロード関数.
@@ -77,6 +75,7 @@ HRESULT CGame::LoadData()
 		//スコアの生成
 		m_pScores.NewScore(p);
 	}
+	m_pCloud.NewCloud();
 	//m_pCloud->LoadData();
 	//時間のリセット
 	CTime::GetInstance()->Reset();
@@ -86,7 +85,7 @@ HRESULT CGame::LoadData()
 	CCamera::GetInstance()->SetLight(Light_Pos);
 	//音楽を再生
 	CSoundManager::PlayLoop(_T("BGM\\MouningGame"));
-
+	
 	//シーン遷移設定
 	SceneManager::GetInstance()->SetTransition(
 		L"BGM\\MouningGame",
@@ -112,36 +111,20 @@ void CGame::Update()
 
 	m_pPlayer.Update();
 
-	m_Shot.Update(
-		m_pPlayer.GetMoveStates(CPlayer::Shot));
+	m_Shot.Update(m_pPlayer.GetShots());
 
 	m_Balloon.Update(
 		m_pPlayer.GetLifes());
 
+	m_pCloud.Update();
 	CollisionManager::GetInstance()->Update();
 
-	m_pScores.Update(
-		m_pPlayer.GetMoveStates(CPlayer::Hit),
-		m_pPlayer.GetMoveStates(CPlayer::Down));
+	m_pScores.Update(m_pPlayer.GetPoints());
 	//スカイの動作関数
 	Sky();
     //シーン遷移
 	Next();
-	//if (!m_Start && CTime::GetInstance()->MaxTime()
-	//		|| (GetAsyncKeyState(VK_RETURN) & 0x8000))
-	//{
-	//	// エフェクトをすべて停止
-	//	CEffect::StopAll();
 
-	//	// スコアをファイルに保存
-	//	m_pScores.ResultScore();
-
-	//	// フェードアウト開始
-	//    m_Start = true;
-	//}
-
-	//// 共通のシーン遷移処理
-	//SceneManager::GetInstance()->UpdateTransition(m_Select, m_Start);
 }
 
 
@@ -162,6 +145,7 @@ void CGame::Draw()
 	m_pScores.Draw();
 	m_Shot.Draw(camera);
 	m_Balloon.Draw(camera);
+	m_pCloud.Draw(camera);
 	m_pTimeUI->Draw();
 	CDirectX11::GetInstance()->SetDepth(false);
 	CTime::GetInstance()->Draw();
@@ -189,16 +173,24 @@ void CGame::Next()
 	if (CTime::GetInstance()->MaxTime()
 		|| GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
-		//音楽を停止
+		////音楽を停止
 		CSoundManager::Stop(_T("BGM\\MouningGame"));
-		//エフェクトをすべて止める
+		////エフェクトをすべて止める
 		CEffect::StopAll();
 		//スコアをファイルに保存
 		m_pScores.ResultScore();
-		//リザルトに遷移
+		////リザルトに遷移
 		SceneManager::GetInstance()->NextScene("Result");
+
+
+		// フェードアウト開始
+		//m_Start = true;
+
+		//SceneManager::GetInstance()->StartTransition();
 	}
 
+	// 共通のシーン遷移処理
+	//SceneManager::GetInstance()->UpdateTransition(0, m_Start);
 
 	//if (!m_Start &&
 	//	(CTime::GetInstance()->MaxTime()
@@ -220,3 +212,20 @@ void CGame::Next()
 	//SceneManager::GetInstance()->UpdateTransition(0, m_Start);
 }
 //Aプレイヤーを押してほかBのプレイヤーに当ててるとBのプレイヤーが風船を失う
+
+
+	//if (!m_Start && CTime::GetInstance()->MaxTime()
+	//		|| (GetAsyncKeyState(VK_RETURN) & 0x8000))
+	//{
+	//	// エフェクトをすべて停止
+	//	CEffect::StopAll();
+
+	//	// スコアを保存
+	//	m_pScores.ResultScore();
+
+	//	// フェードアウト開始
+	//    m_Start = true;
+	//}
+
+	//// 共通のシーン遷移処理
+	//SceneManager::GetInstance()->UpdateTransition(m_Select, m_Start);

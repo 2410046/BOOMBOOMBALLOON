@@ -90,10 +90,6 @@ void SceneManager::StartTransition()
 // シーン遷移更新
 void SceneManager::UpdateTransition(int select,bool &m_Transitioning)
 {
-
-
-
-
     if (!m_Transitioning)
         return;
 
@@ -182,3 +178,19 @@ void SceneManager::SceneList(const std::string& scene)
 //}
 
 //m_Transitioning = false;
+
+// 選択肢なし
+//void SceneManager::StartTransition()
+//{
+//    StartTransition(0);
+//}
+//
+//// 選択肢あり
+//void SceneManager::StartTransition(int select)
+//{
+//    if (m_Transitioning)
+//        return;
+//
+//    m_Select = select;
+//    m_Transitioning = true;
+//}

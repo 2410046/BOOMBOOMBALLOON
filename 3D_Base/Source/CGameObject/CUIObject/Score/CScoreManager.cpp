@@ -35,20 +35,15 @@ void CScoreManager::NewScore(int ID)
 
 }
 //更新関数
-void CScoreManager::Update(const std::vector<bool>& hit,
-    const std::vector<bool>& down)
+void CScoreManager::Update(const std::vector<int>& point)
 {
-
     for (auto& score : m_Scores)
     {
         score->Update();
 
         const int playerNo = score->GetID();
         //スコアを増減する
-        score->Fluctuation(
-            hit[playerNo],
-            down[playerNo]
-        );
+        score->Fluctuation(point[playerNo]);
     }
 }
 //描画関数
