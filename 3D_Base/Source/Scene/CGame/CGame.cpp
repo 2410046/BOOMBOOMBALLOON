@@ -26,6 +26,10 @@ CGame::CGame()
 	: CScene				()
 	, m_PlayerCount			( 0 )
 {
+	//BGM設定
+	m_BGM = L"BGM\\MouningGame";
+	// リザルト
+	m_NextScene = { "Result" };;
 }
 //デストラクタ.
 CGame::~CGame()
@@ -84,15 +88,7 @@ HRESULT CGame::LoadData()
 	//ライトの設定
 	CCamera::GetInstance()->SetLight(Light_Pos);
 	//音楽を再生
-	CSoundManager::PlayLoop(_T("BGM\\MouningGame"));
-	
-	//シーン遷移設定
-	SceneManager::GetInstance()->SetTransition(
-		L"BGM\\MouningGame",
-		{
-			"Result",  // ゲーム開始
-		});
-
+	CSoundManager::PlayLoop(m_BGM);
 	return S_OK;
 }
 //解放関数.
@@ -147,6 +143,7 @@ void CGame::Draw()
 	m_Balloon.Draw(camera);
 	m_pCloud.Draw(camera);
 	m_pTimeUI->Draw();
+
 	CDirectX11::GetInstance()->SetDepth(false);
 	CTime::GetInstance()->Draw();
 	CDirectX11::GetInstance()->SetDepth(true);
@@ -173,59 +170,15 @@ void CGame::Next()
 	if (CTime::GetInstance()->MaxTime()
 		|| GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
-		////音楽を停止
-		CSoundManager::Stop(_T("BGM\\MouningGame"));
 		////エフェクトをすべて止める
 		CEffect::StopAll();
 		//スコアをファイルに保存
 		m_pScores.ResultScore();
-		////リザルトに遷移
-		SceneManager::GetInstance()->NextScene("Result");
-
-
 		// フェードアウト開始
-		//m_Start = true;
-
-		//SceneManager::GetInstance()->StartTransition();
+		m_Start = true;
 	}
-
-	// 共通のシーン遷移処理
-	//SceneManager::GetInstance()->UpdateTransition(0, m_Start);
-
-	//if (!m_Start &&
-	//	(CTime::GetInstance()->MaxTime()
-	//		|| (GetAsyncKeyState(VK_RETURN) & 0x8000)))
-	//{
-	//	// エフェクトを停止
-	//	CEffect::StopAll();
-
-	//	// スコアを保存
-	//	m_pScores.ResultScore();
-
-	//	// フェードアウト開始
-	//	m_Start = true;
-
-	//	SceneManager::GetInstance()->StartTransition();
-	//}
-
-	//// 共通のシーン遷移処理
-	//SceneManager::GetInstance()->UpdateTransition(0, m_Start);
+	//--------------------
+	// シーン遷移
+	//--------------------
+	UpdateTransition(false);
 }
-//Aプレイヤーを押してほかBのプレイヤーに当ててるとBのプレイヤーが風船を失う
-
-
-	//if (!m_Start && CTime::GetInstance()->MaxTime()
-	//		|| (GetAsyncKeyState(VK_RETURN) & 0x8000))
-	//{
-	//	// エフェクトをすべて停止
-	//	CEffect::StopAll();
-
-	//	// スコアを保存
-	//	m_pScores.ResultScore();
-
-	//	// フェードアウト開始
-	//    m_Start = true;
-	//}
-
-	//// 共通のシーン遷移処理
-	//SceneManager::GetInstance()->UpdateTransition(m_Select, m_Start);

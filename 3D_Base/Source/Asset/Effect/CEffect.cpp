@@ -59,12 +59,6 @@ HRESULT CEffect::LoadData()
 	static const std::u16string TEX_DIR = u"Data\\Effekseer\\";
 	static const std::u16string TEX_EFK = u".efk";
 
-	struct EffectList
-	{
-		std::string listNo;				//enList列挙型を設定
-		const char16_t path[256];	//ファイルの名前(パス付き)
-	};
-
 	const char16_t* fileName[] =
 	{
 		u"deleteA",

@@ -25,24 +25,10 @@ public:
     void Release();
     // シーン切り替え
     void NextScene(const std::string& scene);
-    // シーン遷移設定
-    void SetTransition(
-        const std::wstring& bgm,
-        const std::vector<std::string>& nextScene);
-    // 遷移開始
-   // StartTransition(int select)
-        void StartTransition();
-    // シーン遷移更新
-    void UpdateTransition(int select,bool &m_Transitioning);
 private:
     //シーンの種類
     void SceneList(const std::string& scene);
 private:
     std::unique_ptr<CScene>		m_pScene;
     HWND                        m_hWnd;
-    std::wstring m_BGM;
-    std::vector<std::string> m_NextScene;
-
-    bool m_Transitioning;
-    int m_Select;
 };

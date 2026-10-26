@@ -21,6 +21,10 @@ namespace
 CSelect::CSelect()
 	: CScene()
 {
+	//BGM設定
+	m_BGM = L"BGM\\Select";
+	// ゲーム開始とタイトル
+	m_NextScene = { "Game","Title" };
 }
 //デストラクタ.
 CSelect::~CSelect()
@@ -99,13 +103,6 @@ HRESULT CSelect::LoadData()
 	//ライトの設定
 	CCamera::GetInstance()->SetLight(Light_Pos);
 
-	SceneManager::GetInstance()->SetTransition(
-		L"BGM\\Select",
-		{
-			"Game",  // ゲーム開始
-			"Title"  // タイトル
-		});
-
 	return S_OK;
 }
 //破棄関数
@@ -143,9 +140,10 @@ void CSelect::Update()
 
 		return;
 	}
-
-	SceneManager::GetInstance()->
-		UpdateTransition(m_Select,m_Start);
+	//--------------------
+	// シーン遷移
+	//--------------------
+	UpdateTransition();
 }
 //描画関数
 void CSelect::Draw()

@@ -40,7 +40,6 @@ public:
 		GetInstance()->m_pSound.at(alias)->SetVolume(volume);
 	}
 private:
-	//std::unordered_map<std::string, std::unique_ptr<CSound>> m_pSound;
 	std::unordered_map
 		<std::basic_string<TCHAR>,std::unique_ptr<CSound>> m_pSound;
 };

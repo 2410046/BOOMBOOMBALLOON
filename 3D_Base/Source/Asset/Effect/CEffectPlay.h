@@ -2,13 +2,13 @@
 #include"CEffect.h"
 //エフェクトハンドル
 inline EsHandle CreateEffect(
-    CEffect::enList type,
+    const std::u16string& fileName,
     const D3DXVECTOR3& position,
     const D3DXVECTOR3& rotation,
     float scale,
     float speed = 1.0f)
 {
-    EsHandle effect = CEffect::Play(type, position);
+    EsHandle effect = CEffect::Play(fileName, position);
 
     CEffect::SetScale(
         effect,

@@ -43,21 +43,6 @@ namespace {
 class CEffect
 	: public Singleton<CEffect>
 {
-public:
-	////エフェクト種類列挙型
-	enum enList
-	{
-		DeleteA,			//音符Aで使用
-		DeleteB,			//音符Bで使用
-		DeleteX,			//音符Xで使用
-		DeleteY,			//音符Yで使用
-		AppA,
-		AppB,
-		AppX,
-		AppY,
-		Max				//最大数
-
-	};
 private:
 	friend class Singleton<CEffect>;
 	CEffect();
@@ -115,6 +100,5 @@ private:
 	::EsRendererRef		m_pRenderer;
 	//エフェクトの種類ごとに必要
 	std::unordered_map<std::u16string, EsEffectRef> m_pEffect;
-	//std::unordered_map<std::string, ::EsEffectRef> m_pEffect;
 };
 

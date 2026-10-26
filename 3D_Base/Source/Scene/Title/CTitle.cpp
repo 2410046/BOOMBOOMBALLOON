@@ -18,6 +18,10 @@ CTitle::CTitle()
 	: CScene()
 	, m_angle(-1.59f)
 {
+		//BGM設定
+	m_BGM = L"BGM\\Title";
+		// セレクトとゲーム終了
+	m_NextScene = { "Select", "" };
 }
 //デストラクタ
 CTitle::~CTitle()
@@ -75,14 +79,6 @@ HRESULT CTitle::LoadData()
 		m_pSelect[i]->SetPatternNo(0, i);
 		m_pSelect[i]->SetPosition(Sell_Pos);
 	}
-
-	SceneManager::GetInstance()->SetTransition(
-		L"BGM\\Title",
-		{
-			"Select",  // セレクト
-			""         //ゲーム終了
-		});
-
 	// カメラの座標や角度の設定
 	CCamera::GetInstance()->SetCamera(Camera_Pos, Look_Pos);
 	//ライトの設定
@@ -100,7 +96,7 @@ void CTitle::Release()
 void CTitle::Update()
 {
 	//BGMをループ再生する
-	CSoundManager::PlayLoop(_T("BGM\\Title"));
+	CSoundManager::PlayLoop(m_BGM);
 	//選択肢の設定
 	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
 
@@ -133,7 +129,7 @@ void CTitle::Update()
 	//--------------------
 	// シーン遷移
 	//--------------------
-	SceneManager::GetInstance()->UpdateTransition(m_Select,m_Start);
+    UpdateTransition();
 
 }
 

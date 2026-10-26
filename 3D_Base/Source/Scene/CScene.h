@@ -34,7 +34,12 @@ public:
     //描画関数
     virtual void Draw()        = 0;  
 protected:
+    // シーン遷移更新
+    void UpdateTransition(bool UseSelect = true);
+protected:
     int         m_Select;       //選択No
     bool        m_Start;        //選択決定
+    std::wstring m_BGM;         //BGM
+    std::vector<std::string> m_NextScene;//次のシーン
 };
 
