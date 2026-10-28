@@ -75,7 +75,7 @@ HRESULT CTitle::LoadData()
 			= D3DXVECTOR3(600.f, 400.f + i * 100.f, 0.f);	
 
 		m_pSelect[i]->AttachSprite(
-			*CSpriteManager::GetSprite2D(L"Text"));
+			*CSpriteManager::GetSprite2D(L"SelectText"));
 		m_pSelect[i]->SetPatternNo(0, i);
 		m_pSelect[i]->SetPosition(Sell_Pos);
 	}
@@ -118,8 +118,7 @@ void CTitle::Update()
 		for (int i = 0; i < m_pSelect.size(); ++i)
 		{
 			//選択されたときの状態
-			m_pSelect[i]->SellState(
-				i, m_Select, [](int i) { return i; });
+			m_pSelect[i]->SellState(i, m_Select, 0);
 		}
 
 		Sky();

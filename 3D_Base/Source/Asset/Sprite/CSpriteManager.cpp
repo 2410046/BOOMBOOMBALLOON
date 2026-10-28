@@ -66,7 +66,7 @@ HRESULT CSpriteManager::CreateSprite2D()
 {
 
     //スプライト2Dの構造体
-    CSprite2D::SPRITE_STATE SSSel    = { 190.f, 70.f , 147.f, 160.f, 147.f, 53.f };
+    CSprite2D::SPRITE_STATE SSSel    = { 190.f, 70.f,1401.f, 718.f,696.f, 239.f };
     CSprite2D::SPRITE_STATE SSText   = { 240.f, 60.f, 320.f, 185.f, 160.f, 60.f };
   
     CSprite2D::SPRITE_STATE SSLogo   = { 825.f, 276.f, 825.f, 276.f, 825.f, 276.f };
@@ -80,8 +80,8 @@ HRESULT CSpriteManager::CreateSprite2D()
     // スプライトのデータリスト
     Sprite2DData DataList[] =
     {
-        { L"Text",     SSSel    },
-        { L"Logo",     SSLogo   },
+        { L"SelectText", SSSel    },
+        { L"Logo",       SSLogo   },
         { L"Number",     SSNumber },
         { L"ActiveUser", SSActive },
         { L"Rank",       SSRank },

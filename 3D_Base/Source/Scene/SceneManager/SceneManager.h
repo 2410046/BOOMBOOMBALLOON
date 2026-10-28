@@ -1,8 +1,7 @@
 ﻿#pragma once
 #include <memory>
 #include"Singleton.h"
-#include <string>
-#include <vector>
+#include<string>
 class CScene;       //シーンクラス
 /********************************************************************************
 *	シーンマネージャークラス
@@ -24,10 +23,10 @@ public:
     // 現在のシーンを解放
     void Release();
     // シーン切り替え
-    void NextScene(const std::string& scene);
+    void NextScene(std::string scene);
 private:
     //シーンの種類
-    void SceneList(const std::string& scene);
+    void SceneList(std::string scene);
 private:
     std::unique_ptr<CScene>		m_pScene;
     HWND                        m_hWnd;

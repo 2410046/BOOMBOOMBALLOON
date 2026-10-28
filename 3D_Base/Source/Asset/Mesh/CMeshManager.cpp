@@ -6,6 +6,8 @@ static const std::wstring MESH_X = L".X";
 
 // コンストラクタ
 CMeshManager::CMeshManager()
+	: m_SkinMapList{}
+	, m_StaticMapList{}
 {
 }
 

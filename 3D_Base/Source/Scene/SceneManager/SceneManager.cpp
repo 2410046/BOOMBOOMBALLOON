@@ -19,7 +19,7 @@ HRESULT SceneManager::NewScene(HWND hWnd)
 {
     m_hWnd = hWnd;
     //最初はタイトルシーン
-    NextScene("Title");//Title
+    NextScene("Title");
     return S_OK;
 }
 
@@ -52,7 +52,7 @@ void SceneManager::Release()
 }
 
 // 現在のシーンを更新
-void SceneManager::NextScene(const std::string& scene)
+void SceneManager::NextScene(std::string scene)
 {
     if (m_pScene != nullptr)
     {
@@ -69,73 +69,27 @@ void SceneManager::NextScene(const std::string& scene)
     }
 }
 //シーンの種類
-void SceneManager::SceneList(const std::string& scene)
+void SceneManager::SceneList(std::string scene)
 {
+    //シーン作成
     if (scene == "Title")
     {
+        //タイトル
         m_pScene = std::make_unique<CTitle>();
     }
     else if (scene == "Select")
     {
+        //セレクト
         m_pScene = std::make_unique<CSelect>();
     }
     else if (scene == "Game")
     {
+        //ゲーム
         m_pScene = std::make_unique<CGame>();
     }
     else if (scene == "Result")
     {
+        //リザルト
         m_pScene = std::make_unique<CResult>();
     }
 }
-
-
-//if (!m_Transitioning)
-//    return;
-
-//// フェードアウト完了まで待つ
-//if (!CFade::GetInstance()->FadeOut())
-//    return;
-
-//// BGM停止
-//CSoundManager::Stop(m_BGM.c_str());
-
-//// 選択番号の範囲確認
-//if (select < 0 ||
-//    select >= static_cast<int>(m_NextScene.size()))
-//{
-//    m_Transitioning = false;
-//    return;
-//}
-
-//// 遷移先を取得
-//const std::string& nextScene = m_NextScene[select];
-
-//if (nextScene.empty())
-//{
-//    // ゲーム終了
-//    PostQuitMessage(0);
-//}
-//else
-//{
-//    // シーン切り替え
-//    NextScene(nextScene);
-//}
-
-//m_Transitioning = false;
-
-// 選択肢なし
-//void SceneManager::StartTransition()
-//{
-//    StartTransition(0);
-//}
-//
-//// 選択肢あり
-//void SceneManager::StartTransition(int select)
-//{
-//    if (m_Transitioning)
-//        return;
-//
-//    m_Select = select;
-//    m_Transitioning = true;
-//}

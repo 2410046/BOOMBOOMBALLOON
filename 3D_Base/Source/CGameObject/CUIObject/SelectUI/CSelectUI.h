@@ -15,7 +15,7 @@ public:
 	virtual void Draw()override;
 	//選択されたときの状態
 	void SellState(
-		int index,int selectIndex,int (*patternFunc)(int));
+		int index,int selectIndex,int pattern);
 
 private:
 

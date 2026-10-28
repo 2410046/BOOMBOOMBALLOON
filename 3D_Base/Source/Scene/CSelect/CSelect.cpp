@@ -68,10 +68,10 @@ HRESULT CSelect::LoadData()
 	{
 		//選択肢の座標
 		const D3DXVECTOR3 Sell_Pos
-			= D3DXVECTOR3(600.f, 400.f + i * 100.f, 0.f);
+			= D3DXVECTOR3(300.f+(i*500.f), 500.f, 0.f);
 
 		m_pSelect[i]->AttachSprite(
-			*AssetManager::GetSprite2D(L"Text"));
+			*AssetManager::GetSprite2D(L"SelectText"));
 		m_pSelect[i]->SetPatternNo(0, i);
 		m_pSelect[i]->SetPosition(Sell_Pos);
 	}
@@ -113,7 +113,7 @@ void CSelect::Release()
 void CSelect::Update()
 {
 	//BGMをループ再生する
-	CSoundManager::PlayLoop(_T("BGM\\Select"));
+	CSoundManager::PlayLoop(m_BGM);
 
 	//選択肢の設定
 	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
@@ -129,8 +129,7 @@ void CSelect::Update()
 		for (int i = 0; i < m_pSelect.size(); ++i)
 		{
 			//選択されたときの状態
-			m_pSelect[i]->SellState(
-				i, m_Select, [](int i) { return i; });
+			m_pSelect[i]->SellState(i, m_Select, 2);
 		}
 
 		//プレイヤーの人数選択
@@ -156,7 +155,7 @@ void CSelect::Draw()
 
 	CDirectX11::GetInstance()->SetDepth(false);
 	m_pBack->Draw(camera);
-	//選択肢の描画
+	////選択肢の描画
 	for (size_t i = 0; i < m_pSelect.size(); ++i)
 	{
 		m_pSelect[i]->Draw();

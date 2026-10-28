@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "Reaction/CReactionApply/CReactionFactory.h"
 #include "CMeshObject/CTracking/CShot/CShot.h"	    //ショットクラス
-
+#include "CGameObject/CMeshObject/CCloud/CCloud.h"              //雲クラス
 namespace
 {
 	//カプセルのサイズ
@@ -124,11 +124,6 @@ void CPlayer::Update()
 	default:
 		break;
 	}
-
-    // 移動制限
-    m_vPosition.x = std::clamp(m_vPosition.x, m_Min.x, m_Max.x);
-    m_vPosition.y = std::clamp(m_vPosition.y, m_Min.y, m_Max.y);
-    m_vPosition.z = std::clamp(m_vPosition.z, m_Min.z, m_Max.z);
 	
 	//ノックバック中
 		if (m_pReaction)
@@ -313,16 +308,17 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 	}
 	//相手もブースト状態ならノックバックにしたい
 		break;
-	//case CollisionBase::Cloud://雲に接触した場合
-	//{
-	//	//ノックバック
-	//	CReaction::ReactionParam param;
-	//	param.to = GetPosition();
-	//	//param.from = GetPosition();
-	//	m_pReaction = CReactionFactory::Create(CReaction::KnockBack);
-	//	m_pReaction->Apply(param);
-	//}
-	//	break;
+	case CollisionBase::Cloud://雲に接触した場合
+	{
+		auto* cloud = dynamic_cast<CCloud*>(pCollider->GetListener());
+		//ノックバック
+		CReaction::ReactionParam param;
+		param.to = GetPosition();
+		param.from = cloud->GetPosition();
+		m_pReaction = CReactionFactory::Create(CReaction::KnockBack);
+		m_pReaction->Apply(param);
+	}
+		break;
 
 	case CollisionBase::Shot://ショットに当たった瞬間
 	{

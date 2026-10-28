@@ -64,9 +64,6 @@
     <Filter Include="Source\GameObject\SpriteObject\UI">
       <UniqueIdentifier>{d65774c1-37b6-4a33-b791-e4b6e1e524db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\GameObject\SpriteObject\UI\CTime">
-      <UniqueIdentifier>{9b4c8d6d-5682-46c7-875f-7a3408892042}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Collision">
       <UniqueIdentifier>{49672032-2fdb-4cc6-84a1-12bad1d4f431}</UniqueIdentifier>
     </Filter>
@@ -205,6 +202,9 @@
     <Filter Include="Source\GameObject\StaticMeshObject\Character\CCloud\CCloudManager">
       <UniqueIdentifier>{4be82171-09b6-4100-96c1-2fa3a54019f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\GameObject\UIObject\CTime">
+      <UniqueIdentifier>{9b4c8d6d-5682-46c7-875f-7a3408892042}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -244,7 +244,7 @@
       <Filter>Source\GameObject\SpriteObject\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\CGameObject\CSpriteObject\CTIme\CTime.cpp">
-      <Filter>Source\GameObject\SpriteObject\UI\CTime</Filter>
+      <Filter>Source\GameObject\UIObject\CTime</Filter>
     </ClCompile>
     <ClCompile Include="Source\CGameObject\CSpriteObject\CFade\CFade.cpp">
       <Filter>Source\GameObject\SpriteObject\UI\CFade</Filter>
@@ -441,7 +441,7 @@
       <Filter>Source\GameObject\SpriteObject\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CSpriteObject\CTIme\CTime.h">
-      <Filter>Source\GameObject\SpriteObject\UI\CTime</Filter>
+      <Filter>Source\GameObject\UIObject\CTime</Filter>
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CUIObject\CUIObject.h">
       <Filter>Source\GameObject\UIObject</Filter>
