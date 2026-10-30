@@ -166,9 +166,12 @@ void CGame::Sky()
 //シーン遷移
 void CGame::Next()
 {
+	bool m_Flag = false;
+#ifdef _DEBUG
+	m_Flag = GetAsyncKeyState(VK_RETURN) & 0x8000;
+#endif // DEBUG
 	//時間が来たら
-	if (CTime::GetInstance()->MaxTime()
-		|| GetAsyncKeyState(VK_RETURN) & 0x8000)
+	if (m_Flag||CTime::GetInstance()->MaxTime())
 	{
 		////エフェクトをすべて止める
 		CEffect::StopAll();
