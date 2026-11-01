@@ -75,7 +75,7 @@ void CRanking::Register(int ID, int score)
 }
 //動作関数
 void CRanking::Update()
-{
+{//これなんだけどスコアでプレイヤーがい一番上だとしても左に行ってくれない。1234の並びで固定。さすがにスコアの計算が終わったらちゃんと順位通りになるけど
     // '1'キーを押したらスコアのカウントアップをスキップ
     if (GetAsyncKeyState('1') & 0x0001)
     {

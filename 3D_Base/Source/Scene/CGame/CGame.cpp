@@ -8,9 +8,9 @@
 namespace 
 {
 	static const D3DXVECTOR3 Sky_Pos   
-		= D3DXVECTOR3(0.f, -1.f, 11.f);		//スカイ座標
+		= D3DXVECTOR3(0.f, 1.f, 11.f);		//スカイ座標
 	static const D3DXVECTOR3 Camera_Pos 
-		= D3DXVECTOR3(0.0f, 9.0f, -2.0f);	//カメラ座標
+		= D3DXVECTOR3(0.0f, 12.5f, -4.f);	//カメラ座標
 	static const D3DXVECTOR3 Time_Pos
 		= D3DXVECTOR3(600.f, 20.f, 0.f);		//タイムUI座標
 	static const D3DXVECTOR3 Look_Pos   
@@ -70,6 +70,7 @@ HRESULT CGame::LoadData()
 	m_pTimeUI->AttachSprite(
 		*AssetManager::GetSprite2D(L"Time"));
 	m_pTimeUI->SetPosition(Time_Pos);
+	m_pTimeUI->SetScale(0.8f);
 
 	// プレイヤーの数
 	for (int p = 0; p < m_PlayerCount; ++p)
@@ -104,7 +105,7 @@ void CGame::Update()
 {
 	CTime::GetInstance()->Update();
 	CReactionManager::GetInstance()->Update();
-
+	CCamera::GetInstance()->Update();
 	m_pPlayer.Update();
 
 	m_Shot.Update(m_pPlayer.GetShots());
@@ -171,7 +172,7 @@ void CGame::Next()
 	m_Flag = GetAsyncKeyState(VK_RETURN) & 0x8000;
 #endif // DEBUG
 	//時間が来たら
-	if (m_Flag||CTime::GetInstance()->MaxTime())
+	if (m_Flag/* || CTime::GetInstance()->MaxTime()*/)
 	{
 		////エフェクトをすべて止める
 		CEffect::StopAll();

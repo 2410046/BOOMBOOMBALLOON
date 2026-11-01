@@ -50,7 +50,7 @@ HRESULT CTitle::LoadData()
 {
 	//スカイの読み込み、座標の設定
 	m_pSky->AttachMesh(
-		*AssetManager::GetStatic(L"Sky\\Sky"));
+		*AssetManager::GetStatic(L"Sky\\TitleSky"));
 
 	D3DXQUATERNION quaternion;
 
