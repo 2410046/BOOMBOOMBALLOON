@@ -45,6 +45,8 @@ void CFiring::Update()
 	//終了
 	if (m_State.timer <= 0.0f)
 	{
+		// 元の回転に戻す
+		*m_pQuaternion = m_ShotBaseRot;
 		//タイマーをリセット
 		m_State.timer = 5.f;
 		m_State.active = false;

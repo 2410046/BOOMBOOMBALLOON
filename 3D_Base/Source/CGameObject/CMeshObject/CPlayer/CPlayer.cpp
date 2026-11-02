@@ -34,6 +34,7 @@ CPlayer::CPlayer()
 	m_vQuaternion
 		= D3DXQUATERNION(0.0f, 0.7071068f, 0.0f, 0.7071068f);
 	m_angle = 0.f;
+	m_Count = 50.f;
 }
 //デストラクタ
 CPlayer::~CPlayer()
@@ -70,6 +71,7 @@ void CPlayer::Update()
 		//プレイヤーの方向にまっすぐ進む
 		CReaction::ReactionParam param;
 		param.rot = m_vQuaternion;
+		param.power = 2.f;
 		m_pReaction = CReactionFactory::Create(CReaction::Boost);
 		m_pReaction->Apply(param);
 		m_MoveState = enMoveState::Live;
@@ -155,7 +157,7 @@ void CPlayer::Controller()
 	{
 		return;
 	}
-
+	m_Count++;
 	//キーボード
 	float moveX = 0.0f;
 	float moveZ = 0.0f;
@@ -166,9 +168,24 @@ void CPlayer::Controller()
 		if (GetAsyncKeyState(VK_DOWN) & 0x8000) moveZ -= 1.0f;
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000) moveX -= 1.0f;
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) moveX += 1.0f;
-		
-		if (GetAsyncKeyState('Z') & 0x8000) m_MoveState = enMoveState::Boost;
-		if (GetAsyncKeyState('X') & 0x0001) m_MoveState = enMoveState::Shot;
+
+		if (GetAsyncKeyState('Z') & 0x8000 && std::fmod(m_Count, 50.0f) == 0.0f)
+		{
+			m_MoveState = enMoveState::Boost;
+			m_Count = 0.f;
+		}
+		if ((GetAsyncKeyState('X') & 0x8000) 
+			&& std::fmod(m_Count, 10.0f) == 0.0f)
+		{
+			// アニメーション中でなければ再生
+			if (m_pReaction &&
+				 m_pReaction->Play(CReaction::Firing))
+			{
+				return;
+			}
+
+			m_MoveState = enMoveState::Shot;
+		}
 		break;
 	case 1:
 		if (GetAsyncKeyState('W') & 0x8000) moveZ += 1.0f;
@@ -177,7 +194,19 @@ void CPlayer::Controller()
 		if (GetAsyncKeyState('D') & 0x8000) moveX += 1.0f;
 
 		if (GetAsyncKeyState('1') & 0x8000) m_MoveState = enMoveState::Boost;
-		if (GetAsyncKeyState('2') & 0x0001) m_MoveState = enMoveState::Shot;
+
+		if (GetAsyncKeyState('2') & 0x8000)
+		{
+			// アニメーション中でなければ再生
+			if (m_pReaction &&
+				m_pReaction->Play(CReaction::Firing))
+			{
+				return;
+			}
+
+			m_MoveState = enMoveState::Shot;
+			m_Count = 0.0f;
+		}
 		break;
 	default:
 		break;

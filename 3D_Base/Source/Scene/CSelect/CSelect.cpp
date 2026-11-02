@@ -24,7 +24,7 @@ CSelect::CSelect()
 	//BGM設定
 	m_BGM = L"BGM\\Select";
 	// ゲーム開始とタイトル
-	m_NextScene = { "Game","Title" };
+	m_SceneList = { "Game","Title" };
 }
 //デストラクタ.
 CSelect::~CSelect()

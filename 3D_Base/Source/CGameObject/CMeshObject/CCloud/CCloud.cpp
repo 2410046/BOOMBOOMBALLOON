@@ -5,11 +5,13 @@
 
 namespace
 {
+	//当たり判定
+	constexpr float radius = 0.6f;
 	//ボックスのサイズ
-	D3DXVECTOR3 Box = D3DXVECTOR3(80.f, 20.f, 20.f);
-	static constexpr float Stage_ScaleX = 5.0f;   // X方向範囲倍率
-	static constexpr float Stage_ScaleZ = 4.0f;	  // Z方向範囲倍率
-	static constexpr float Stage_Offset = 0.5f;	  // Z端微調整
+	//D3DXVECTOR3 Box = D3DXVECTOR3(80.f, 20.f, 20.f);
+	constexpr float Stage_ScaleX = 5.0f;   // X方向範囲倍率
+	constexpr float Stage_ScaleZ = 4.0f;	  // Z方向範囲倍率
+	constexpr float Stage_Offset = 0.5f;	  // Z端微調整
 }
 //コンストラクタ
 CCloud::CCloud()
@@ -19,8 +21,8 @@ CCloud::CCloud()
 	//サイズ
 	m_vScale = D3DXVECTOR3(0.05f, 0.05f, 0.05f);
 	//ボックスの当たり判定
-	m_pCollider = CreateCollider::CreateBox(
-		Box, this, CollisionBase::Cloud
+	m_pCollider = CreateCollider::CreateSphere(
+		radius, this, CollisionBase::Cloud
 	);
 }
 //デストラクタ

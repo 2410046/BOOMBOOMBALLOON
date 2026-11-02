@@ -29,7 +29,7 @@ CGame::CGame()
 	//BGM設定
 	m_BGM = L"BGM\\MouningGame";
 	// リザルト
-	m_NextScene = { "Result" };;
+	m_SceneList = { "Result" };;
 }
 //デストラクタ.
 CGame::~CGame()
@@ -48,6 +48,10 @@ void CGame::Create()
 	m_pSky      = std::make_unique<CCharacter>();
 	//時計のUIのインスタンス生成
 	m_pTimeUI   = std::make_unique<CUIObject>();
+	//初期化
+	CollisionManager::GetInstance()->Init();
+	CReactionManager::GetInstance()->Init();
+	CTrackingManager::GetInstance()->Init();
 }
 
 //ロード関数.
@@ -95,17 +99,13 @@ HRESULT CGame::LoadData()
 //解放関数.
 void CGame::Release()
 {
-		//初期化
-	CollisionManager::GetInstance()->Init();
-	CReactionManager::GetInstance()->Init();
-	CTrackingManager::GetInstance()->Init();
 }
 //動作関数
 void CGame::Update()
 {
 	CTime::GetInstance()->Update();
 	CReactionManager::GetInstance()->Update();
-	CCamera::GetInstance()->Update();
+	//CCamera::GetInstance()->Update();
 	m_pPlayer.Update();
 
 	m_Shot.Update(m_pPlayer.GetShots());

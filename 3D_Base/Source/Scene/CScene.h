@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include <Windows.h>
-#include "Scene/SceneManager/SceneManager.h"       //シーンマネージャークラス
 #include "Asset/AssetManager/AssetManager.h"       //サウンドマネージャークラス
 #include "Asset/CXInput/CXInput.h"	               //コントローラークラス
 #include "Camera/CCamera.h"                        //カメラクラス
@@ -33,6 +32,9 @@ public:
     virtual void Update()      = 0;
     //描画関数
     virtual void Draw()        = 0;  
+
+    //次に呼ぶシーンの取得
+    std::string GetRequestScene() const;
 protected:
     // シーン遷移更新
     void UpdateTransition(bool UseSelect = true);
@@ -40,6 +42,8 @@ protected:
     int         m_Select;       //選択No
     bool        m_Start;        //選択決定
     std::wstring m_BGM;         //BGM
-    std::vector<std::string> m_NextScene;//次のシーン
+
+    std::vector<std::string> m_SceneList;//次に呼ぶシーンリスト
+    std::string m_RequestScene;         //次に呼ぶシーン
 };
 

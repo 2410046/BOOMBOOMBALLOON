@@ -21,7 +21,6 @@ public:
 
     // Playerの方向
     D3DXQUATERNION GetQuaternion() const;
-
     // 対象取得
     CPlayer* GetTarget() const;
     //ID

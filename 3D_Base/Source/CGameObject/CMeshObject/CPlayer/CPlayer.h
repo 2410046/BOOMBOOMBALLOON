@@ -53,8 +53,6 @@ protected:
 	void Controller();
 	//クオータニオン対応
 	void Quotanion(D3DXVECTOR3 moveDir);
-	//移動制限
-	void MoveLimit();
 protected:
 	enMoveState	m_MoveState;	//移動状態
 	float       m_StateTime;	//状態の開始時間
@@ -62,5 +60,4 @@ protected:
 	int         m_Life;			//ライフの数
 	int			m_Point;		//スコアに追加するポイント
 	std::shared_ptr<CReaction>	m_pReaction;	//当たり判定
-
 };

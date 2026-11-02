@@ -30,6 +30,14 @@ void SceneManager::Update()
     if (m_pScene != nullptr)
     {
         m_pScene->Update();
+
+        // 遷移要求があればシーンを切り替える
+        if (!m_pScene->GetRequestScene().empty())
+        {
+            std::string nextScene = m_pScene->GetRequestScene();
+            //次のシーン
+            NextScene(nextScene);
+        }
     }
 }
 // 現在のシーンを描画
@@ -46,7 +54,6 @@ void SceneManager::Release()
 {
     if (m_pScene != nullptr)
     {
-        m_pScene->Release();
         m_pScene.reset();
     }
 }
@@ -54,11 +61,7 @@ void SceneManager::Release()
 // 現在のシーンを更新
 void SceneManager::NextScene(std::string scene)
 {
-    if (m_pScene != nullptr)
-    {
-        m_pScene->Release();
-        m_pScene.reset();
-    }
+    Release();
 
     SceneList(scene);
 

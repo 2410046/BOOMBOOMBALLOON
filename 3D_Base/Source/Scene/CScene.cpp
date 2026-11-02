@@ -3,11 +3,16 @@
 CScene::CScene()
     : m_Start(false)
     , m_Select(0)
-    , m_BGM()       
-    , m_NextScene()
+    , m_SceneList()
+    , m_RequestScene()
+    , m_BGM()
 {
 }
-// シーン遷移設定
+//次に呼ぶシーンの取得
+std::string CScene::GetRequestScene() const
+{
+    return m_RequestScene;
+}
 // シーン遷移更新
 void CScene::UpdateTransition(bool UseSelect)
 {
@@ -37,13 +42,13 @@ void CScene::UpdateTransition(bool UseSelect)
 
     // 選択番号の範囲確認
     if (index < 0 ||
-        index >= static_cast<int>(m_NextScene.size()))
+        index >= static_cast<int>(m_SceneList.size()))
     {
         m_Start = false;
         return;
     }
 
-    const std::string& nextScene = m_NextScene[m_Select];
+    const std::string& nextScene = m_SceneList[m_Select];
 
     // 遷移先が空ならゲーム終了
     if (nextScene.empty())
@@ -52,8 +57,8 @@ void CScene::UpdateTransition(bool UseSelect)
     }
     else
     {
-        // シーン切り替え
-        SceneManager::GetInstance()->NextScene(nextScene);
+        // 遷移要求を保存
+        m_RequestScene = nextScene;
     }
 
     m_Start = false;

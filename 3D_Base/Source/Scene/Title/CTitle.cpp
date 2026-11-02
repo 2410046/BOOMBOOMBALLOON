@@ -21,7 +21,7 @@ CTitle::CTitle()
 		//BGM設定
 	m_BGM = L"BGM\\Title";
 		// セレクトとゲーム終了
-	m_NextScene = { "Select", "" };
+	m_SceneList = { "Select", "" };
 }
 //デストラクタ
 CTitle::~CTitle()
