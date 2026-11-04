@@ -1,5 +1,5 @@
 ﻿#include "CGame.h"
-#include "CGameObject/CSpriteObject/CTime/CTime.h"		//タイムクラス
+#include "CGameObject/CUIObject/CTime/CTime.h"		//タイムクラス
 #include "Scene/SelectText/CSelectText.h"               //選択肢の関数
 #include "Collision/CollisionManager/CollisionManager.h"
 #include "CMeshObject/CTracking/CTrackingManager/CTrackingManager.h"
@@ -29,7 +29,7 @@ CGame::CGame()
 	//BGM設定
 	m_BGM = L"BGM\\MouningGame";
 	// リザルト
-	m_SceneList = { "Result" };;
+	m_SceneList = { "Result" };
 }
 //デストラクタ.
 CGame::~CGame()
@@ -83,7 +83,10 @@ HRESULT CGame::LoadData()
 		m_pPlayer.NewPlayer(p);
 		//スコアの生成
 		m_pScores.NewScore(p);
+		//アイコンの生成
+		m_pIcon.NewIcon(p);
 	}
+
 	m_pCloud.NewCloud();
 	//m_pCloud->LoadData();
 	//時間のリセット
@@ -105,18 +108,18 @@ void CGame::Update()
 {
 	CTime::GetInstance()->Update();
 	CReactionManager::GetInstance()->Update();
-	//CCamera::GetInstance()->Update();
+
 	m_pPlayer.Update();
 
 	m_Shot.Update(m_pPlayer.GetShots());
 
-	m_Balloon.Update(
-		m_pPlayer.GetLifes());
+	m_Balloon.Update(m_pPlayer.GetLifes());
 
 	m_pCloud.Update();
 	CollisionManager::GetInstance()->Update();
 
 	m_pScores.Update(m_pPlayer.GetPoints());
+	m_pIcon.Update();
 	//スカイの動作関数
 	Sky();
     //シーン遷移
@@ -140,6 +143,8 @@ void CGame::Draw()
 	//m_pCloud->Draw(camera);
 	m_pPlayer.Draw(camera);
 	m_pScores.Draw();
+	m_pIcon.Draw();
+
 	m_Shot.Draw(camera);
 	m_Balloon.Draw(camera);
 	m_pCloud.Draw(camera);

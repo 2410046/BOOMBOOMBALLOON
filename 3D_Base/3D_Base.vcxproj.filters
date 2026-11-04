@@ -205,6 +205,12 @@
     <Filter Include="Source\GameObject\UIObject\CTime">
       <UniqueIdentifier>{9b4c8d6d-5682-46c7-875f-7a3408892042}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\GameObject\UIObject\CAttackIcon">
+      <UniqueIdentifier>{5bd66cb0-fd8b-4614-b1d7-687331b30328}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameObject\UIObject\CAttackIcon\CIconManager">
+      <UniqueIdentifier>{8d74787b-4241-4460-bbb1-399c500b6202}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -242,9 +248,6 @@
     </ClCompile>
     <ClCompile Include="Source\CGameObject\CSpriteObject\CSpriteObject.cpp">
       <Filter>Source\GameObject\SpriteObject\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CGameObject\CSpriteObject\CTIme\CTime.cpp">
-      <Filter>Source\GameObject\UIObject\CTime</Filter>
     </ClCompile>
     <ClCompile Include="Source\CGameObject\CSpriteObject\CFade\CFade.cpp">
       <Filter>Source\GameObject\SpriteObject\UI\CFade</Filter>
@@ -396,6 +399,15 @@
     <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloudManager\CCloudManager.cpp">
       <Filter>Source\GameObject\StaticMeshObject\Character\CCloud\CCloudManager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CGameObject\CUIObject\CTime\CTime.cpp">
+      <Filter>Source\GameObject\UIObject\CTime</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CGameObject\CUIObject\CAttackicon\CAttackIcon.cpp">
+      <Filter>Source\GameObject\UIObject\CAttackIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CGameObject\CUIObject\CAttackIcon\IconManager\CIconManager.cpp">
+      <Filter>Source\GameObject\UIObject\CAttackIcon\CIconManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Global.h">
@@ -439,9 +451,6 @@
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CSpriteObject\CSpriteObject.h">
       <Filter>Source\GameObject\SpriteObject\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CGameObject\CSpriteObject\CTIme\CTime.h">
-      <Filter>Source\GameObject\UIObject\CTime</Filter>
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CUIObject\CUIObject.h">
       <Filter>Source\GameObject\UIObject</Filter>
@@ -610,6 +619,15 @@
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CMeshObject\CCloud\CCloudManager\CCloudManager.h">
       <Filter>Source\GameObject\StaticMeshObject\Character\CCloud\CCloudManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CGameObject\CUIObject\CTime\CTime.h">
+      <Filter>Source\GameObject\UIObject\CTime</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CGameObject\CUIObject\CAttackicon\CAttackIcon.h">
+      <Filter>Source\GameObject\UIObject\CAttackIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CGameObject\CUIObject\CAttackIcon\IconManager\CIconManager.h">
+      <Filter>Source\GameObject\UIObject\CAttackIcon\CIconManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

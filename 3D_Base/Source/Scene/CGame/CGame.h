@@ -5,6 +5,7 @@
 #include "CGameObject/CMeshObject/CTracking/CBallun/CBallunManager/CBalloonManager.h"//バルーンクラス
 #include "CGameObject/CMeshObject/CCloud/CCloudManager/CCloudManager.h"              //雲クラス
 #include "CGameObject/CUIObject/Score/CScoreManager.h"		//スコアマネージャークラス
+#include "CGameObject/CUIObject/CAttackIcon/IconManager/CIconManager.h"	//攻撃アイコン
 
 /********************************************************************************
 *	ゲームクラス.
@@ -43,6 +44,7 @@ private:
 	CScoreManager	m_pScores;	        //スコア
 	CShotManager    m_Shot;		        //ショット
 	CBalloonManager m_Balloon;          //バルーン
+	CIconManager    m_pIcon;             //アイコン
 private:
 	int   m_PadButton[2] = { -1, -1 }; // コントローラーが押しているボタン(0:Pad0, 1:Pad1)
 	int	  m_PlayerCount;			   // プレイヤーの人数

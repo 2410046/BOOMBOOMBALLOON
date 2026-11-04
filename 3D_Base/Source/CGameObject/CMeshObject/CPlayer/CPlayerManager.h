@@ -3,6 +3,7 @@
 #include <memory>
 #include "CGameObject/CMeshObject/CPlayer/CPlayer.h"//プレイヤークラス
 #include "CGameObject/CMeshObject/CTracking/CTracking.h"//追尾クラス
+#include "CGameObject/CUIObject/CAttackIcon/CAttackIcon.h"	//攻撃アイコン
 /********************************************************************************
 * プレイヤーマネージャークラス
 **/
@@ -33,5 +34,5 @@ public:
     std::vector<int> GetPoints() const;
 private:
     std::vector<std::unique_ptr<CPlayer>> m_Players;     //プレイヤー
-    //std::vector<std::unique_ptr<CTracking>> m_Tracking;  //追尾
+    std::vector<std::unique_ptr<CAttackIcon>> m_Icon;     //アタックアイコン
 };

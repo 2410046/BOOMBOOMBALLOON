@@ -68,16 +68,14 @@ public:
          m_State.timer = 0.0f;
      }
      //リアクション中の場合
-     bool Play(//const std::shared_ptr<CReaction>& reaction,
-         MoveType type)
+     bool Play(MoveType type)
      {
          //if (!reaction)
          //{
          //    return false;
          //}
 
-         return /*reaction->*/IsActive() &&
-            /* reaction->*/ GetType() == type;
+         return IsActive() && GetType() == type;
      }
 protected:
     ReactionState m_State = {};

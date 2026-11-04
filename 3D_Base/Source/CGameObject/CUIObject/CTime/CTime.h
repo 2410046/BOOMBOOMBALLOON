@@ -1,5 +1,4 @@
 ﻿#pragma once
-//#include"CSpriteObject/CSpriteObject.h"
 #include "CGameObject/CUIObject/CUIObject.h"
 #include "Singleton.h"
 /********************************************************************************

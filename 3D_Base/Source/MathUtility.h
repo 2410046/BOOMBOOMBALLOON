@@ -1,44 +1,9 @@
 ﻿#pragma once
-
-//----------------------------------------------------
-// UpdateTimer
-// 値を  max の範囲まで増やす
-//----------------------------------------------------
+#include <algorithm>
 template <typename T>
-bool UpdateTimer(T& timer, T delta, T limit)
+//値を上限か下限まで増減するとき
+bool delta_clamp(T& value, T max)
 {
-    timer += delta;
-
-    // カウントアップ（deltaがプラスの場合)
-    if (delta > 0 && timer >= limit)
-    {
-        timer = 0;
-        return true;
-    }
-
-    // カウントダウン（deltaがマイナスの場合)
-    if (delta < 0 && timer <= limit)
-    {
-        timer = limit;
-        return true;
-    }
-
-    return false;
-}
-//----------------------------------------------------
-// Wrap
-// 値が範囲外になった場合、反対側へ循環させる
-//----------------------------------------------------
-template <typename W>
-W Wrap(W value, W min, W max)
-{
-    if (value < min)
-    {
-        return max;
-    }
-    if (value > max)
-    {
-        return min;
-    }
-    return value;
+	value = std::clamp(value, T{ 0 }, max);
+	return value == T{ 0 } || value == max;
 }

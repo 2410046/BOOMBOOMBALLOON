@@ -186,7 +186,9 @@
     <ClCompile Include="Source\CGameObject\CSkinObject\CSkinMeshObject.cpp" />
     <ClCompile Include="Source\CGameObject\CSpriteObject\CFade\CFade.cpp" />
     <ClCompile Include="Source\CGameObject\CSpriteObject\CSpriteObject.cpp" />
-    <ClCompile Include="Source\CGameObject\CSpriteObject\CTIme\CTime.cpp" />
+    <ClCompile Include="Source\CGameObject\CUIObject\CAttackicon\CAttackIcon.cpp" />
+    <ClCompile Include="Source\CGameObject\CUIObject\CAttackIcon\IconManager\CIconManager.cpp" />
+    <ClCompile Include="Source\CGameObject\CUIObject\CTime\CTime.cpp" />
     <ClCompile Include="Source\CGameObject\CUIObject\CUIObject.cpp" />
     <ClCompile Include="Source\CGameObject\CUIObject\Ranking\CRanking.cpp" />
     <ClCompile Include="Source\CGameObject\CUIObject\Score\CScore.cpp" />
@@ -256,7 +258,9 @@
     <ClInclude Include="Source\CGameObject\CSkinObject\CSkinMeshObject.h" />
     <ClInclude Include="Source\CGameObject\CSpriteObject\CFade\CFade.h" />
     <ClInclude Include="Source\CGameObject\CSpriteObject\CSpriteObject.h" />
-    <ClInclude Include="Source\CGameObject\CSpriteObject\CTIme\CTime.h" />
+    <ClInclude Include="Source\CGameObject\CUIObject\CAttackicon\CAttackIcon.h" />
+    <ClInclude Include="Source\CGameObject\CUIObject\CAttackIcon\IconManager\CIconManager.h" />
+    <ClInclude Include="Source\CGameObject\CUIObject\CTime\CTime.h" />
     <ClInclude Include="Source\CGameObject\CUIObject\CUIObject.h" />
     <ClInclude Include="Source\CGameObject\CUIObject\Ranking\CRanking.h" />
     <ClInclude Include="Source\CGameObject\CUIObject\Score\CScore.h" />

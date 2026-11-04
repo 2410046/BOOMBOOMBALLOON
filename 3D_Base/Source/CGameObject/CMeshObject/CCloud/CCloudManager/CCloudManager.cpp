@@ -1,5 +1,5 @@
 #include "CCloudManager.h"
-#include "CGameObject/CSpriteObject/CTime/CTime.h"		//タイムクラス
+#include "CGameObject/CUIObject/CTime/CTime.h"		//タイムクラス
 namespace
 {
     const int ObjectCount = 51;
