@@ -5,7 +5,7 @@
 namespace
 {
 
-    constexpr float Space    = 34.f;   // 数字の間隔
+    constexpr float Space    = 32.f;   // 数字の間隔
 
     constexpr float Pop_Power = 50.0f; // スコア増加の演出の強さ
     constexpr float Base_Size = 0.8f;  // 通常時スケール
@@ -76,7 +76,7 @@ void CScore::Draw()
     //プレイヤーによってスコアの色を変える
     m_Patten = m_ID;
     // 数字を描画（m_vPosition は変更しない）
-    Number(m_Pos,m_DisplayScore, Space);
+    Number(m_DisplayScore, Space);
 }
 //スコアの増減
 void CScore::Fluctuation(int point)
@@ -92,11 +92,6 @@ void CScore::ResultScore()
 {
     //ランキングに登録
     CRanking::GetInstance()->Register(m_ID, m_Score);
-}
-//スコアとコンボの座標を取得
-void CScore::SetPos(D3DXVECTOR3 pos)
-{
-    m_Pos = pos; 
 }
 //スコアが増えた時のアニメーション
 void CScore::AddAnime()

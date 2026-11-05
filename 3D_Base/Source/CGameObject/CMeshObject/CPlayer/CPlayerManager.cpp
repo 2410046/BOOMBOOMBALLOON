@@ -150,4 +150,22 @@ std::vector<int> CPlayerManager::GetPoints() const
 
     return result;
 }
+//全プレイヤーのクールタイムフラグを取得
+std::vector<std::unordered_map<std::string, bool>> CPlayerManager::GetCoolFlag() const
+{
+    std::vector<std::unordered_map<std::string, bool>> result;
+
+    for (const auto& player : m_Players)
+    {
+        if (player == nullptr)
+        {
+            result.push_back({});
+            continue;
+        }
+        result.push_back(
+            player->GetCoolFlag());
+    }
+
+    return result;
+}
 

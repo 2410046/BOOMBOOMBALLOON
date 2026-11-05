@@ -171,8 +171,9 @@ void CRanking::Draw()
         m_Patten = data.ID;
 
         D3DXVECTOR3 pos = m_PlayerPos[data.ID];
+        m_vPosition = pos;
         // 数値描画
-        Number(pos, data.DisplayScore, Space);
+        Number(data.DisplayScore, Space);
     }
 }
 

@@ -19,8 +19,6 @@ public:
 	void Fluctuation(int point);
 	//ゲーム終了時のスコア
 	void ResultScore();
-	//スコアとコンボの座標を取得
-	void SetPos(D3DXVECTOR3 pos);
 protected:
 	//スコアが増えた時のアニメーション
 	void AddAnime();
@@ -34,8 +32,6 @@ private:
 	float       m_Scale;        // 現在のスケール（表示サイズ）
 	float       m_TargetScale;  // 目標スケール（アニメーションで目指すサイズ）
 	int         m_PrevScore;    // 前回のスコア（変化検知や更新判定用）
-private:        
-	D3DXVECTOR3 m_Pos;			  //スコアの描画位置
 };
 
 

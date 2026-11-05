@@ -34,10 +34,13 @@ void CIconManager::NewIcon(int ID)
 
 }
 //更新関数
-void CIconManager::Update(/*const std::vector<int>& point*/)
+void CIconManager::Update(
+    const std::vector<std::unordered_map<std::string, bool>>& flag)
 {
     for (auto& icon : m_Icons)
     {
+        const int playerNo = icon->GetID();
+        icon->SetCoolFlag(flag[playerNo]);
         icon->Update();
     }
 }

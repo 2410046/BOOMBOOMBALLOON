@@ -27,6 +27,7 @@ public:
 		int maxcount = 0;
 		float coolTime = 180.0f;
 		float coolTimer = 0.0f;
+		bool isCoolTime = false;
 	};
 public:
 	//コンストラクタ
@@ -45,6 +46,8 @@ public:
 	int  GetPoint();
 	//ライフを取得
 	int  GetLife() { return m_Life; }
+	//クールタイム中のフラグを取得
+	std::unordered_map<std::string, bool> GetCoolFlag() const;
 protected:
 	//当たり判定
 	void OnCollision(
@@ -53,8 +56,10 @@ protected:
 	void Controller();
 	//クオータニオン対応
 	void Quotanion(D3DXVECTOR3 moveDir);
+
 	//攻撃回数の制限
 	bool AttackLimit(const std::string& name);
+	//クールタイムの更新
 	void UpdateAttack();
 protected:
 	enMoveState	m_MoveState;	//移動状態

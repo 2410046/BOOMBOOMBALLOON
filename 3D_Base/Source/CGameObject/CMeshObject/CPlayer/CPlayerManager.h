@@ -32,7 +32,8 @@ public:
     std::vector<int> GetLifes() const;
     //全プレイヤーのポイント取得
     std::vector<int> GetPoints() const;
+    //全プレイヤーのクールタイムフラグを取得
+    std::vector<std::unordered_map<std::string, bool>> GetCoolFlag() const;
 private:
     std::vector<std::unique_ptr<CPlayer>> m_Players;     //プレイヤー
-    std::vector<std::unique_ptr<CAttackIcon>> m_Icon;     //アタックアイコン
 };

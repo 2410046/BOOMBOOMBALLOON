@@ -45,10 +45,8 @@ void CUIObject::Draw(
 {
 	Draw();
 }
-void CUIObject::Number(
-	D3DXVECTOR3 pos,int Score, float Space, int digitCount)
+void CUIObject::Number(int Score, float Space, int digitCount)
 {
-	//スロットマシンのようなアニメーションにしたい
 	const POINTS PatternMax = m_pSprite->GetPatternMax();
 
 	char buf[16];
@@ -66,11 +64,12 @@ void CUIObject::Number(
 
 		m_pSprite->SetPatternNo(m_PatternNo.x, m_PatternNo.y);
 
-		float PosX = pos.x + (i * Space);
-		D3DXVECTOR3 DigitPos
-			= D3DXVECTOR3(PosX, pos.y, pos.z);
-		m_vPosition = DigitPos;  // ローカル変数で位置を設定
-		CUIObject::Draw();
+		D3DXVECTOR3 pos = m_vPosition;
+		pos.x += i * Space;
+
+		m_pSprite->SetPosition(pos);
+		//レンダリング.
+		m_pSprite->Render();
 	}
 }
 

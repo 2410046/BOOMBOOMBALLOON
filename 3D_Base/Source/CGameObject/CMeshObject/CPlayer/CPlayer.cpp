@@ -307,8 +307,9 @@ void CPlayer::Quotanion(D3DXVECTOR3 moveDir)
 bool CPlayer::AttackLimit(const std::string& name)
 {
 	auto& data = m_AttackData.at(name);
-	// 回数が0なら使用不可
-	if (data.count <= 0)
+
+	// 使用不可
+	if (data.isCoolTime || data.count <= 0)
 	{
 		return false;
 	}
@@ -318,6 +319,7 @@ bool CPlayer::AttackLimit(const std::string& name)
 		data.count -= 1, data.maxcount))
 	{
 		data.coolTimer = data.coolTime;
+		data.isCoolTime = true;
 	}
 
 	return true;
@@ -327,18 +329,33 @@ void CPlayer::UpdateAttack()
 {
 	for (auto& data : m_AttackData)
 	{
+
 		// 回数が0ならクールタイム中
-		if (data.second.count <= 0)
+		if (!data.second.isCoolTime)
 		{
-			// クールタイム終了
-			if (delta_clamp(
-				data.second.coolTimer-= 1.f, data.second.coolTime))
-			{
-				data.second.coolTimer = 0.0f;
-				data.second.count = data.second.maxcount;
-			}
+			continue;
+		}
+		// クールタイム終了
+		if (delta_clamp(
+			data.second.coolTimer-= 1.f, data.second.coolTime))
+		{
+			data.second.coolTimer = 0.0f;
+			data.second.count = data.second.maxcount;
+			data.second.isCoolTime = false;
 		}
 	}
+}
+//クールタイム中のフラグを取得
+std::unordered_map<std::string, bool> CPlayer::GetCoolFlag() const
+{
+	std::unordered_map<std::string, bool> data;
+
+	for (const auto& attack : m_AttackData)
+	{
+		data[attack.first] = attack.second.isCoolTime;
+	}
+
+	return data;
 }
 //当たり判定
 void CPlayer::OnCollision(CollisionBase* pCollider)

@@ -119,7 +119,7 @@ void CGame::Update()
 	CollisionManager::GetInstance()->Update();
 
 	m_pScores.Update(m_pPlayer.GetPoints());
-	m_pIcon.Update();
+	m_pIcon.Update(m_pPlayer.GetCoolFlag());
 	//スカイの動作関数
 	Sky();
     //シーン遷移

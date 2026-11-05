@@ -29,7 +29,7 @@ void CScoreManager::NewScore(int ID)
      //IDを設定する
      score->SetID(ID);
      //座標を設定
-     score->SetPos(SCORE_POS[ID]);
+     score->SetPosition(SCORE_POS[ID]);
      //スコアの登録
      m_Scores.emplace_back(std::move(score));
 

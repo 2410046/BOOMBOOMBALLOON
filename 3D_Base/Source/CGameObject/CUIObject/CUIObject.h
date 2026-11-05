@@ -44,8 +44,7 @@ protected:
 	//final : これ以降はoverrideさせない
 	void Draw(const CCamera* pCamera) override final;
 	//数字
-	void Number(
-		D3DXVECTOR3 pos, int Score, float Space, int digitCount = 4);
+	void Number(int Score, float Space, int digitCount = 4);
 protected:
 	CSprite2D*	m_pSprite;
 	POINTS		m_PatternNo;	//パターン番号(マス目)

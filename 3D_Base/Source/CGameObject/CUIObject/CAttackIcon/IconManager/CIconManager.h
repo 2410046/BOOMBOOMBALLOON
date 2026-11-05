@@ -17,11 +17,10 @@ public:
     // アイコンの生成
     void NewIcon(int ID);
     // 動作関数
-    void Update(/*const std::vector<int>& point*/);
+    void Update(
+        const std::vector<std::unordered_map<std::string, bool>>& flag);
     // 描画関数
     void Draw();
-    // プレイヤーIDから対応するスコアオブジェクトを取得
-  // CAttackIcon* GetIcon(int ID);
 private:
     std::vector<std::unique_ptr<CAttackIcon>> m_Icons; // スコア
 };
