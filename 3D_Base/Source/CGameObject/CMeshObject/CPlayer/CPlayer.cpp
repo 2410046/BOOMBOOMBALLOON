@@ -74,7 +74,7 @@ void CPlayer::Update()
 		//プレイヤーの方向にまっすぐ進む
 		CReaction::ReactionParam param;
 		param.rot = m_vQuaternion;
-		param.power = 2.f;
+		param.power = 1.f;
 		m_pReaction = CReactionFactory::Create(CReaction::Boost);
 		m_pReaction->Apply(param);
 		m_MoveState = enMoveState::Live;
@@ -404,22 +404,24 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		break;
 	case CollisionBase::Cloud://雲に接触した場合
 	{
-		//ブースト状態なら止める
-		if (m_pReaction && m_pReaction->Play(CReaction::Boost))
+		auto* cloud = dynamic_cast<CCloud*>(pCollider->GetListener());
+		if (!cloud) return;
+
+		// Boostを含め、現在のリアクションを停止
+		if (m_pReaction)
 		{
 			m_pReaction->Stop();
-
 		}
-		auto* cloud = dynamic_cast<CCloud*>(pCollider->GetListener());
+
 		//ノックバック
 		CReaction::ReactionParam param;
-		param.to = GetPosition();
 		param.from = cloud->GetPosition();
+		param.to = GetPosition();
+
 		m_pReaction = CReactionFactory::Create(CReaction::KnockBack);
 		m_pReaction->Apply(param);
-
 	}
-		break;
+	break;
 
 	case CollisionBase::Shot://ショットに当たった瞬間
 	{
@@ -456,3 +458,174 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 	}
 	
 }
+
+
+//修正コードを書いて
+//今回は既存の CollisionCapsule と CollisionSphere をそのまま使って、Boost中だけ移動経路を考慮するスイープ判定を追加しよう。
+//
+//CollisionManagerのコードがまだないので、まずはColliderとCollisionUtility側の修正コードを書くね。
+//
+//① CollisionCapsule.h
+//移動前のカプセルを保存する変数と関数を追加する。
+//
+//private:
+//	// 移動前のカプセル
+//	Capsule m_PreviousCapsule;
+//
+//public:
+//	// 移動前の座標を保存
+//	void SavePreviousPosition();
+//
+//	// 移動前のカプセルを取得
+//	const Capsule& GetPreviousCapsule() const
+//	{
+//		return m_PreviousCapsule;
+//	}
+//
+//	② CollisionCapsule.cpp
+//		移動前のカプセルを保存する。
+//
+//		//--------------------------------------
+//		// 移動前の座標を保存
+//		//--------------------------------------
+//		void CollisionCapsule::SavePreviousPosition()
+//	{
+//		m_PreviousCapsule = m_Capsule;
+//	}
+//
+//	③ CollisionUtility.h
+//		スイープ判定を追加する。
+//
+//		// カプセルと球のスイープ判定
+//		bool CapsuleSweepToSphere(
+//			const CollisionBase* cA,
+//			const CollisionBase* sA);
+//
+//	④ CollisionUtility.cpp
+//		カプセルの移動経路と球体の衝突を判定する。
+//
+//		//--------------------------------------
+//		// カプセルと球のスイープ判定
+//		//--------------------------------------
+//		bool CollisionUtility::CapsuleSweepToSphere(
+//			const CollisionBase* cA,
+//			const CollisionBase* sA)
+//	{
+//		const auto* capsuleA =
+//			dynamic_cast<const CollisionCapsule*>(cA);
+//
+//		const auto* sphereA =
+//			dynamic_cast<const CollisionSphere*>(sA);
+//
+//		if (!capsuleA || !sphereA)
+//			return false;
+//
+//		const auto& current = capsuleA->GetCapsule();
+//		const auto& previous = capsuleA->GetPreviousCapsule();
+//		const auto& sphere = sphereA->GetSphere();
+//
+//		float radius = current.Radius + sphere.Radius;
+//
+//		// カプセルの移動量
+//		D3DXVECTOR3 move = current.Start - previous.Start;
+//
+//		float distance = D3DXVec3Length(&move);
+//
+//		// 移動距離に応じて分割数を決定
+//		float interval = radius * 0.25f;
+//
+//		if (interval < 0.01f)
+//			interval = 0.01f;
+//
+//		int count = static_cast<int>(ceilf(distance / interval));
+//
+//		if (count < 1)
+//			count = 1;
+//
+//		// 移動経路を分割して判定
+//		for (int i = 0; i <= count; i++)
+//		{
+//			float t = static_cast<float>(i) / count;
+//
+//			D3DXVECTOR3 start =
+//				previous.Start + (current.Start - previous.Start) * t;
+//
+//			D3DXVECTOR3 end =
+//				previous.End + (current.End - previous.End) * t;
+//
+//			// カプセルの中心軸と球の中心との最近点
+//			D3DXVECTOR3 ab = end - start;
+//			D3DXVECTOR3 ap = sphere.Center - start;
+//
+//			float abLenSq = D3DXVec3LengthSq(&ab);
+//
+//			float closestT = 0.0f;
+//
+//			if (abLenSq > 0.0001f)
+//			{
+//				closestT = D3DXVec3Dot(&ap, &ab) / abLenSq;
+//				closestT = std::clamp(closestT, 0.0f, 1.0f);
+//			}
+//
+//			D3DXVECTOR3 closest = start + ab * closestT;
+//
+//			D3DXVECTOR3 diff = sphere.Center - closest;
+//
+//			if (D3DXVec3LengthSq(&diff) <= radius * radius)
+//			{
+//				return true;
+//			}
+//		}
+//
+//		return false;
+//	}
+//
+//	⑤ Boostの移動処理
+//		ここが重要。
+//
+//		Boostで移動する前に、移動前のカプセル座標を保存する必要がある。
+//
+//		void CBoost::Update()
+//	{
+//		if (m_State.active == false)
+//			return;
+//
+//		// 移動前のカプセル座標を保存
+//		m_pCapsule->SavePreviousPosition();
+//
+//		// 移動
+//		*m_pPosition += m_State.velocity;
+//
+//		// 速度減衰
+//		m_State.velocity *= 0.9f;
+//
+//		// 残り時間
+//		m_State.timer -= 1.0f;
+//
+//		if (m_State.timer <= 0.0f)
+//		{
+//			Stop();
+//		}
+//	}
+//
+//	※ m_pCapsule は例。実際にはPlayerが所有するColliderを参照する必要がある。
+//
+//		また、移動後に WorldUpdate() を実行して、現在のカプセル座標を更新する必要がある。
+//
+//		⑥ CollisionManager側
+//		最後にCollisionManagerで判定を切り替える。
+//
+//		// Boost中
+//		if (isBoost)
+//		{
+//			hit = CollisionUtility::CapsuleSweepToSphere(
+//				capsule, sphere);
+//		}
+//		else
+//		{
+//			// 通常時
+//			hit = CollisionUtility::CapsuleToSphere(
+//				capsule, sphere);
+//		}
+//
+//	isBoost の取得方法や判定の呼び出し順序は、現在のCollisionManagerに合わせて調整する必要がある。

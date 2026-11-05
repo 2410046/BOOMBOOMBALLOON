@@ -55,10 +55,6 @@ void CBoost::Update()
     // 持続時間が終了したらブーストを終了
     if (m_State.timer <= 0.0f)
     {
-        // ブーストを停止
-        m_State.active = false;
-
-        // 速度をリセット
-        m_State.velocity = D3DXVECTOR3(0.f, 0.f, 0.f);
+        Stop();
     }
 }

@@ -65,7 +65,8 @@ public:
      void Stop()
      {
          m_State.active = false;
-         m_State.timer = 0.0f;
+         m_State.velocity = D3DXVECTOR3(0.f, 0.f, 0.f);
+         m_State.timer = 0.f;
      }
      //リアクション中の場合
      bool Play(MoveType type)
