@@ -48,19 +48,7 @@ void CTitle::Create()
 //ロード関数
 HRESULT CTitle::LoadData()
 {
-	//スカイの読み込み、座標の設定
-	m_pSky->AttachMesh(
-		*AssetManager::GetStatic(L"Sky\\TitleSky"));
 
-	D3DXQUATERNION quaternion;
-
-	D3DXQuaternionRotationYawPitchRoll(
-		&quaternion,
-		-D3DX_PI / 3.f,  // 左90度
-		0.0f,
-		0.0f);
-
-	m_pSky->SetQuaternion(quaternion);
 
 	//タイトルロゴの読み込み,座標の設定
 	m_pLogo->AttachSprite(
@@ -79,6 +67,20 @@ HRESULT CTitle::LoadData()
 		m_pSelect[i]->SetPatternNo(0, i);
 		m_pSelect[i]->SetPosition(Sell_Pos);
 	}
+
+	//スカイの読み込み、座標の設定
+	m_pSky->AttachMesh(
+		*AssetManager::GetStatic(L"Sky\\TitleSky"));
+
+	D3DXQUATERNION quaternion;
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&quaternion,
+		-D3DX_PI / 3.f,  // 左90度
+		0.0f,
+		0.0f);
+
+	m_pSky->SetQuaternion(quaternion);
 	// カメラの座標や角度の設定
 	CCamera::GetInstance()->SetCamera(Camera_Pos, Look_Pos);
 	//ライトの設定
@@ -141,9 +143,11 @@ void CTitle::Draw()
 	camera->Camera();		//カメラ関数
 	camera->Projection();	//プロジェクション関数
 
-	CDirectX11::GetInstance()->SetDepth(false);
 	//背景の描画
 	m_pSky->Draw(camera);
+
+	CDirectX11::GetInstance()->SetDepth(false);
+
 	m_pLogo->Draw();
 
 	//選択肢の描画

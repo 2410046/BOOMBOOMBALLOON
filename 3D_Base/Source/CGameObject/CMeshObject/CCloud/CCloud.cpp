@@ -6,7 +6,7 @@
 namespace
 {
 	//当たり判定
-	constexpr float radius = 0.8f;
+	constexpr float radius = 0.7f;
 	//ボックスのサイズ
 	//D3DXVECTOR3 Box = D3DXVECTOR3(80.f, 20.f, 20.f);
 	constexpr float Stage_ScaleX = 5.0f;   // X方向範囲倍率
