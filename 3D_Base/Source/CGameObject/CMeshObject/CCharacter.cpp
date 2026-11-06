@@ -9,7 +9,6 @@ CCharacter::CCharacter()
 	, m_Scale       ( 0 )
 
 {
-	D3DXQuaternionIdentity(&m_Quat);
 }
 
 CCharacter::~CCharacter()

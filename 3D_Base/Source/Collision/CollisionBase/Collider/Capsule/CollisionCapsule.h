@@ -34,40 +34,29 @@ public:
 
 	~CollisionCapsule();
 
-	//--------------------------------------
 	// 更新処理
 	// ワールド座標に応じてStart/Endを更新
-	//--------------------------------------
 	void WorldUpdate() override;
 
-	//--------------------------------------
 	// ローカルオフセット設定
 	// モデル基準の位置ずれ
-	//--------------------------------------
 	void SetLocalOffsetA(const D3DXVECTOR3& offset) { m_LocalOffsetA = offset; }
 	void SetLocalOffsetB(const D3DXVECTOR3& offset) { m_LocalOffsetB = offset; }
-
-	//--------------------------------------
 	// 移動オフセット設定
 	// 動きに応じた補正（予測など）
-	//--------------------------------------
 	void SetMoveOffsetA(const D3DXVECTOR3& offset) { m_MoveOffsetA = offset; }
 	void SetMoveOffsetB(const D3DXVECTOR3& offset) { m_MoveOffsetB = offset; }
-
-	//--------------------------------------
 	// カプセル情報取得
-	//--------------------------------------
 	const Capsule& GetCapsule() const { return m_Capsule; }
-
-	//--------------------------------------
+	//カプセルの古い情報取得
+	const Capsule& GetBeforeCapsule() const{ return m_BeforeCapsule;}
 	// 半径設定
-	//--------------------------------------
 	void SetRadius(float r) { m_Radius = r; }
 
 	CollisionType GetType() const override { return CollisionType::Capsule; }
 private:
 	float m_Radius; // カプセル半径
-
+	bool m_IsInitialized;
 	// 移動補正オフセット（予測位置などに使用）
 	D3DXVECTOR3 m_MoveOffsetA;
 	D3DXVECTOR3 m_MoveOffsetB;
@@ -77,4 +66,5 @@ private:
 	D3DXVECTOR3 m_LocalOffsetB;
 
 	Capsule m_Capsule; // 計算済みカプセル情報
+	Capsule m_BeforeCapsule;//以前のカプセル情報
 };

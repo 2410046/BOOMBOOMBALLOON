@@ -78,9 +78,7 @@ bool CollisionManager::CheckCollision(
     CollisionBase* b)
 {
     using Type = CollisionBase::CollisionType;
-    
-    Type tA = a->GetType();
-    Type tB = b->GetType();
+
     //カプセルとボックスの当たり判定
     if (CollisionPattern(a, b,Type::Capsule,Type::Box,
         CollisionUtility::CapsuleToAABB))

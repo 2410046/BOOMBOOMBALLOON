@@ -29,7 +29,6 @@ public:
 protected:
 	int		m_ID;			//ID
 	float	m_Speed;	//移動速度
-	D3DXQUATERNION m_Quat;
 	float t = 0.f;
 	float m_Scale;
 	float m_angle = -1.59f;

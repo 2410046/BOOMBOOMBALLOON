@@ -135,6 +135,7 @@ void CPlayer::Update()
 			m_pReaction->Update();
 		}
 
+		CCharacter::Update();
 }
 //描画関数
 void CPlayer::Draw(
@@ -159,7 +160,8 @@ void CPlayer::Controller()
 {
 #if 1
 	//無敵状態と生存状態以外の場合
-	if (m_MoveState != enMoveState::Live && m_MoveState != enMoveState::Invincible)
+	if (m_MoveState != enMoveState::Live 
+		&& m_MoveState != enMoveState::Invincible)
 	{
 		return;
 	}
@@ -232,6 +234,21 @@ void CPlayer::Controller()
 	{
 		// 移動
 		m_vPosition += moveDir * m_Speed;
+
+		// 移動範囲を制限
+		//float x = (m_vPosition.x + 1.0f) / 10.0f;
+		//float z = (m_vPosition.z - 10.5f) / 8.9f;
+
+		//float distance = x * x + z * z;
+
+		//if (distance > 1.0f)
+		//{
+		//	// 円周の内側に戻す
+		//	float scale = 1.0f / sqrtf(distance);
+
+		//	m_vPosition.x = -1.0f + (m_vPosition.x + 1.0f) * scale;
+		//	m_vPosition.z = 10.5f + (m_vPosition.z - 10.5f) * scale;
+		//}
 		//クオータニオン
 		Quotanion(moveDir);
 		//nanamehayasi
@@ -404,19 +421,27 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		break;
 	case CollisionBase::Cloud://雲に接触した場合
 	{
-		//ブースト状態なら止める
+		// ブースト状態なら止める
 		if (m_pReaction && m_pReaction->Play(CReaction::Boost))
 		{
 			m_pReaction->Stop();
-
+		
 		}
+
 		auto* cloud = dynamic_cast<CCloud*>(pCollider->GetListener());
-		//ノックバック
+		if (!cloud) break;
+		m_pReaction.reset();
+		//m_vPosition.x = std::clamp(m_vPosition.x,cloud->GetPosition().x, cloud->GetPosition().x);
+		//m_vPosition.z = std::clamp(m_vPosition.z, cloud->GetPosition().z, cloud->GetPosition().z);
+
+		// 3. 押し戻した最新位置からノックバックを適用
 		CReaction::ReactionParam param;
-		param.to = GetPosition();
+		param.to = m_vPosition;
 		param.from = cloud->GetPosition();
 		m_pReaction = CReactionFactory::Create(CReaction::KnockBack);
 		m_pReaction->Apply(param);
+
+		OutputDebugStringA("Cloud衝突\n");
 
 	}
 		break;

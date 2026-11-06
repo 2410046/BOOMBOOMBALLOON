@@ -13,7 +13,7 @@ public:
     // Center : 中心座標
     // Radius : 半径
     //--------------------------------------
-    struct SphereShape
+    struct SphereSphape
     {
         D3DXVECTOR3 Center 
             = D3DXVECTOR3(0.f, 0.f, 0.f);
@@ -41,11 +41,11 @@ public:
     //--------------------------------------
     // 球情報取得
     //--------------------------------------
-    const SphereShape& GetSphere() const { return m_Sphere; }
+    const SphereSphape& GetSphere() const { return m_Sphere; }
 
     CollisionType GetType() const override { return CollisionType::Sphere; }
 private:
     float m_Radius;          // 半径（元データ）
     D3DXVECTOR3 m_Offset;    // 中心のローカルオフセット
-    SphereShape m_Sphere;    // 計算済み球情報
+    SphereSphape m_Sphere;    // 計算済み球情報
 };

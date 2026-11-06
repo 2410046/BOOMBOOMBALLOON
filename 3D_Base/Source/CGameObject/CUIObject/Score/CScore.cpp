@@ -42,10 +42,9 @@ CScore::~CScore()
 //動作関数
 void CScore::Update()
 {
-    //5秒に1増える
-   CountUpdate(m_Count);
-    //スコアはプレイヤー4人分あるのに１Pしか増えない。ResetCountを消すとせいじょうにかどうするが1秒に1回増えずに連続で増える
-    if (MaxCount(m_Count, 1.0f) >= 1.0f)
+    m_Count++;
+
+    if (std::fmod(m_Count, 80.0f) == 0.0f)
     {
         m_Score = std::clamp(m_Score + 1, 0, Max);
         ResetCount(m_Count);

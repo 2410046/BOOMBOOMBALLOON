@@ -33,7 +33,7 @@ void CCloudManager::NewCloud()
         const D3DXVECTOR3 Pos = D3DXVECTOR3(
             -1.0f + 14.0f * cosf(angle),  // X座標
             1.0f,                         // Y座標
-            13.5f + 12.0f * sinf(angle)   // Z座標
+            13.5f + 11.9f * sinf(angle)   // Z座標
         );
 
         // 座標を設定

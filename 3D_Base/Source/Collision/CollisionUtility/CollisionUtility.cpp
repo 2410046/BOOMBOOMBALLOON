@@ -1,6 +1,7 @@
 #include "CollisionUtility.h"
 #include <algorithm>
 #include <float.h>
+#include <cmath>
 // 球同士
 bool CollisionUtility::SphereToSphere(
     const CollisionBase* sA,
@@ -30,43 +31,190 @@ bool CollisionUtility::CapsuleToSphere(
     const CollisionBase* cA,
     const CollisionBase* sA)
 {
-    const CollisionCapsule* CapsuleA = dynamic_cast<const CollisionCapsule*>(cA);
-    const CollisionSphere* SphereA = dynamic_cast<const CollisionSphere*>(sA);
+    const CollisionCapsule* capsuleA =
+        dynamic_cast<const CollisionCapsule*>(cA);
 
-    if (!CapsuleA || !SphereA) { return false; }
+    const CollisionSphere* sphereA =
+        dynamic_cast<const CollisionSphere*>(sA);
 
-    const auto& Capsule = CapsuleA->GetCapsule();
-    const auto& Sphere = SphereA->GetSphere();
+    if (!capsuleA || !sphereA)
+        return false;
 
-    //--------------------------------------
-    // カプセル線分と球中心の最近点を求める
-    //--------------------------------------
-    D3DXVECTOR3 ab = Capsule.End - Capsule.Start;
-    D3DXVECTOR3 ap = Sphere.Center - Capsule.Start;
+    // 現在のカプセル
+    const auto& current = capsuleA->GetCapsule();
 
-    float abLenSq = D3DXVec3Dot(&ab, &ab);
+    // 前フレームのカプセル
+    const auto& previous = capsuleA->GetBeforeCapsule();
 
-    // カプセルが点の場合
-    if (abLenSq <= 0.0001f)
+    // 球
+    const auto& sphere = sphereA->GetSphere();
+
+    // 合計半径
+    float radius = current.Radius + sphere.Radius;
+
+    // カプセルの移動距離
+    D3DXVECTOR3 moveA = current.Start - previous.Start;
+    D3DXVECTOR3 moveB = current.End - previous.End;
+
+    float distanceA = D3DXVec3Length(&moveA);
+    float distanceB = D3DXVec3Length(&moveB);
+
+    float distance = distanceA;
+
+    if (distanceB > distanceA)
     {
-        D3DXVECTOR3 diff = Sphere.Center - Capsule.Start;
-        float distSq = D3DXVec3LengthSq(&diff);
-        float r = Capsule.Radius + Sphere.Radius;
-        return distSq <= (r * r);
+        distance = distanceB;
+    }
+    static int debugCount = 0;
+
+    debugCount++;
+
+    if (debugCount >= 100)
+    {
+        debugCount = 0;
+
+        OutputDebugStringA("Collision Debug\n");
+    }
+    // 判定の分割間隔
+    float interval = radius * 0.25f;
+
+    if (interval < 0.01f)
+    {
+        interval = 0.01f;
     }
 
-    // 最近点の補間係数
-    float t = D3DXVec3Dot(&ap, &ab) / abLenSq;
-    t = std::clamp(t, 0.0f, 1.0f);
+    // 分割数
+    int steps = static_cast<int>(std::ceil(distance / interval));
 
-    D3DXVECTOR3 closest = Capsule.Start + ab * t;
+    if (steps < 1)
+    {
+        steps = 1;
+    }
 
-    D3DXVECTOR3 diff = Sphere.Center - closest;
-    float distSq = D3DXVec3LengthSq(&diff);
+    // 前フレームから現在位置まで判定
+    for (int i = 0; i <= steps; ++i)
+    {
+        float t = static_cast<float>(i) / steps;
 
-    float r = Capsule.Radius + Sphere.Radius;
+        // カプセルの位置を補間
+        D3DXVECTOR3 start =
+            previous.Start + (current.Start - previous.Start) * t;
 
-    return distSq <= (r * r);
+        D3DXVECTOR3 end =
+            previous.End + (current.End - previous.End) * t;
+
+        // カプセル線分と球中心の最近点
+        D3DXVECTOR3 ab = end - start;
+        D3DXVECTOR3 ap = sphere.Center - start;
+
+        float abLenSq = D3DXVec3Dot(&ab, &ab);
+
+        D3DXVECTOR3 closest;
+
+        if (abLenSq <= 0.0001f)
+        {
+            closest = start;
+        }
+        else
+        {
+            float t2 = D3DXVec3Dot(&ap, &ab) / abLenSq;
+
+            t2 = std::clamp(t2, 0.0f, 1.0f);
+
+            closest = start + ab * t2;
+        }
+
+        // 球中心との距離
+        D3DXVECTOR3 diff = sphere.Center - closest;
+
+        float distSq = D3DXVec3LengthSq(&diff);
+
+        // 衝突判定
+        if (distSq <= radius * radius)
+        {
+            return true;
+        }
+    }
+
+    return false;
+    //const CollisionCapsule* capsuleA =
+    //    dynamic_cast<const CollisionCapsule*>(cA);
+
+    //const CollisionSphere* sphereA =
+    //    dynamic_cast<const CollisionSphere*>(sA);
+
+    //if (!capsuleA || !sphereA)
+    //{
+    //    return false;
+    //}
+    //const auto& before = capsuleA->GetBeforeCapsule();
+    //const auto& current = capsuleA->GetCapsule();
+    //const auto& sphere = sphereA->GetSphere();
+    //// カプセルの移動距離
+    //D3DXVECTOR3 move = current.Start - before.Start;
+
+    //float distance = D3DXVec3Length(&move);
+
+    //// 判定間隔
+    //float step = (current.Radius + sphere.Radius) * 0.25f;
+
+    //if (step <= 0.0f)
+    //{
+    //    return false;
+    //}
+
+    //// 移動距離に応じて判定回数を決定
+    //int count = static_cast<int>(std::ceil(distance / step));
+
+    //if (count < 1)
+    //{
+    //    count = 1;
+    //}
+
+    //// 移動途中を順番に判定
+    //for (int i = 0; i <= count; i++)
+    //{
+    //    float t = static_cast<float>(i) / count;
+
+    //    CollisionCapsule::Capsule test;
+
+    //    // 始点を補間
+    //    test.Start =
+    //        before.Start + (current.Start - before.Start) * t;
+
+    //    // 終点を補間
+    //    test.End =
+    //        before.End + (current.End - before.End) * t;
+
+    //    test.Radius = current.Radius;
+
+    //    // カプセルと球の最近点を求める
+    //    D3DXVECTOR3 ab = test.End - test.Start;
+    //    D3DXVECTOR3 ac = sphere.Center - test.Start;
+
+    //    float lengthSq = D3DXVec3LengthSq(&ab);
+
+    //    float u = 0.0f;
+
+    //    if (lengthSq > 0.0001f)
+    //    {
+    //        u = D3DXVec3Dot(&ac, &ab) / lengthSq;
+    //        u = std::clamp(u, 0.0f, 1.0f);
+    //    }
+
+    //    D3DXVECTOR3 closest = test.Start + ab * u;
+
+    //    D3DXVECTOR3 diff = sphere.Center - closest;
+
+    //    float radius = test.Radius + sphere.Radius;
+
+    //    if (D3DXVec3LengthSq(&diff) <= radius * radius)
+    //    {
+    //        return true;
+    //    }
+    //}
+
+    //return false;
 }
 
 // カプセルとボックス

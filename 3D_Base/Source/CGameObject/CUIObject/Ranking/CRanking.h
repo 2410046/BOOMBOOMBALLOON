@@ -40,15 +40,20 @@ public:
     int GetRank(int index) const;
     //カウント終了を取得
     bool GetCountEnd(int index) const;
-    //ID取得
-    int GetPlayerID(int index) const;
+    int GetRankID(int index) const
+    {
+        return m_RankID[index];
+    }
+    //順位位置を取得
+    int GetRankIndex(int playerID) const;
+protected:
     // 座標交換
     void SwapPosition(int playerID, int targetID);
-protected:
     void ConfirmRank(int playerID);
 private:
-    D3DXVECTOR3 m_PlayerPos[4];
     std::vector<enData> m_ScoreList;      //スコアリスト
     // 順位確定済みのプレイヤー数
     int m_ConfirmCount = 0;
+
+    int m_RankID[4] = { 0, 1, 2, 3 };
 };

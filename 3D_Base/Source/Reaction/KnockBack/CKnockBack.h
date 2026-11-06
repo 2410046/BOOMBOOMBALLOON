@@ -12,7 +12,7 @@ public:
     //更新関数
     void Update()override;
     //モーションを設定
-    virtual MoveType GetType() const override { return MoveType::Boost; };
+    virtual MoveType GetType() const override { return MoveType::KnockBack; };
 protected:
 };
 

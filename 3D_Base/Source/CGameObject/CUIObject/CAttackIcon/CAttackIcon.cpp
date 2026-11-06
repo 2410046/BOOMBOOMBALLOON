@@ -38,11 +38,6 @@ void CAttackIcon::Update()
             }
 
         }
-        //else
-        //{
-        //    m_Alpha[i] = 1.f;
-        //}
-        //
         if (m_CoolTime["Shot"])
         {
             if (i == 1)
@@ -51,6 +46,11 @@ void CAttackIcon::Update()
                 m_Alpha[i] = 0.f;
             }
         }
+        else
+        {
+            m_Alpha[i] = 1.f;
+        }
+        //
     }
     CUIObject::Update();
 }

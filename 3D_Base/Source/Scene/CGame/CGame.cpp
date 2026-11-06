@@ -107,17 +107,12 @@ void CGame::Release()
 void CGame::Update()
 {
 	CTime::GetInstance()->Update();
-	CReactionManager::GetInstance()->Update();
-
 	m_pPlayer.Update();
-
 	m_Shot.Update(m_pPlayer.GetShots());
-
 	m_Balloon.Update(m_pPlayer.GetLifes());
-
 	m_pCloud.Update();
+	//CReactionManager::GetInstance()->Update();
 	CollisionManager::GetInstance()->Update();
-
 	m_pScores.Update(m_pPlayer.GetPoints());
 	m_pIcon.Update(m_pPlayer.GetCoolFlag());
 	//スカイの動作関数

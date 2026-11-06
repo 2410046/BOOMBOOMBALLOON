@@ -6,7 +6,7 @@
 namespace
 {
 	//当たり判定
-	constexpr float radius = 0.6f;
+	constexpr float radius = 0.8f;
 	//ボックスのサイズ
 	//D3DXVECTOR3 Box = D3DXVECTOR3(80.f, 20.f, 20.f);
 	constexpr float Stage_ScaleX = 5.0f;   // X方向範囲倍率
@@ -19,7 +19,7 @@ CCloud::CCloud()
 	//座標
 	m_vPosition = D3DXVECTOR3(0.9f, 1.f, 11.5f);
 	//サイズ
-	m_vScale = D3DXVECTOR3(0.05f, 0.05f, 0.05f);
+	m_vScale = D3DXVECTOR3(0.06f, 0.06f, 0.07f);
 	//ボックスの当たり判定
 	m_pCollider = CreateCollider::CreateSphere(
 		radius, this, CollisionBase::Cloud
