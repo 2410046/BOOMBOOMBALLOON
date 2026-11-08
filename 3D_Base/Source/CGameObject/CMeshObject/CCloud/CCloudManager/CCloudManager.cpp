@@ -16,8 +16,6 @@ CCloudManager::~CCloudManager()
 //動いた雲にショットを当てると5方向に弾を発射.雲はBOOSTとSHOTがぶつかったプレイヤーの球を発射する
 void CCloudManager::NewCloud()
 {
-    D3DXVECTOR3 m_Min = D3DXVECTOR3(-8.f, 1.f, 5.5f);
-    D3DXVECTOR3 m_Max = D3DXVECTOR3(7.f, 1.f, 17.5f);
     for (int i = 0;i < ObjectCount;i++)
     {
         // Cloud生成
@@ -35,7 +33,6 @@ void CCloudManager::NewCloud()
             1.0f,                         // Y座標
             13.5f + 11.9f * sinf(angle)   // Z座標
         );
-
         // 座標を設定
         cloud->SetPosition(Pos);
         // 登録

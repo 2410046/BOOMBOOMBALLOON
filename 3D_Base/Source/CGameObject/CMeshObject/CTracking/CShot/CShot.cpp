@@ -50,6 +50,7 @@ void CShot::Init(CTracking* pTracking)
 	m_pReaction = CReactionFactory::Create(CReaction::Boost);
 	m_pReaction->Apply(param);
 
+
 	// 生存
 	m_ShotFlag = true;
 }

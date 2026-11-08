@@ -49,18 +49,6 @@ void CBoost::Update()
     *m_pPosition += m_State.velocity;
 
     D3DXVECTOR3 move = *m_pPosition - oldPos;
-
-    char debug[256];
-
-    sprintf_s(
-        debug,
-        "Boost Move: %.2f, %.2f, %.2f\n",
-        move.x,
-        move.y,
-        move.z
-    );
-
-    OutputDebugStringA(debug);
     // 速度を減衰させて、徐々に勢いを弱める
     m_State.velocity *= 0.9f;
 

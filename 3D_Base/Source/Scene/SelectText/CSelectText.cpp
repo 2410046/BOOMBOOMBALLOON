@@ -40,16 +40,20 @@ void Selecter(int& No, int MaxNo, bool& StartFlag, bool VK)
 		if (MovePrev)
 		{
 			No = (No - 1 + MaxNo) % MaxNo;
+			CSoundManager::GetInstance()->PlaySE(L"SE\\Select");
+
 		}
 		// 右（または下）入力：次の要素へ（ループ）
 		if (MoveNext)
 		{
 			No = (No + 1) % MaxNo;
-		}
+			CSoundManager::GetInstance()->PlaySE(L"SE\\Select");
 
+		}
 		// Bボタンで決定
 		if (KeyTrigger(VK_RETURN) || pPad->IsDown(CXInput::KEY::B, true))
 		{
+			CSoundManager::GetInstance()->PlaySE(L"SE\\Enter");
 			StartFlag = true;
 		}
 	//}

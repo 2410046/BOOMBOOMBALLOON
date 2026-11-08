@@ -123,7 +123,6 @@ void CBalloonManager::Update(
 
         balloon->Update();
     }
-
     // 死んだバルーンを削除
     m_Balloons.erase(
         std::remove_if(

@@ -3,10 +3,13 @@
 #include "Collision/CollisionManager/CollisionManager.h"
 //スフィアの当たり判定を生成
 std::shared_ptr<CollisionBase> CreateCollider::CreateSphere(
-    float Radius, CollisionListener* pOwner,CollisionBase::LayerTag tag)
+    float Radius,
+    CollisionListener* pOwner,
+    CollisionBase::LayerTag tag,
+    const D3DXVECTOR3& offset) // 引数を追加
 {
     std::shared_ptr<CollisionBase> pCollider
-        = std::make_shared<CollisionSphere>(Radius, pOwner, tag);
+        = std::make_shared<CollisionSphere>(Radius, pOwner, tag, offset);
     CollisionManager::GetInstance()->Register(pCollider);
     return pCollider;
 }

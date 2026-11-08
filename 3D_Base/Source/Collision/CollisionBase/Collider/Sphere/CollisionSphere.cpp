@@ -7,13 +7,11 @@
 // layer  : 所属レイヤー
 //--------------------------------------
 CollisionSphere::CollisionSphere(
-    float radius, CollisionListener* listener, LayerTag tag)
+    float radius, CollisionListener* listener, LayerTag tag, const D3DXVECTOR3& offset)
     : CollisionBase(listener, tag)
+    , m_Radius(radius)
+    , m_Offset(offset) // オフセットを保存
 {
-    m_Radius = radius;
-
-    // ローカル座標での中心オフセット
-    m_Offset = D3DXVECTOR3(0, 0, 0);
 }
 
 CollisionSphere::~CollisionSphere()
@@ -28,24 +26,18 @@ void CollisionSphere::WorldUpdate()
 {
     // 所有オブジェクト取得
     CGameObject* Object = dynamic_cast<CGameObject*>(GetListener());
-
     if (!Object) return;
 
-    // ワールド行列取得
     const D3DXMATRIX& world = Object->GetWorldMatrix();
 
-    //--------------------------------------
-    // ローカル → ワールド変換
-    //--------------------------------------
+    // 1. オフセットを加味してワールド座標変換
     D3DXVec3TransformCoord(&m_Sphere.Center, &m_Offset, &world);
 
-    //--------------------------------------
-    // 半径を設定
-    //--------------------------------------
-    m_Sphere.Radius = m_Radius;
+    // 2. ワールド行列のX軸スケールを取得して半径に掛ける
+    //D3DXVECTOR3 axisX(world._11, world._12, world._13);
+    //float scaleX = D3DXVec3Length(&axisX);
+    m_Sphere.Radius = m_Radius;/* * scaleX;*/
 
-    //--------------------------------------
-    // 基底クラスの位置も更新（中心座標）
-    //--------------------------------------
     m_WorldPos = m_Sphere.Center;
+
 }

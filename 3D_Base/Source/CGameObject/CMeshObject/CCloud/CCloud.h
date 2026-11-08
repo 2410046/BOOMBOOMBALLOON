@@ -19,7 +19,8 @@ public:
 	virtual void Update();
 	//描画関数
 	virtual void Draw(CCamera*camera);
-
-	void OnCollision(CollisionBase* pCollider)override {};
-
+	//当たり判定
+	void OnCollision(CollisionBase* pCollider)override;
+private:
+	bool m_Animation;
 };

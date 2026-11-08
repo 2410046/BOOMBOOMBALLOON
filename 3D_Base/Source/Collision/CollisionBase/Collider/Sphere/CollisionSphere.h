@@ -26,9 +26,14 @@ public:
     // radius : 半径
     // object : 所有オブジェクト
     // layer  : 所属レイヤー
+    // offset : 中心のローカルオフセット
     //--------------------------------------
     CollisionSphere(
-        float radius, CollisionListener* listener, LayerTag tag);
+        float radius,
+        CollisionListener* listener,
+        LayerTag tag,
+        const D3DXVECTOR3& offset = D3DXVECTOR3(0.f, 0.f, 0.f) 
+    );
 
     ~CollisionSphere();
 
@@ -42,7 +47,7 @@ public:
     // 球情報取得
     //--------------------------------------
     const SphereSphape& GetSphere() const { return m_Sphere; }
-
+    void SetOffset(const D3DXVECTOR3& offset) { m_Offset = offset; }
     CollisionType GetType() const override { return CollisionType::Sphere; }
 private:
     float m_Radius;          // 半径（元データ）

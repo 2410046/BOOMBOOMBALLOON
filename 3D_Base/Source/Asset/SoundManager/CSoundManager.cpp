@@ -19,6 +19,18 @@ bool CSoundManager::Load(HWND hWnd)
 		{ _T("BGM\\NightGame")   },
 		{ _T("BGM\\Select")      },
 		{ _T("BGM\\空と虹")      },
+
+		{ _T("SE\\Ballon")       },
+		{ _T("SE\\BaseHit")      },
+		{ _T("SE\\Boost")        },
+		{ _T("SE\\Dead")         },
+		{ _T("SE\\Down")         },
+		{ _T("SE\\Enter")        },
+		{ _T("SE\\PlayerHit")    },
+		{ _T("SE\\Point")        },
+		{ _T("SE\\Select")       },
+		{ _T("SE\\Shot")         },
+
 	};
 
 	int list_max = sizeof(path) / sizeof(path[0]);

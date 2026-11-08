@@ -4,11 +4,12 @@
 #include <algorithm>
 #include "Reaction/CReactionApply/CReactionFactory.h"
 #include "CMeshObject/CTracking/CShot/CShot.h"	    //ショットクラス
-#include "CGameObject/CMeshObject/CCloud/CCloud.h"              //雲クラス
+#include "CGameObject/CMeshObject/CCloud/CCloud.h"  //雲クラス
+#include "Asset/Effect/CEffectPlay.h"
 namespace
 {
 	//カプセルのサイズ
-	constexpr float radius = 0.5f;
+	constexpr float radius = 0.7f;
 	constexpr float height = 0.7f;
 
 	constexpr float TimeSpeed  = 0.1f;	//経過速度
@@ -18,12 +19,21 @@ namespace
 
 	constexpr int Max_Boost  = 3;
 	constexpr int Max_Shot  = 5;
+	// 円の中心座標
+	constexpr float CenterX = 0.f;
+	constexpr float CenterZ = 13.5f;
+
+	// 円の半径
+	constexpr float RadiusX = 12.8f;
+	constexpr float RadiusZ = 11.f;
+	//constexpr float RadiusX = 12.8f;
+	//constexpr float RadiusZ = 10.5f;
+
 
 }
 //コンストラクタ
 CPlayer::CPlayer()
 	: m_MoveState		( enMoveState::App )
-	, m_StateTime		( 5.f )
 	, m_Life			( 3 )
 	, m_Point			( 0 )
 	, m_AttackData		( )
@@ -49,7 +59,9 @@ CPlayer::~CPlayer()
 void CPlayer::Update()
 {
 	//クールタイム
-	UpdateAttack();
+	UpdateCoolTime();
+	//移動制限
+	UpdateMoveLimit();
 	switch (m_MoveState)
 	{
 
@@ -91,8 +103,12 @@ void CPlayer::Update()
 	break;
 	case enMoveState::Down://ダウン状態
 		m_Point = -20;
+		//エフェクト出現
+		//m_Effect = CreateEffect(Type, m_EffectPos,
+		//	m_, 0.5f, EffectSpeed);
 		if (delta_clamp(m_Life -= 1, 5))
 		{
+			CSoundManager::GetInstance()->PlaySE(L"SE\\Dead");
 			m_MoveState = enMoveState::Dead;
 		}
 		else
@@ -178,10 +194,11 @@ void CPlayer::Controller()
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) moveX += 1.0f;
 
 		if (GetAsyncKeyState('Z') & 0x8000 
-			&& std::fmod(m_Count, 50.0f) == 0.0f)
+			&& std::fmod(m_Count, 10.0f) == 0.0f)
 		{
 			if (AttackLimit("Boost"))
 			{
+				CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");
 				m_MoveState = enMoveState::Boost;
 				m_Count = 0.f;
 			}
@@ -196,6 +213,7 @@ void CPlayer::Controller()
 			}
 			if (AttackLimit("Shot"))
 			{
+				CSoundManager::GetInstance()->PlaySE(L"SE\\Shot");
 				m_MoveState = enMoveState::Shot;
 			}
 		}
@@ -234,21 +252,6 @@ void CPlayer::Controller()
 	{
 		// 移動
 		m_vPosition += moveDir * m_Speed;
-
-		// 移動範囲を制限
-		//float x = (m_vPosition.x + 1.0f) / 10.0f;
-		//float z = (m_vPosition.z - 10.5f) / 8.9f;
-
-		//float distance = x * x + z * z;
-
-		//if (distance > 1.0f)
-		//{
-		//	// 円周の内側に戻す
-		//	float scale = 1.0f / sqrtf(distance);
-
-		//	m_vPosition.x = -1.0f + (m_vPosition.x + 1.0f) * scale;
-		//	m_vPosition.z = 10.5f + (m_vPosition.z - 10.5f) * scale;
-		//}
 		//クオータニオン
 		Quotanion(moveDir);
 		//nanamehayasi
@@ -341,8 +344,27 @@ bool CPlayer::AttackLimit(const std::string& name)
 
 	return true;
 }
+//移動制限
+void CPlayer::UpdateMoveLimit()
+{
+	// 中心からの距離
+	const float dx = m_vPosition.x - CenterX;
+	const float dz = m_vPosition.z - CenterZ;
+
+	// 楕円の範囲を超えているか確認
+	const float distance = (dx * dx) / (RadiusX * RadiusX)
+		+ (dz * dz) / (RadiusZ * RadiusZ);
+	//トンネリング現象が解決しないため移動制限を設定
+	if (distance > 1.0f)
+	{
+		// 中心からの方向を正規化する
+		const float length = sqrtf(distance);
+		m_vPosition.x = CenterX + dx / length;
+		m_vPosition.z = CenterZ + dz / length;
+	}
+}
 //クールタイム
-void CPlayer::UpdateAttack()
+void CPlayer::UpdateCoolTime()
 {
 	for (auto& data : m_AttackData)
 	{
@@ -393,21 +415,20 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		}
 		//相手のリアクション
 		auto& BoostOther = other->m_pReaction;
-		//よくわかんないけど、KnockBack吹っ飛ばされた時にほかのプレイヤーにあたるとダウン状態になるプレイヤーを吹っ飛ばしてほかのプレイヤーにあたった場合も
-		//風船が多いほどスコアの量が上がる
 		//ブースト状態
 		if (m_pReaction&&m_pReaction->Play(CReaction::Boost))
 		{
+			CSoundManager::GetInstance()->PlaySE(L"SE\\PlayerHit");
 			m_Point = 20;
     		m_pReaction->Stop();//リアクションを終わらせる
 			//プレイヤーは風船とスコアを1つ取得する
 			m_Life = std::clamp(m_Life + 1, 0, 5);
-
 			//相手のプレイヤーをダウンx状態に
 			other->m_MoveState = enMoveState::Down;
 		}
 		else//お互いブーストじゃない場合		
 		{
+			CSoundManager::GetInstance()->PlaySE(L"SE\\BaseHit");
 			//ノックバック
 			CReaction::ReactionParam param;
 			param.from = other->GetPosition();
@@ -425,21 +446,14 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		if (m_pReaction && m_pReaction->Play(CReaction::Boost))
 		{
 			m_pReaction->Stop();
-		
 		}
-
 		auto* cloud = dynamic_cast<CCloud*>(pCollider->GetListener());
 		if (!cloud) break;
-		m_pReaction.reset();
-		//m_vPosition.x = std::clamp(m_vPosition.x,cloud->GetPosition().x, cloud->GetPosition().x);
-		//m_vPosition.z = std::clamp(m_vPosition.z, cloud->GetPosition().z, cloud->GetPosition().z);
 
-		// 3. 押し戻した最新位置からノックバックを適用
+		//// 3. 押し戻した最新位置からノックバックを適用
 		CReaction::ReactionParam param;
-		param.to = GetPosition();
 		param.from = cloud->GetPosition();
 		param.to = GetPosition();
-
 		m_pReaction = CReactionFactory::Create(CReaction::KnockBack);
 		m_pReaction->Apply(param);
 	}
@@ -468,6 +482,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		}
 		else 
 		{
+			CSoundManager::GetInstance()->PlaySE(L"SE\\Ballon");
 			// 相手のShotならダウン
 			//スコアを減らす
 			m_MoveState = enMoveState::Down;
@@ -480,174 +495,3 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 	}
 	
 }
-
-
-//修正コードを書いて
-//今回は既存の CollisionCapsule と CollisionSphere をそのまま使って、Boost中だけ移動経路を考慮するスイープ判定を追加しよう。
-//
-//CollisionManagerのコードがまだないので、まずはColliderとCollisionUtility側の修正コードを書くね。
-//
-//① CollisionCapsule.h
-//移動前のカプセルを保存する変数と関数を追加する。
-//
-//private:
-//	// 移動前のカプセル
-//	Capsule m_PreviousCapsule;
-//
-//public:
-//	// 移動前の座標を保存
-//	void SavePreviousPosition();
-//
-//	// 移動前のカプセルを取得
-//	const Capsule& GetPreviousCapsule() const
-//	{
-//		return m_PreviousCapsule;
-//	}
-//
-//	② CollisionCapsule.cpp
-//		移動前のカプセルを保存する。
-//
-//		//--------------------------------------
-//		// 移動前の座標を保存
-//		//--------------------------------------
-//		void CollisionCapsule::SavePreviousPosition()
-//	{
-//		m_PreviousCapsule = m_Capsule;
-//	}
-//
-//	③ CollisionUtility.h
-//		スイープ判定を追加する。
-//
-//		// カプセルと球のスイープ判定
-//		bool CapsuleSweepToSphere(
-//			const CollisionBase* cA,
-//			const CollisionBase* sA);
-//
-//	④ CollisionUtility.cpp
-//		カプセルの移動経路と球体の衝突を判定する。
-//
-//		//--------------------------------------
-//		// カプセルと球のスイープ判定
-//		//--------------------------------------
-//		bool CollisionUtility::CapsuleSweepToSphere(
-//			const CollisionBase* cA,
-//			const CollisionBase* sA)
-//	{
-//		const auto* capsuleA =
-//			dynamic_cast<const CollisionCapsule*>(cA);
-//
-//		const auto* sphereA =
-//			dynamic_cast<const CollisionSphere*>(sA);
-//
-//		if (!capsuleA || !sphereA)
-//			return false;
-//
-//		const auto& current = capsuleA->GetCapsule();
-//		const auto& previous = capsuleA->GetPreviousCapsule();
-//		const auto& sphere = sphereA->GetSphere();
-//
-//		float radius = current.Radius + sphere.Radius;
-//
-//		// カプセルの移動量
-//		D3DXVECTOR3 move = current.Start - previous.Start;
-//
-//		float distance = D3DXVec3Length(&move);
-//
-//		// 移動距離に応じて分割数を決定
-//		float interval = radius * 0.25f;
-//
-//		if (interval < 0.01f)
-//			interval = 0.01f;
-//
-//		int count = static_cast<int>(ceilf(distance / interval));
-//
-//		if (count < 1)
-//			count = 1;
-//
-//		// 移動経路を分割して判定
-//		for (int i = 0; i <= count; i++)
-//		{
-//			float t = static_cast<float>(i) / count;
-//
-//			D3DXVECTOR3 start =
-//				previous.Start + (current.Start - previous.Start) * t;
-//
-//			D3DXVECTOR3 end =
-//				previous.End + (current.End - previous.End) * t;
-//
-//			// カプセルの中心軸と球の中心との最近点
-//			D3DXVECTOR3 ab = end - start;
-//			D3DXVECTOR3 ap = sphere.Center - start;
-//
-//			float abLenSq = D3DXVec3LengthSq(&ab);
-//
-//			float closestT = 0.0f;
-//
-//			if (abLenSq > 0.0001f)
-//			{
-//				closestT = D3DXVec3Dot(&ap, &ab) / abLenSq;
-//				closestT = std::clamp(closestT, 0.0f, 1.0f);
-//			}
-//
-//			D3DXVECTOR3 closest = start + ab * closestT;
-//
-//			D3DXVECTOR3 diff = sphere.Center - closest;
-//
-//			if (D3DXVec3LengthSq(&diff) <= radius * radius)
-//			{
-//				return true;
-//			}
-//		}
-//
-//		return false;
-//	}
-//
-//	⑤ Boostの移動処理
-//		ここが重要。
-//
-//		Boostで移動する前に、移動前のカプセル座標を保存する必要がある。
-//
-//		void CBoost::Update()
-//	{
-//		if (m_State.active == false)
-//			return;
-//
-//		// 移動前のカプセル座標を保存
-//		m_pCapsule->SavePreviousPosition();
-//
-//		// 移動
-//		*m_pPosition += m_State.velocity;
-//
-//		// 速度減衰
-//		m_State.velocity *= 0.9f;
-//
-//		// 残り時間
-//		m_State.timer -= 1.0f;
-//
-//		if (m_State.timer <= 0.0f)
-//		{
-//			Stop();
-//		}
-//	}
-//
-//	※ m_pCapsule は例。実際にはPlayerが所有するColliderを参照する必要がある。
-//
-//		また、移動後に WorldUpdate() を実行して、現在のカプセル座標を更新する必要がある。
-//
-//		⑥ CollisionManager側
-//		最後にCollisionManagerで判定を切り替える。
-//
-//		// Boost中
-//		if (isBoost)
-//		{
-//			hit = CollisionUtility::CapsuleSweepToSphere(
-//				capsule, sphere);
-//		}
-//		else
-//		{
-//			// 通常時
-//			hit = CollisionUtility::CapsuleToSphere(
-//				capsule, sphere);
-//		}
-//
-//	isBoost の取得方法や判定の呼び出し順序は、現在のCollisionManagerに合わせて調整する必要がある。
