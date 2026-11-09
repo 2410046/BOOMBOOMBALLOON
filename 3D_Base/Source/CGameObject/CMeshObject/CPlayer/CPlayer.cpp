@@ -392,8 +392,6 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 			return;
 		}
 		//相手のリアクション
-		auto& BoostOther = other->m_pReaction;
-		//よくわかんないけど、KnockBack吹っ飛ばされた時にほかのプレイヤーにあたるとダウン状態になるプレイヤーを吹っ飛ばしてほかのプレイヤーにあたった場合も
 		//風船が多いほどスコアの量が上がる
 		//ブースト状態
 		if (m_pReaction&&m_pReaction->Play(CReaction::Boost))
