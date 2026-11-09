@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "CMeshObject/CCharacter.h"
 #include "Global.h"
+#include "Asset/CXInput/CXInput.h"
+
 /********************************************************************************
 * プレイヤークラス
 **/
@@ -46,6 +48,8 @@ public:
 	int  GetPoint();
 	//ライフを取得
 	int  GetLife() { return m_Life; }
+	//COMかどうか
+	void SetCOM(bool com) { m_COM = com; }
 	//クールタイム中のフラグを取得
 	std::unordered_map<std::string, bool> GetCoolFlag() const;
 protected:
@@ -63,12 +67,13 @@ protected:
 	//移動制限
 	void UpdateMoveLimit();
 protected:
-	enMoveState	m_MoveState;	//移動状態
-	std::shared_ptr<CReaction>	m_pReaction;	//リアクション
 	::EsHandle     m_Effect;	    //エフェクトハンドル
-	//キーボード
+
 	int         m_Life;			//ライフの数
 	int			m_Point;		//スコアに追加するポイント
-	// 攻撃制限
-    std::unordered_map<std::string, AttackData> m_AttackData;
+	bool		m_COM;			//コンピューターかどうかを判別
+
+	enMoveState	m_MoveState;	//移動状態
+	std::shared_ptr<CReaction>	m_pReaction;	//リアクション
+	std::unordered_map<std::string, AttackData> m_AttackData;
 };

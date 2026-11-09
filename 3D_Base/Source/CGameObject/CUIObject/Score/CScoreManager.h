@@ -16,7 +16,7 @@ public:
     ~CScoreManager() = default;
 
     // スコアの生成
-    void NewScore(int ID);
+    void NewScore();
     // 動作関数
     void Update(const std::vector<int>& point);
     // 描画関数

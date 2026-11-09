@@ -1,9 +1,6 @@
 ﻿#include "CGameObject/CMeshObject/CPlayer/CPlayerManager.h"
 #include "Asset/AssetManager/AssetManager.h"
 #include "CMeshObject/CTracking/CTrackingManager/CTrackingManager.h"
-
-#include "MathUtility.h"
-#include <algorithm>
 namespace
 {
     // IDごとのプレイヤーの位置
@@ -16,38 +13,70 @@ namespace
     };
     //プレイヤーのサイズ
     constexpr float Player_Scale = 0.02f;
+    constexpr int Max = 4;
+    constexpr bool m_Com[] = { true };
 }
 CPlayerManager::CPlayerManager()
 {
 }
 // IDを指定してプレイヤーの生成
-void CPlayerManager::NewPlayer(int ID)
+void CPlayerManager::NewPlayer()
 {
-    //プレイヤーのオブジェクト生成
-    auto player = std::make_unique<CPlayer>();
-    //メッシュの接続
-    player->AttachMesh(*AssetManager::GetStatic(L"Player\\Player01"));
-    //プレイヤーIDの設定
-    player->SetID(ID);
-    //サイズを設定
-    player->SetScale(Player_Scale);
-    //座標を設定
-    player->SetPosition(Player_Pos[ID]);
+    // コントローラー接続数
+    int padCount = CXInput::GetInstance(0)->GetPadID();
 
-    //プレイヤー登録
-    m_Players.emplace_back(std::move(player));
-   
-    auto tracking =
-        std::make_unique<CTracking>();
+    // 人間プレイヤーは1人
+    int playerCount = 1;
 
-    // 今登録したプレイヤーを追跡
-    tracking->SetTarget(
-        m_Players.back().get());
+    // COM人数
+    int comCount = Max - playerCount;
 
-    // TrackingManagerへ登録
-    CTrackingManager::GetInstance()
-        ->AddTracking(
-            std::move(tracking));
+    for (int i = 0; i < Max; i++)
+    {
+         //プレイヤーのオブジェクト生成
+         auto player = std::make_unique<CPlayer>();
+         //メッシュの接続
+         player->AttachMesh(*AssetManager::GetStatic(L"Player\\Player01"));
+         //プレイヤーIDの設定
+         player->SetID(i);
+         //サイズを設定
+         player->SetScale(Player_Scale);
+         //座標を設定
+         player->SetPosition(Player_Pos[i]);
+  
+         // コントローラーの接続状態でCOMを設定
+         //if (CXInput::GetInstance(0)->IsControllerConnected(padCount))
+         //{
+         //    player->SetCOM(false);
+         //}
+         //else
+         //{
+         //    player->SetCOM(true);
+         //}
+
+         if (i < padCount)
+         {
+             player->SetCOM(false);
+         }
+         else
+         {
+             player->SetCOM(true);
+         }
+         //プレイヤー登録
+         m_Players.emplace_back(std::move(player));
+        
+         auto tracking =
+             std::make_unique<CTracking>();
+
+         // 今登録したプレイヤーを追跡
+         tracking->SetTarget(
+             m_Players.back().get());
+
+         // TrackingManagerへ登録
+         CTrackingManager::GetInstance()
+             ->AddTracking(
+                 std::move(tracking));
+    }
 
     
 }

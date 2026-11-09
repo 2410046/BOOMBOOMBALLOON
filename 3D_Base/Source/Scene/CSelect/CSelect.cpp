@@ -188,7 +188,7 @@ void CSelect::PlayerActive()
 	CXInput* pPad = CXInput::GetInstance(Player_Index);
 
 	// 現在接続されているコントローラーの数
-	int m_PadCount = 0;
+	int m_PadCount = 1;
 
 	// 各プレイヤーのコントローラー接続状態を確認
 	for (int i = 0; i < Max_Player; i++)
@@ -211,24 +211,21 @@ void CSelect::PlayerActive()
 			// 該当するプレイヤーの表示パターンを変更
 			// i + 1 はプレイヤー番号（P1～P4）
 			m_pActive[i]->SetPatternNo(0, i + 1);
-			m_pPlayer[i]->Turn(true);
-
+			 m_pPlayer[i]->Turn(true);
 		}
 		else
 		{
-
-			//プレイヤーを動かす
-			m_pPlayer[i]->UpDown();
 			//回転
 			// 接続されていないプレイヤーをCOM
 			m_pActive[i]->SetPatternNo(0, 0);
+			//プレイヤーを動かす
+            m_pPlayer[i]->UpDown();
 		}
 
 	}
-
 	// 接続されているコントローラー数を
-	// プレイする人数としてゲームデータに設定
-	CGameData::GetInstance()->SetPlayNo(m_PadCount);
+	// プレイする人数として設定
+	pPad->SetPadID(m_PadCount);
 }
 //スカイの動作
 void CSelect::Sky()
@@ -253,3 +250,5 @@ void CSelect::Sky()
 	//m_pSky->UpDown();
 	//m_pSky->Turn(XSpeed, MaxAngle);
 }
+
+//m_pPlayer[i]->Turn(true);

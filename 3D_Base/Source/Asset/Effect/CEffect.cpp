@@ -170,6 +170,11 @@ void CEffect::SetRotationY(::EsHandle handle, D3DXVECTOR3 vAxis, float angle)
 	CEffect::GetInstance()->m_pManager->
 		SetRotation(handle, ::EsVec3(vAxis.x, vAxis.y, vAxis.z), angle);
 }
+void CEffect::SetQuaternion(::EsHandle handle, D3DXQUATERNION Qua)
+{
+	//CEffect::GetInstance()->m_pManager->
+	//	(handle, rot.x, rot.y, rot.z);
+}
 //サイズを指定する
 void CEffect::SetScale(::EsHandle handle, D3DXVECTOR3 scale)
 {

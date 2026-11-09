@@ -20,8 +20,8 @@ CTime::CTime()
 {
     //スプライトを接続
     AttachSprite(*CSpriteManager::GetSprite2D(L"TimeArrow"));
-    m_vPosition = D3DXVECTOR3(650.f, 68.f, 0.f);
-    m_vScale = D3DXVECTOR3(0.15f, 0.15f, 0.15f);
+    m_vPosition = D3DXVECTOR3(673.f, 50.f, 0.f);
+    m_vScale = D3DXVECTOR3(0.15f, 0.12f, 0.15f);
     //リセット
     Reset();
 }

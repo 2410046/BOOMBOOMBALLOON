@@ -16,7 +16,7 @@ public:
     ~CPlayerManager() = default;
 
     // IDを指定してプレイヤーの生成
-    void NewPlayer(int ID);
+    void NewPlayer();
     // 動作関数
     void Update();
     //描画関数

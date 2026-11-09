@@ -27,7 +27,7 @@ bool CSoundManager::Load(HWND hWnd)
 		{ _T("SE\\Down")         },
 		{ _T("SE\\Enter")        },
 		{ _T("SE\\PlayerHit")    },
-		{ _T("SE\\Point")        },
+		//{ _T("SE\\Point")        },
 		{ _T("SE\\Select")       },
 		{ _T("SE\\Shot")         },
 

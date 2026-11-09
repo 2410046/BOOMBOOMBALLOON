@@ -12,7 +12,7 @@ namespace
 	constexpr float Stage_ScaleX = 5.0f;   // X方向範囲倍率
 	constexpr float Stage_ScaleZ = 4.0f;	  // Z方向範囲倍率
 	constexpr float Stage_Offset = 0.5f;	  // Z端微調整
-	// ローカルオフセットを設定（数値は調整してください）
+	// ローカルオフセットを設定
 	const D3DXVECTOR3 colliderOffset = D3DXVECTOR3(15.5f, 0.0f, 0.f);
 }
 //コンストラクタ

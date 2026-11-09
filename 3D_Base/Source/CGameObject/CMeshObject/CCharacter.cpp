@@ -39,6 +39,10 @@ bool CCharacter::Turn(float Speed,float Max,bool Loop)
 	if (m_angle >= Max)
 	{
 		m_angle = Max;
+		if (Loop)
+		{
+			m_angle = 0;
+		}
 		return true;
 	}
 

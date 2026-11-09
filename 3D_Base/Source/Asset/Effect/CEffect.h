@@ -83,6 +83,8 @@ public:
 	static void SetRotation(::EsHandle handle, D3DXVECTOR3 rot);
 	//回転を指定する（軸回転）
 	static void SetRotationY(::EsHandle handle, D3DXVECTOR3 vAxis, float angle);
+	//クオータニオンを指定する
+	static void SetQuaternion(::EsHandle handle, D3DXQUATERNION Qua);
 	//サイズを指定する
 	static void SetScale(::EsHandle handle, D3DXVECTOR3 scale);
 private:

@@ -17,7 +17,7 @@ public:
 	// padIdごとにインスタンス取得
 	static CXInput* GetInstance(DWORD padId)
 	{
-		if (padId >= 2) return nullptr;
+		if (padId >= 4) return nullptr;
 
 		if (!s_instances[padId])
 			s_instances[padId] = new CXInput(padId);
@@ -114,6 +114,8 @@ public:
 	bool IsConnect() const	{	return m_connect;	}
 	//パッド番号取得.
 	DWORD GetPadID() const	{	return m_padId;		}
+
+	void  SetPadID(DWORD pad ) {	m_padId = pad;		}
 
 	//コントローラーが接続されているか
 	bool IsControllerConnected(int no);

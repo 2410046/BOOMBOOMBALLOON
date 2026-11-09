@@ -149,18 +149,17 @@ bool CXInput::SetVibration( WORD LMotorSpd, WORD RMotorSpd )
 	}
 	return false;
 }
-
+//コントローラーが接続されているか
 bool CXInput::IsControllerConnected(int no)
 {
 	
-		XINPUT_STATE state;
-		ZeroMemory(&state, sizeof(XINPUT_STATE));
+	XINPUT_STATE state;
+	ZeroMemory(&state, sizeof(XINPUT_STATE));
 
-		DWORD result = XInputGetState(no, &state);
+	DWORD result = XInputGetState(no, &state);
 
-		// 接続してないと ERROR_DEVICE_NOT_CONNECTED が返る
-		return (result == ERROR_SUCCESS);
-	
+	// 接続してないと ERROR_DEVICE_NOT_CONNECTED が返る
+	return (result == ERROR_SUCCESS);
 }
 
 //-------------------------------------------------.

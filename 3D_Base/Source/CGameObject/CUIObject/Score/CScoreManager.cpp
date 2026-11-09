@@ -18,21 +18,30 @@ namespace
         {900.f, 40.f, 0.f},  // ID : 2
         {1110.f, 40.f, 0.f},  // ID : 3
     };
+
+    const int SCORE_[] =
+    {
+         20,70,33,1110
+    };
+    constexpr int Max = 4;
 }
 // IDを指定してスコアを生成
-void CScoreManager::NewScore(int ID)
+void CScoreManager::NewScore()
 {
-     // スコアオブジェクト生成
-     auto score = std::make_unique<CScore>();
-     //スプライトを接続
-     score->AttachSprite(*AssetManager::GetSprite2D(L"Number"));
-     //IDを設定する
-     score->SetID(ID);
-     //座標を設定
-     score->SetPosition(SCORE_POS[ID]);
-     //スコアの登録
-     m_Scores.emplace_back(std::move(score));
-
+    for (int i = 0; i < Max; i++)
+    {
+        // スコアオブジェクト生成
+        auto score = std::make_unique<CScore>();
+        //スプライトを接続
+        score->AttachSprite(*AssetManager::GetSprite2D(L"Number"));
+        //IDを設定する
+        score->SetID(i);
+        //座標を設定
+        score->SetPosition(SCORE_POS[i]);
+        score->Fluctuation(70);
+        //スコアの登録
+        m_Scores.emplace_back(std::move(score));
+    }
 }
 //更新関数
 void CScoreManager::Update(const std::vector<int>& point)

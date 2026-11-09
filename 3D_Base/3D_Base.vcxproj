@@ -174,6 +174,7 @@
     <ClCompile Include="Source\CGameObject\CMeshObject\CCharacter.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloud.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloudManager\CCloudManager.cpp" />
+    <ClCompile Include="Source\CGameObject\CMeshObject\CPlayer\CCOM\CCOM.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CPlayer\CPlayer.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CPlayer\CPlayerManager.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CStaticMeshObject.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="Source\CGameObject\CMeshObject\CCharacter.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CCloud\CCloud.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CCloud\CCloudManager\CCloudManager.h" />
+    <ClInclude Include="Source\CGameObject\CMeshObject\CPlayer\CCOM\CCOM.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CPlayer\CPlayer.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CPlayer\CPlayerManager.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CStaticMeshObject.h" />
@@ -290,7 +292,6 @@
     <ClInclude Include="Source\Reaction\CReactionApply\CReactionFactory.h" />
     <ClInclude Include="Source\Reaction\KnockBack\CKnockBack.h" />
     <ClInclude Include="Source\Reaction\ReactionManager.h" />
-    <ClInclude Include="Source\Scene\CGameData.h" />
     <ClInclude Include="Source\Scene\CGame\CGame.h" />
     <ClInclude Include="Source\Scene\CResult\CResult.h" />
     <ClInclude Include="Source\Scene\CScene.h" />

@@ -15,7 +15,7 @@ public:
     ~CIconManager() = default;
 
     // アイコンの生成
-    void NewIcon(int ID);
+    void NewIcon();
     // 動作関数
     void Update(
         const std::vector<std::unordered_map<std::string, bool>>& flag);

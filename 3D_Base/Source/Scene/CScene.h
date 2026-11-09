@@ -5,7 +5,6 @@
 #include "Camera/CCamera.h"                        //カメラクラス
 #include "CGameObject/CUIObject/CUIObject.h"       //UIオブジェクトクラス
 #include "CGameObject/CSpriteObject/CFade/CFade.h" //フェードクラス
-#include "Scene/CGameData.h"                       //データクラス
 #include "CGameObject/CUIObject/SelectUI/CSelectUI.h"
 #include "DirectX/CDirectX11.h"
 #include <memory>

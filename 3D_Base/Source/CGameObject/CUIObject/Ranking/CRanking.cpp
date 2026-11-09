@@ -1,6 +1,5 @@
 ﻿#include "CRanking.h"
 #include <fstream>
-#include "Scene/CGameData.h"
 #include "MathUtility.h"
 #include <algorithm>
 
@@ -91,8 +90,8 @@ void CRanking::Update()
     // スコアカウントアップのスキップ処理
     //--------------------------------------------------
 
-    // '1'キーを押した場合、スコアのカウントアップをスキップする
-    if (GetAsyncKeyState('1') & 0x0001)
+    // '1'キーを押した,または2位のスコアが決定した場合のカウントアップをスキップする
+    if (GetAsyncKeyState('1') & 0x0001||m_Count >= 3)
     {
         // 全プレイヤーの表示スコアを最終スコアにする
         for (auto& data : m_ScoreList)
@@ -153,10 +152,37 @@ void CRanking::Update()
             data.DisplayScore += std::clamp(diff, -1, 1);
         }
 
+
+    //int count = 0;
+
+        //for (int i = static_cast<int>(m_ScoreList.size()); i++;)
+        //{
+        //    // 対象プレイヤーのスコアデータを取得
+        //    auto& data = m_ScoreList[i];
+        //    if (data.CoundEnd)
+        //    {
+        //        m_Count++;
+        //    }
+        //}
+
+        //if (m_Count >= 3)
+        //{
+        //    // 全プレイヤーの表示スコアを最終スコアにする
+        //    for (auto& data : m_ScoreList)
+        //    {
+        //        data.DisplayScore = data.MyScore;
+        //        //// すでに順位が確定している場合はスキップ
+        //        if (data.CoundEnd) continue;
+        //        //// プレイヤーの順位に応じて表示位置を確定する
+        //        //ConfirmRank(data.ID);
+        //        //// 順位確定済みの状態にする
+        //        data.CoundEnd = true;
+        //    }
+        //}
+
         //--------------------------------------------------
         // 順位確定処理
         //--------------------------------------------------
-
         // 最下位から順番に順位確定の条件を確認する
         for (int i = static_cast<int>(m_ScoreList.size()) - 1; i >= 0; --i)
         {
@@ -174,7 +200,9 @@ void CRanking::Update()
 
             // 順位確定済みの状態にする
             data.CoundEnd = true;
-
+            //順位が確定した数をカウント
+            m_Count++;
+           
             // 1回の更新で確定する順位は1人だけにする
             break;
         }
@@ -315,7 +343,7 @@ void CRanking::Reset()
 {
     m_ScoreList.clear();
     m_ConfirmCount = 0;
-
+    m_Count = 0;
     for (int i = 0; i < Rank_Max; ++i)
     {
         m_RankID[i] = i;

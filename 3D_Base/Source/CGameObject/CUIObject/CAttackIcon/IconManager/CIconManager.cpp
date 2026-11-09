@@ -17,21 +17,24 @@ namespace
         {900.f, 10.f, 0.f},  // ID : 2
         {1110.f, 10.f, 0.f},  // ID : 3
     };
+    constexpr int Max = 4;
 }
 // IDを指定してスコアを生成
-void CIconManager::NewIcon(int ID)
+void CIconManager::NewIcon()
 {
-     // スコアオブジェクト生成
-     auto icon = std::make_unique<CAttackIcon>();
-     //スプライトを接続
-     icon->AttachSprite(*AssetManager::GetSprite2D(L"AttackUser"));
-     //IDを設定する
-     icon->SetID(ID);
-     //座標を設定
-     icon->SetPosition(ICON_POS[ID]);
-     //スコアの登録
-     m_Icons.emplace_back(std::move(icon));
-
+    for (int i = 0; i < Max; i++)
+    {
+        // スコアオブジェクト生成
+        auto icon = std::make_unique<CAttackIcon>();
+        //スプライトを接続
+        icon->AttachSprite(*AssetManager::GetSprite2D(L"AttackUser"));
+        //IDを設定する
+        icon->SetID(i);
+        //座標を設定
+        icon->SetPosition(ICON_POS[i]);
+        //スコアの登録
+        m_Icons.emplace_back(std::move(icon));
+    }
 }
 //更新関数
 void CIconManager::Update(

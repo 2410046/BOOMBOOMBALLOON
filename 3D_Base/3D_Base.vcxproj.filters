@@ -82,9 +82,6 @@
     <Filter Include="Source\Scene\CSelect">
       <UniqueIdentifier>{fe060c5f-2934-450e-8181-972036530326}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Scene\CGameData">
-      <UniqueIdentifier>{02e2ef5a-e7c1-4cc0-8a90-a63c9eaf9559}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\GameObject\UIObject\CSelectUI">
       <UniqueIdentifier>{1c73a696-ec62-43bc-acca-2dfe7a108f5c}</UniqueIdentifier>
     </Filter>
@@ -210,6 +207,9 @@
     </Filter>
     <Filter Include="Source\GameObject\UIObject\CAttackIcon\CIconManager">
       <UniqueIdentifier>{8d74787b-4241-4460-bbb1-399c500b6202}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GameObject\StaticMeshObject\Character\CPlayerManager\CCOM">
+      <UniqueIdentifier>{33c368e1-1251-4efc-b13f-44772926a0a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -408,6 +408,9 @@
     <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloud.cpp">
       <Filter>Source\GameObject\StaticMeshObject\Character\CCloud</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CGameObject\CMeshObject\CPlayer\CCOM\CCOM.cpp">
+      <Filter>Source\GameObject\StaticMeshObject\Character\CPlayerManager\CCOM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Global.h">
@@ -472,9 +475,6 @@
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CGameObject.h">
       <Filter>Source\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\CGameData.h">
-      <Filter>Source\Scene\CGameData</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\CScene.h">
       <Filter>Source\Scene</Filter>
@@ -628,6 +628,9 @@
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CUIObject\CAttackIcon\IconManager\CIconManager.h">
       <Filter>Source\GameObject\UIObject\CAttackIcon\CIconManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CGameObject\CMeshObject\CPlayer\CCOM\CCOM.h">
+      <Filter>Source\GameObject\StaticMeshObject\Character\CPlayerManager\CCOM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

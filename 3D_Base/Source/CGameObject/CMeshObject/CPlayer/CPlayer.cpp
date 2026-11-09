@@ -1,7 +1,6 @@
 ﻿#include "CPlayer.h"
-#include "Asset/CXInput/CXInput.h"
+
 #include "MathUtility.h"
-#include <algorithm>
 #include "Reaction/CReactionApply/CReactionFactory.h"
 #include "CMeshObject/CTracking/CShot/CShot.h"	    //ショットクラス
 #include "CGameObject/CMeshObject/CCloud/CCloud.h"  //雲クラス
@@ -17,7 +16,7 @@ namespace
 	constexpr float Size_Speed = 0.0001f;
 	constexpr float Base_Size = 0.01f;
 
-	constexpr int Max_Boost  = 3;
+	constexpr int Max_Boost  = 1;
 	constexpr int Max_Shot  = 5;
 	// 円の中心座標
 	constexpr float CenterX = 0.f;
@@ -37,6 +36,7 @@ CPlayer::CPlayer()
 	, m_Life			( 3 )
 	, m_Point			( 0 )
 	, m_AttackData		( )
+	, m_COM				( false )
 {	
 	//カプセルの当たり判定
 	m_pCollider = CreateCollider::CreateCaupsule(
@@ -48,7 +48,7 @@ CPlayer::CPlayer()
 
 	//攻撃制限数を設定
 	m_AttackData["Shot"] = { Max_Shot,Max_Shot, 180.0f,0.f};
-	m_AttackData["Boost"] = { Max_Boost,Max_Boost, 300.0f,0.f };
+	m_AttackData["Boost"] = { Max_Boost,Max_Boost, 50.0f,0.f };
 }
 //デストラクタ
 CPlayer::~CPlayer()
@@ -78,17 +78,30 @@ void CPlayer::Update()
 	}
 	break;
 	case enMoveState::Live:
-		Controller();
 		CCharacter::UpDown();
+		if (m_COM)
+		{
+			m_vPosition.x += 0.1f;
+		}
+		else
+		{
+			Controller();
+		}
 		break;
 	case enMoveState::Boost:		//ブースト状態
 	{
 		//プレイヤーの方向にまっすぐ進む
 		CReaction::ReactionParam param;
 		param.rot = m_vQuaternion;
-		param.power = 1.f;
+		param.power = 2.f;
 		m_pReaction = CReactionFactory::Create(CReaction::Boost);
 		m_pReaction->Apply(param);
+
+		const auto& effect = s_IDTable[m_ID];
+		//エフェクト出現
+		//m_Effect = CreateEffect(effect.BoostEffect, m_vPosition,
+		//	GetEffectRotation(), EffectScale, EffectSpeed);
+
 		m_MoveState = enMoveState::Live;
 	}
 	break;
@@ -176,11 +189,11 @@ void CPlayer::Controller()
 {
 #if 1
 	//無敵状態と生存状態以外の場合
-	if (m_MoveState != enMoveState::Live 
-		&& m_MoveState != enMoveState::Invincible)
-	{
-		return;
-	}
+	//if (m_MoveState != enMoveState::Live 
+	//	&& m_MoveState != enMoveState::Invincible)
+	//{
+	//	return;
+	//}
 	m_Count++;
 	//キーボード
 	float moveX = 0.0f;
@@ -194,8 +207,14 @@ void CPlayer::Controller()
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) moveX += 1.0f;
 
 		if (GetAsyncKeyState('Z') & 0x8000 
-			&& std::fmod(m_Count, 10.0f) == 0.0f)
+/*			&& std::fmod(m_Count, 10.0f) == 0.0f*/)
 		{
+			// アニメーション中でなければ再生
+			if (m_pReaction &&
+				m_pReaction->Play(CReaction::Boost))
+			{
+				return;
+			}
 			if (AttackLimit("Boost"))
 			{
 				CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");

@@ -12,7 +12,7 @@ namespace
 	static const D3DXVECTOR3 Camera_Pos 
 		= D3DXVECTOR3(0.0f, 12.5f, -4.f);	//カメラ座標
 	static const D3DXVECTOR3 Time_Pos
-		= D3DXVECTOR3(600.f, 20.f, 0.f);		//タイムUI座標
+		= D3DXVECTOR3(630.f, 10.f, 0.f);		//タイムUI座標
 	static const D3DXVECTOR3 Look_Pos   
 		= D3DXVECTOR3(0.0f, 2.0f, 10.0f);	//カメラの方向座標
 	static const D3DXVECTOR3 Light_Pos  
@@ -74,21 +74,17 @@ HRESULT CGame::LoadData()
 	m_pTimeUI->AttachSprite(
 		*AssetManager::GetSprite2D(L"Time"));
 	m_pTimeUI->SetPosition(Time_Pos);
-	m_pTimeUI->SetScale(0.8f);
+	m_pTimeUI->SetScale(0.7f);
 
-	// プレイヤーの数
-	for (int p = 0; p < m_PlayerCount; ++p)
-	{
-		//プレイヤーの生成
-		m_pPlayer.NewPlayer(p);
-		//スコアの生成
-		m_pScores.NewScore(p);
-		//アイコンの生成
-		m_pIcon.NewIcon(p);
-	}
-
+	//プレイヤーの生成
+	m_pPlayer.NewPlayer();
+	//スコアの生成
+	m_pScores.NewScore();
+	//アイコンの生成
+	m_pIcon.NewIcon();
+	//雲の生成
 	m_pCloud.NewCloud();
-	//m_pCloud->LoadData();
+
 	//時間のリセット
 	CTime::GetInstance()->Reset();
 	// カメラの座標や角度の設定
