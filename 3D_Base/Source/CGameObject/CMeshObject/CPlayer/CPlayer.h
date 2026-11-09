@@ -56,16 +56,16 @@ protected:
 	void Controller();
 	//クオータニオン対応
 	void Quotanion(D3DXVECTOR3 moveDir);
-
 	//攻撃回数の制限
 	bool AttackLimit(const std::string& name);
 	//クールタイムの更新
-	void UpdateAttack();
+	void UpdateCoolTime();
+	//移動制限
+	void UpdateMoveLimit();
 protected:
 	enMoveState	m_MoveState;	//移動状態
-	std::shared_ptr<CReaction>	m_pReaction;	//当たり判定
-
-	float       m_StateTime;	//状態の開始時間
+	std::shared_ptr<CReaction>	m_pReaction;	//リアクション
+	::EsHandle     m_Effect;	    //エフェクトハンドル
 	//キーボード
 	int         m_Life;			//ライフの数
 	int			m_Point;		//スコアに追加するポイント

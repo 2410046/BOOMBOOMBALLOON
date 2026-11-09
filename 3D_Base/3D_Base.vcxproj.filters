@@ -390,9 +390,6 @@
     <ClCompile Include="Source\CGameObject\CMeshObject\CTracking\CBallun\CBallunManager\CBalloonManager.cpp">
       <Filter>Source\GameObject\StaticMeshObject\Character\CTracking\CBalloon\CBalloonManager</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloud.cpp">
-      <Filter>Source\GameObject\StaticMeshObject\Character\CCloud</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CGameObject\CMeshObject\CTracking\CTrackingManager\CTrackingManager.cpp">
       <Filter>Source\GameObject\StaticMeshObject\Character\CTracking\CTrackingManager</Filter>
     </ClCompile>
@@ -407,6 +404,9 @@
     </ClCompile>
     <ClCompile Include="Source\CGameObject\CUIObject\CAttackIcon\IconManager\CIconManager.cpp">
       <Filter>Source\GameObject\UIObject\CAttackIcon\CIconManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloud.cpp">
+      <Filter>Source\GameObject\StaticMeshObject\Character\CCloud</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
