@@ -19,10 +19,10 @@ namespace
         {1110.f, 40.f, 0.f},  // ID : 3
     };
 
-    const int SCORE_[] =
-    {
-         20,70,33,1110
-    };
+    //const int SCORE_[] =
+    //{
+    //     20,70,33,1110
+    //};
     constexpr int Max = 4;
 }
 // IDを指定してスコアを生成
@@ -38,7 +38,7 @@ void CScoreManager::NewScore()
         score->SetID(i);
         //座標を設定
         score->SetPosition(SCORE_POS[i]);
-        score->Fluctuation(70);
+        //  score->Fluctuation(70);
         //スコアの登録
         m_Scores.emplace_back(std::move(score));
     }

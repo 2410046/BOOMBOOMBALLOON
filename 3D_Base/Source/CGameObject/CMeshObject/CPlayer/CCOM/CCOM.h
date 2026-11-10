@@ -1,6 +1,14 @@
 #pragma once
 class CCom
 {
+private:
+    enum MOVE_ACTION
+    {
+        Approach,
+        Boost,
+        Shot,
+        Escape,
+    };
 public:
     void Update();
 
@@ -15,4 +23,5 @@ private:
 private:
     int m_TargetID;
     D3DXVECTOR3 m_Direction;
+    int m_Move;
 };

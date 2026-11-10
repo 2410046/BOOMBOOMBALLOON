@@ -82,7 +82,6 @@ void CScore::Fluctuation(int point)
 {
     // プレイヤーが当てたら
     m_Score += point;
-	//CSoundManager::GetInstance()->PlaySE(L"SE\\Point");
     m_Score = std::clamp(m_Score, 0, Max);
 }
 

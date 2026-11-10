@@ -24,7 +24,6 @@ namespace
 //コンストラクタ.
 CGame::CGame()
 	: CScene				()
-	, m_PlayerCount			( 0 )
 {
 	//BGM設定
 	m_BGM = L"BGM\\MouningGame";
@@ -41,13 +40,12 @@ CGame::~CGame()
 //構築関数
 void CGame::Create()
 {
-	//プレイヤー人数の取得
-	//m_PlayerCount = CGameData::GetInstance()->PlayerNo();
-	m_PlayerCount = 4;
 	// スカイのインスタンス生成
 	m_pSky      = std::make_unique<CCharacter>();
 	//時計のUIのインスタンス生成
 	m_pTimeUI   = std::make_unique<CUIObject>();
+	//カウントダウンUI
+	m_pCountdown = std::make_unique<CUIObject>();
 	//初期化
 	CollisionManager::GetInstance()->Init();
 	CReactionManager::GetInstance()->Init();
@@ -75,6 +73,11 @@ HRESULT CGame::LoadData()
 		*AssetManager::GetSprite2D(L"Time"));
 	m_pTimeUI->SetPosition(Time_Pos);
 	m_pTimeUI->SetScale(0.7f);
+
+	m_pCountdown->AttachSprite(
+		*AssetManager::GetSprite2D(L"Number"));
+	m_pCountdown->SetPosition(Time_Pos);
+	//m_pCountdown->SetScale(1.7f);
 
 	//プレイヤーの生成
 	m_pPlayer.NewPlayer();
@@ -130,7 +133,6 @@ void CGame::Draw()
 
 	m_pSky->Draw(camera);
 
-
 	//m_pCloud->Draw(camera);
 	m_pPlayer.Draw(camera);
 	m_pScores.Draw();
@@ -142,6 +144,7 @@ void CGame::Draw()
 	m_pTimeUI->Draw();
 
 	CDirectX11::GetInstance()->SetDepth(false);
+	m_pCountdown->Draw();
 	CTime::GetInstance()->Draw();
 	CDirectX11::GetInstance()->SetDepth(true);
 

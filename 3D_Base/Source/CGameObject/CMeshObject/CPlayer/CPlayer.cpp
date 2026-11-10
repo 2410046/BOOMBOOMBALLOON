@@ -25,10 +25,6 @@ namespace
 	// 円の半径
 	constexpr float RadiusX = 12.8f;
 	constexpr float RadiusZ = 11.f;
-	//constexpr float RadiusX = 12.8f;
-	//constexpr float RadiusZ = 10.5f;
-
-
 }
 //コンストラクタ
 CPlayer::CPlayer()
@@ -115,10 +111,11 @@ void CPlayer::Update()
 	}
 	break;
 	case enMoveState::Down://ダウン状態
+	{
 		m_Point = -20;
+		const auto& effect = s_IDTable[m_ID];
 		//エフェクト出現
-		//m_Effect = CreateEffect(Type, m_EffectPos,
-		//	m_, 0.5f, EffectSpeed);
+		m_Effect = CreateEffect(effect.DeleteEffect, m_vPosition);
 		if (delta_clamp(m_Life -= 1, 5))
 		{
 			CSoundManager::GetInstance()->PlaySE(L"SE\\Dead");
@@ -128,7 +125,7 @@ void CPlayer::Update()
 		{
 			m_MoveState = enMoveState::Invincible;
 		}
-
+	}
 		break;
 	case enMoveState::Invincible://無敵状態
 		if (CCharacter::Turn())
@@ -272,7 +269,7 @@ void CPlayer::Controller()
 		// 移動
 		m_vPosition += moveDir * m_Speed;
 		//クオータニオン
-		Quotanion(moveDir);
+		CCharacter::Quotanion(moveDir);
 		//nanamehayasi
 	}
 #else
@@ -318,30 +315,7 @@ void CPlayer::Controller()
 #endif
 
 }
-//クオータニオン対応
-void CPlayer::Quotanion(D3DXVECTOR3 moveDir)
-{
-	D3DXVec3Normalize(&moveDir, &moveDir);
 
-	// ===== 回転（クォータニオン）=====
-	float yaw = atan2f(moveDir.x, moveDir.z) - D3DX_PI / 2;
-
-	D3DXQUATERNION targetRot;
-	D3DXQuaternionRotationYawPitchRoll(
-		&targetRot,
-		yaw,
-		0.0f,
-		0.0f
-	);
-
-	// スムーズ回転
-	D3DXQuaternionSlerp(
-		&m_vQuaternion,
-		&m_vQuaternion,
-		&targetRot,
-		0.2f
-	);
-}
 //攻撃回数の制限
 bool CPlayer::AttackLimit(const std::string& name)
 {
@@ -506,7 +480,6 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 			//スコアを減らす
 			m_MoveState = enMoveState::Down;
 		}
-		//ほかのプレイヤーに自分のショットが当たったらスコア
 	}
 	break;
 	default:

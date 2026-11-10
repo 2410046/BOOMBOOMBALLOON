@@ -55,3 +55,28 @@ bool CCharacter::Turn(float Speed,float Max,bool Loop)
 		0.0f);
 	return false;
 }
+
+//クオータニオン対応
+void CCharacter::Quotanion(D3DXVECTOR3 moveDir)
+{
+	D3DXVec3Normalize(&moveDir, &moveDir);
+
+	// ===== 回転（クォータニオン）=====
+	float yaw = atan2f(moveDir.x, moveDir.z) - D3DX_PI / 2;
+
+	D3DXQUATERNION targetRot;
+	D3DXQuaternionRotationYawPitchRoll(
+		&targetRot,
+		yaw,
+		0.0f,
+		0.0f
+	);
+
+	// スムーズ回転
+	D3DXQuaternionSlerp(
+		&m_vQuaternion,
+		&m_vQuaternion,
+		&targetRot,
+		0.2f
+	);
+}

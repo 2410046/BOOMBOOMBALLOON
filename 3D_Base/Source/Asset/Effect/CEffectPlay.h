@@ -4,8 +4,8 @@
 inline EsHandle CreateEffect(
     const std::u16string& fileName,
     const D3DXVECTOR3& position,
-    const D3DXVECTOR3& rotation,
-    float scale,
+    const D3DXVECTOR3& rotation = D3DXVECTOR3(0.f, 0.f, 0.f),
+    float scale = 0.5f,
     float speed = 1.0f)
 {
     EsHandle effect = CEffect::Play(fileName, position);

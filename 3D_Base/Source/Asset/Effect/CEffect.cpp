@@ -61,10 +61,10 @@ HRESULT CEffect::LoadData()
 
 	const char16_t* fileName[] =
 	{
-		u"deleteA",
-		u"deleteB",
-		u"deleteX",
-		u"deleteY",
+		u"delete1",
+		u"delete2",
+		u"delete3",
+		u"delete4",
 		u"Boost1",
 		u"Boost2",
 		u"Boost3",

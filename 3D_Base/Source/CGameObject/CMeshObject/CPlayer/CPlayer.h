@@ -31,6 +31,16 @@ public:
 		float coolTimer = 0.0f;
 		bool isCoolTime = false;
 	};
+
+	// COMの行動状態
+	enum class enCOMState
+	{
+		Chase,      // 接近
+		KeepDist,   // 距離を保つ
+		Attack,     // 攻撃
+		Avoid       // 回避
+	};
+
 public:
 	//コンストラクタ
 	CPlayer();
@@ -58,8 +68,6 @@ protected:
 		CollisionBase* pCollider) override;
 	//コントローラー操作
 	void Controller();
-	//クオータニオン対応
-	void Quotanion(D3DXVECTOR3 moveDir);
 	//攻撃回数の制限
 	bool AttackLimit(const std::string& name);
 	//クールタイムの更新
