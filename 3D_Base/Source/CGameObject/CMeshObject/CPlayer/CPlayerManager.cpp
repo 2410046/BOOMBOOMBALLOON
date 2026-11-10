@@ -11,7 +11,7 @@ namespace
         {  6.f, 1.f, 5.5f }, // ID : 2
         {  6.f, 1.f, 13.5f }, // ID : 2
     };
-    //プレイヤーのサイズ
+    //プレイヤーのサイズ  
     constexpr float Player_Scale = 0.02f;
     constexpr int Max = 4;
     constexpr bool m_Com[] = { true };
@@ -43,16 +43,6 @@ void CPlayerManager::NewPlayer()
          player->SetScale(Player_Scale);
          //座標を設定
          player->SetPosition(Player_Pos[i]);
-  
-         // コントローラーの接続状態でCOMを設定
-         //if (CXInput::GetInstance(0)->IsControllerConnected(padCount))
-         //{
-         //    player->SetCOM(false);
-         //}
-         //else
-         //{
-         //    player->SetCOM(true);
-         //}
 
          if (i < padCount)
          {

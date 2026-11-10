@@ -170,6 +170,17 @@ void CEffect::SetRotationY(::EsHandle handle, D3DXVECTOR3 vAxis, float angle)
 	CEffect::GetInstance()->m_pManager->
 		SetRotation(handle, ::EsVec3(vAxis.x, vAxis.y, vAxis.z), angle);
 }
+//回転を指定する(クォータニオンを使用)
+void CEffect::SetRotation(::EsHandle handle, D3DXQUATERNION Qua)
+{
+	D3DXVECTOR3 axis;
+	float angle;
+
+	//クォータニオンから軸と角度に変換
+	D3DXQuaternionToAxisAngle(&Qua, &axis, &angle);
+
+	m_pManager->SetRotation(handle, ::EsVec3(axis.x, axis.y, axis.z), angle);
+}
 void CEffect::SetQuaternion(::EsHandle handle, D3DXQUATERNION Qua)
 {
 	//CEffect::GetInstance()->m_pManager->

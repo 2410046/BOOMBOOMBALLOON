@@ -95,8 +95,8 @@ void CPlayer::Update()
 
 		const auto& effect = s_IDTable[m_ID];
 		//エフェクト出現
-		//m_Effect = CreateEffect(effect.BoostEffect, m_vPosition,
-		//	GetEffectRotation(), EffectScale, EffectSpeed);
+		m_Effect["Boost"] = CreateEffect(effect.BoostEffect, m_vPosition,
+			m_vQuaternion);
 
 		m_MoveState = enMoveState::Live;
 	}
@@ -113,9 +113,12 @@ void CPlayer::Update()
 	case enMoveState::Down://ダウン状態
 	{
 		m_Point = -20;
+
 		const auto& effect = s_IDTable[m_ID];
 		//エフェクト出現
-		m_Effect = CreateEffect(effect.DeleteEffect, m_vPosition);
+		m_Effect["Down"] = CreateEffect(
+			effect.DeleteEffect, m_vPosition);
+
 		if (delta_clamp(m_Life -= 1, 5))
 		{
 			CSoundManager::GetInstance()->PlaySE(L"SE\\Dead");
@@ -161,6 +164,18 @@ void CPlayer::Update()
 			m_pReaction->Update();
 		}
 
+		D3DXVECTOR3 axis(0.f, 1.f, 0.f);
+		D3DXQUATERNION rot180;
+		D3DXQUATERNION backRot;
+
+		// Y軸180度回転
+		D3DXQuaternionRotationAxis(&rot180, &axis, D3DX_PI);
+
+		// 現在の向きに180度回転を加える
+		D3DXQuaternionMultiply(&backRot, &m_vQuaternion, &rot180);
+
+		//ブーストエフェクトの更新
+		EffectUpdate(m_Effect["Boost"], m_vPosition, backRot);
 		CCharacter::Update();
 }
 //描画関数

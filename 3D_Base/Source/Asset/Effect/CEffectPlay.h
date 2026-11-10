@@ -4,17 +4,16 @@
 inline EsHandle CreateEffect(
     const std::u16string& fileName,
     const D3DXVECTOR3& position,
-    const D3DXVECTOR3& rotation = D3DXVECTOR3(0.f, 0.f, 0.f),
+    const D3DXQUATERNION& Quaternion = D3DXQUATERNION(0.f, 0.f, 0.f, 1.f),
     float scale = 0.5f,
     float speed = 1.0f)
 {
     EsHandle effect = CEffect::Play(fileName, position);
 
     CEffect::SetScale(
-        effect,
-        D3DXVECTOR3(scale, scale, scale));
+        effect,D3DXVECTOR3(scale, scale, scale));
 
-    CEffect::SetRotation(effect, rotation);
+    CEffect::SetQuaternion(effect, Quaternion);
     CEffect::SetLocation(effect, position);
     CEffect::SetSpeed(effect, speed);
 
@@ -23,10 +22,10 @@ inline EsHandle CreateEffect(
 
 //エフェクトの更新
 inline void EffectUpdate(
-    ::EsHandle m_Effect, const D3DXVECTOR3& position, const D3DXVECTOR3& rotation)
+    ::EsHandle m_Effect, const D3DXVECTOR3& position, const D3DXQUATERNION& Quaternion)
 {
     CEffect::SetLocation(m_Effect, position);
-    CEffect::SetRotation(m_Effect, rotation);
+    CEffect::SetQuaternion(m_Effect, Quaternion );
 }
 
 //エフェクトの終了
