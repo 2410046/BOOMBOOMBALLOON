@@ -75,14 +75,14 @@ void CPlayer::Update()
 	break;
 	case enMoveState::Live:
 		CCharacter::UpDown();
-		if (m_COM)
-		{
-			m_vPosition.x += 0.1f;
-		}
-		else
-		{
+		//if (m_COM)
+		//{
+		//	m_vPosition.x += 0.1f;
+		//}
+		//else
+		//{
 			Controller();
-		}
+		//}
 		break;
 	case enMoveState::Boost:		//ブースト状態
 	{
