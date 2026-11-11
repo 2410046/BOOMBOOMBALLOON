@@ -26,8 +26,7 @@ CCloud::CCloud()
 
 	// スフィアの当たり判定を生成（オフセットを指定）
 	m_pCollider = CreateCollider::CreateSphere(
-		radius, this, CollisionBase::Cloud, colliderOffset
-	);
+		radius, this, CollisionBase::Cloud, colliderOffset);
 }
 //デストラクタ
 CCloud::~CCloud()

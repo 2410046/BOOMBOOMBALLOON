@@ -29,7 +29,6 @@ public:
 protected:
     //クオータニオン対応
     void Quotanion(D3DXVECTOR3 moveDir);
-
 protected:
 	int		m_ID;			//ID
 	float	m_Speed;	//移動速度

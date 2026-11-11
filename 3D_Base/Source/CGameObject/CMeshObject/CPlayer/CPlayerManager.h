@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include "CGameObject/CMeshObject/CPlayer/CPlayer.h"//プレイヤークラス
+#include "CGameObject/CMeshObject/CPlayer/CCOM/CCOM.h"//コンピュータークラス
 #include "CGameObject/CMeshObject/CTracking/CTracking.h"//追尾クラス
 #include "CGameObject/CUIObject/CAttackIcon/CAttackIcon.h"	//攻撃アイコン
 /********************************************************************************
@@ -36,4 +37,5 @@ public:
     std::vector<std::unordered_map<std::string, bool>> GetCoolFlag() const;
 private:
     std::vector<std::unique_ptr<CPlayer>> m_Players;     //プレイヤー
+    std::vector<std::unique_ptr<CCom>> m_Coms;
 };

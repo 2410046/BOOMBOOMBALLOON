@@ -34,7 +34,20 @@ void CPlayerManager::NewPlayer()
     for (int i = 0; i < Max; i++)
     {
          //プレイヤーのオブジェクト生成
-         auto player = std::make_unique<CPlayer>();
+         //auto player = std::make_unique<CPlayer>();
+
+         std::unique_ptr<CPlayer> player = nullptr;
+
+
+         if (i < padCount)
+         {
+             player = std::make_unique<CPlayer>();
+         }
+         else
+         {
+             player = std::make_unique<CCom>();
+         }
+
          //メッシュの接続
          player->AttachMesh(*AssetManager::GetStatic(L"Player\\Player01"));
          //プレイヤーIDの設定
@@ -44,14 +57,6 @@ void CPlayerManager::NewPlayer()
          //座標を設定
          player->SetPosition(Player_Pos[i]);
 
-         if (i < padCount)
-         {
-             player->SetCOM(false);
-         }
-         else
-         {
-             player->SetCOM(true);
-         }
          //プレイヤー登録
          m_Players.emplace_back(std::move(player));
         
@@ -68,7 +73,12 @@ void CPlayerManager::NewPlayer()
                  std::move(tracking));
     }
 
-    
+    // 全プレイヤー情報を生成後にCOMへ他プレイヤー参照を共有
+    std::vector<CPlayer*> rawPlayers = GetPlayers();
+    for (auto& player : m_Players)
+    {
+        player->SetTargetPlayers(rawPlayers);
+    }
 }
 //動作関数
 void CPlayerManager::Update()

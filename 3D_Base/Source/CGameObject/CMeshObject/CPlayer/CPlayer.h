@@ -58,16 +58,16 @@ public:
 	int  GetPoint();
 	//ライフを取得
 	int  GetLife() { return m_Life; }
-	//COMかどうか
-	void SetCOM(bool com) { m_COM = com; }
 	//クールタイム中のフラグを取得
 	std::unordered_map<std::string, bool> GetCoolFlag() const;
+	// 他のプレイヤーリストを設定・参照するための関数を追加
+	void SetTargetPlayers(const std::vector<CPlayer*>& players) { m_pOtherPlayers = players; }
 protected:
 	//当たり判定
 	void OnCollision(
 		CollisionBase* pCollider) override;
 	//コントローラー操作
-	void Controller();
+	virtual void Controller();
 	//攻撃回数の制限
 	bool AttackLimit(const std::string& name);
 	//クールタイムの更新
@@ -77,10 +77,10 @@ protected:
 protected:  
 	int         m_Life;			//ライフの数
 	int			m_Point;		//スコアに追加するポイント
-	bool		m_COM;			//コンピューターかどうかを判別
-
 	enMoveState	m_MoveState;	//移動状態
 	std::shared_ptr<CReaction>	m_pReaction;	//リアクション
 	std::unordered_map<std::string, AttackData> m_AttackData;
 	std::unordered_map<std::string, ::EsHandle> m_Effect;
+
+	std::vector<CPlayer*> m_pOtherPlayers; // 参照用他プレイヤーリスト
 };

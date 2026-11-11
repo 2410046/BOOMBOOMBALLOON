@@ -32,7 +32,7 @@ CPlayer::CPlayer()
 	, m_Life			( 3 )
 	, m_Point			( 0 )
 	, m_AttackData		( )
-	, m_COM				( false )
+	, m_Effect			()
 {	
 	//カプセルの当たり判定
 	m_pCollider = CreateCollider::CreateCaupsule(
@@ -40,11 +40,10 @@ CPlayer::CPlayer()
 	m_vQuaternion
 		= D3DXQUATERNION(0.0f, 0.7071068f, 0.0f, 0.7071068f);
 	m_angle = 0.f;
-	m_Count = 50.f;
-
 	//攻撃制限数を設定
 	m_AttackData["Shot"] = { Max_Shot,Max_Shot, 180.0f,0.f};
-	m_AttackData["Boost"] = { Max_Boost,Max_Boost, 50.0f,0.f };
+	m_AttackData["Boost"] = { Max_Boost,Max_Boost, 150.0f,0.f };
+	m_AttackData["Invincible"] = { Max_Boost,Max_Boost, 150.0f,0.f };
 }
 //デストラクタ
 CPlayer::~CPlayer()
@@ -54,10 +53,12 @@ CPlayer::~CPlayer()
 //動作関数
 void CPlayer::Update()
 {
+
 	//クールタイム
 	UpdateCoolTime();
 	//移動制限
 	UpdateMoveLimit();
+
 	switch (m_MoveState)
 	{
 
@@ -75,28 +76,26 @@ void CPlayer::Update()
 	break;
 	case enMoveState::Live:
 		CCharacter::UpDown();
-		//if (m_COM)
-		//{
-		//	m_vPosition.x += 0.1f;
-		//}
-		//else
-		//{
-			Controller();
-		//}
+		//コントローラー操作
+		Controller();
 		break;
 	case enMoveState::Boost:		//ブースト状態
 	{
-		//プレイヤーの方向にまっすぐ進む
 		CReaction::ReactionParam param;
 		param.rot = m_vQuaternion;
 		param.power = 2.f;
+
 		m_pReaction = CReactionFactory::Create(CReaction::Boost);
 		m_pReaction->Apply(param);
 
 		const auto& effect = s_IDTable[m_ID];
-		//エフェクト出現
-		m_Effect["Boost"] = CreateEffect(effect.BoostEffect, m_vPosition,
-			m_vQuaternion);
+
+		m_Effect["Boost"] = CreateEffect(
+			effect.BoostEffect,
+			m_vPosition,
+			m_vQuaternion,
+			0.5f,
+			1.f);
 
 		m_MoveState = enMoveState::Live;
 	}
@@ -134,11 +133,16 @@ void CPlayer::Update()
 		if (CCharacter::Turn())
 		{
 			m_angle = 0.f;
-           //コントローラー操作
-		    Controller();
-			CCharacter::UpDown();
-			//無敵時間開始
-			m_MoveState = enMoveState::Live;
+			//コントローラー操作
+			//Controller();
+			//CCharacter::UpDown();
+			m_pMesh->SetDiffuse(D3DXVECTOR4(0.4f, 0.8f, 1, 1));
+			//tennmetu
+			if (AttackLimit("Invincible"))
+			{
+				//無敵時間開始
+				//m_MoveState = enMoveState::Live;
+			}	
 		}
 		break;
 	case enMoveState::Dead://死亡状態
@@ -155,7 +159,6 @@ void CPlayer::Update()
 	default:
 		break;
 	}
-	
 	//ノックバック中
 		if (m_pReaction)
 		{
@@ -164,18 +167,12 @@ void CPlayer::Update()
 			m_pReaction->Update();
 		}
 
-		D3DXVECTOR3 axis(0.f, 1.f, 0.f);
-		D3DXQUATERNION rot180;
-		D3DXQUATERNION backRot;
-
-		// Y軸180度回転
-		D3DXQuaternionRotationAxis(&rot180, &axis, D3DX_PI);
-
-		// 現在の向きに180度回転を加える
-		D3DXQuaternionMultiply(&backRot, &m_vQuaternion, &rot180);
-
-		//ブーストエフェクトの更新
-		EffectUpdate(m_Effect["Boost"], m_vPosition, backRot);
+		if (m_pReaction &&
+			m_pReaction->Play(CReaction::Boost))
+		{
+			EffectUpdateY(
+				m_Effect["Boost"], m_vPosition, m_vQuaternion);
+		}
 		CCharacter::Update();
 }
 //描画関数
@@ -201,12 +198,11 @@ void CPlayer::Controller()
 {
 #if 1
 	//無敵状態と生存状態以外の場合
-	//if (m_MoveState != enMoveState::Live 
-	//	&& m_MoveState != enMoveState::Invincible)
-	//{
-	//	return;
-	//}
-	m_Count++;
+	if (m_MoveState != enMoveState::Live 
+/*		&& m_AttackData["Invincible"].isCoolTime*/)
+	{
+		return;
+	}
 	//キーボード
 	float moveX = 0.0f;
 	float moveZ = 0.0f;
@@ -218,8 +214,7 @@ void CPlayer::Controller()
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000) moveX -= 1.0f;
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000) moveX += 1.0f;
 
-		if (GetAsyncKeyState('Z') & 0x8000 
-/*			&& std::fmod(m_Count, 10.0f) == 0.0f*/)
+		if (GetAsyncKeyState('Z') & 0x8000)
 		{
 			// アニメーション中でなければ再生
 			if (m_pReaction &&
@@ -231,7 +226,6 @@ void CPlayer::Controller()
 			{
 				CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");
 				m_MoveState = enMoveState::Boost;
-				m_Count = 0.f;
 			}
 		}
 		if ((GetAsyncKeyState('X') & 0x8000))
@@ -248,29 +242,6 @@ void CPlayer::Controller()
 				m_MoveState = enMoveState::Shot;
 			}
 		}
-		break;
-	case 1:
-		if (GetAsyncKeyState('W') & 0x8000) moveZ += 1.0f;
-		if (GetAsyncKeyState('S') & 0x8000) moveZ -= 1.0f;
-		if (GetAsyncKeyState('A') & 0x8000) moveX -= 1.0f;
-		if (GetAsyncKeyState('D') & 0x8000) moveX += 1.0f;
-
-		if (GetAsyncKeyState('1') & 0x8000) m_MoveState = enMoveState::Boost;
-
-		if (GetAsyncKeyState('2') & 0x8000)
-		{
-			// アニメーション中でなければ再生
-			if (m_pReaction &&
-				m_pReaction->Play(CReaction::Firing))
-			{
-				return;
-			}
-
-			m_MoveState = enMoveState::Shot;
-			m_Count = 0.0f;
-		}
-		break;
-	default:
 		break;
 	}
 
@@ -376,7 +347,6 @@ void CPlayer::UpdateCoolTime()
 {
 	for (auto& data : m_AttackData)
 	{
-
 		// 回数が0ならクールタイム中
 		if (!data.second.isCoolTime)
 		{
@@ -415,9 +385,8 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		auto* other = dynamic_cast<CPlayer*>(pCollider->GetListener());
 		if (!other || other == this)
 			return;
-		//ダウン状態は無視
-		if (other->m_MoveState == enMoveState::Down
-			|| other->m_MoveState == enMoveState::Invincible)
+		//生存状態以外は無視
+		if (other->m_MoveState != enMoveState::Live)
 		{
 			return;
 		}
@@ -470,8 +439,8 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 	case CollisionBase::Shot://ショットに当たった瞬間
 	{
 		//ダウン状態は無視
-		if (m_MoveState == enMoveState::Down
-			||m_MoveState == enMoveState::Invincible)
+		//生存状態以外は無視
+		if (m_MoveState != enMoveState::Live)
 		{
 			return;
 		}
