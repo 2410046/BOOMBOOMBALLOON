@@ -25,7 +25,7 @@ inline void EffectUpdate(
     ::EsHandle m_Effect, const D3DXVECTOR3& position, const D3DXQUATERNION& Quaternion)
 {
     CEffect::SetLocation(m_Effect, position);
-    CEffect::SetQuaternion(m_Effect, Quaternion);
+    CEffect::SetQuaternion(m_Effect, Quaternion );
 }
 
 //エフェクトの終了

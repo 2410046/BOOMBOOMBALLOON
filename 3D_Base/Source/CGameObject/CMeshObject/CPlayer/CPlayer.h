@@ -74,9 +74,7 @@ protected:
 	void UpdateCoolTime();
 	//移動制限
 	void UpdateMoveLimit();
-protected:
-	::EsHandle     m_Effect;	    //エフェクトハンドル
-
+protected:  
 	int         m_Life;			//ライフの数
 	int			m_Point;		//スコアに追加するポイント
 	bool		m_COM;			//コンピューターかどうかを判別
@@ -84,4 +82,5 @@ protected:
 	enMoveState	m_MoveState;	//移動状態
 	std::shared_ptr<CReaction>	m_pReaction;	//リアクション
 	std::unordered_map<std::string, AttackData> m_AttackData;
+	std::unordered_map<std::string, ::EsHandle> m_Effect;
 };
