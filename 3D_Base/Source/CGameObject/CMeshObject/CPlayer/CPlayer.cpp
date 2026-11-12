@@ -43,7 +43,7 @@ CPlayer::CPlayer()
 	//攻撃制限数を設定
 	m_AttackData["Shot"] = { Max_Shot,Max_Shot, 180.0f,0.f};
 	m_AttackData["Boost"] = { Max_Boost,Max_Boost, 150.0f,0.f };
-	m_AttackData["Invincible"] = { Max_Boost,Max_Boost, 150.0f,0.f };
+	m_AttackData["Invincible"] = { Max_Boost,Max_Boost, 150.0f, 0.f };
 }
 //デストラクタ
 CPlayer::~CPlayer()
@@ -74,11 +74,6 @@ void CPlayer::Update()
 		m_vScale = D3DXVECTOR3(m_Scale, m_Scale, m_Scale);
 	}
 	break;
-	case enMoveState::Live:
-		CCharacter::UpDown();
-		//コントローラー操作
-		Controller();
-		break;
 	case enMoveState::Boost:		//ブースト状態
 	{
 		CReaction::ReactionParam param;
@@ -125,24 +120,28 @@ void CPlayer::Update()
 		}
 		else
 		{
-			m_MoveState = enMoveState::Invincible;
+			m_MoveState = enMoveState::Turn;
 		}
 	}
 		break;
-	case enMoveState::Invincible://無敵状態
-		if (CCharacter::Turn())
+	case enMoveState::Turn://回転状態
+		if (CCharacter::TurnUpdate())
 		{
 			m_angle = 0.f;
-			//コントローラー操作
-			//Controller();
-			//CCharacter::UpDown();
-			m_pMesh->SetDiffuse(D3DXVECTOR4(0.4f, 0.8f, 1, 1));
-			//tennmetu
-			if (AttackLimit("Invincible"))
-			{
-				//無敵時間開始
-				//m_MoveState = enMoveState::Live;
-			}	
+			LimitCoolTime("Invincible");
+			m_MoveState = enMoveState::Invincible;
+		}
+		break;
+	case enMoveState::Invincible://無敵状態
+		m_vScale = D3DXVECTOR3(0.03f, 0.03f, 0.03f);
+		// クールタイムが終了したら無敵解除
+		if (!m_AttackData["Invincible"].isCoolTime)
+		{
+			m_vScale = D3DXVECTOR3(
+				Base_Size,
+				Base_Size,
+				Base_Size);
+			m_MoveState = enMoveState::Live;
 		}
 		break;
 	case enMoveState::Dead://死亡状態
@@ -159,6 +158,9 @@ void CPlayer::Update()
 	default:
 		break;
 	}
+
+	//コントローラー操作
+	Controller();
 	//ノックバック中
 		if (m_pReaction)
 		{
@@ -173,6 +175,7 @@ void CPlayer::Update()
 			EffectUpdateY(
 				m_Effect["Boost"], m_vPosition, m_vQuaternion);
 		}
+
 		CCharacter::Update();
 }
 //描画関数
@@ -199,7 +202,7 @@ void CPlayer::Controller()
 #if 1
 	//無敵状態と生存状態以外の場合
 	if (m_MoveState != enMoveState::Live 
-/*		&& m_AttackData["Invincible"].isCoolTime*/)
+		&& m_MoveState != enMoveState::Invincible)
 	{
 		return;
 	}
@@ -222,7 +225,7 @@ void CPlayer::Controller()
 			{
 				return;
 			}
-			if (AttackLimit("Boost"))
+			if (LimitCoolTime("Boost"))
 			{
 				CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");
 				m_MoveState = enMoveState::Boost;
@@ -236,7 +239,8 @@ void CPlayer::Controller()
 			{
 				return;
 			}
-			if (AttackLimit("Shot"))
+
+			if (LimitCoolTime("Shot"))
 			{
 				CSoundManager::GetInstance()->PlaySE(L"SE\\Shot");
 				m_MoveState = enMoveState::Shot;
@@ -258,6 +262,7 @@ void CPlayer::Controller()
 		CCharacter::Quotanion(moveDir);
 		//nanamehayasi
 	}
+	m_vPosition.y = 1.f;
 #else
 	//ダイレクト操作
 	CXInput* pPad = CXInput::GetInstance(m_ID); // 1Pコントローラー
@@ -303,21 +308,21 @@ void CPlayer::Controller()
 }
 
 //攻撃回数の制限
-bool CPlayer::AttackLimit(const std::string& name)
+bool CPlayer::LimitCoolTime(const std::string& name)
 {
 	auto& data = m_AttackData.at(name);
 
 	// 使用不可
-	if (data.isCoolTime || data.count <= 0)
+	if (data.isCoolTime && data.count <= 0)
 	{
 		return false;
 	}
-	// 攻撃回数を減らす
+
+	// 回数を減らす
 	// 回数が0になったらクールタイム開始
 	if (delta_clamp(
 		data.count -= 1, data.maxcount))
 	{
-		data.coolTimer = data.coolTime;
 		data.isCoolTime = true;
 	}
 
@@ -352,9 +357,10 @@ void CPlayer::UpdateCoolTime()
 		{
 			continue;
 		}
+
 		// クールタイム終了
 		if (delta_clamp(
-			data.second.coolTimer-= 1.f, data.second.coolTime))
+			data.second.coolTimer += 1.f, data.second.coolTime))
 		{
 			data.second.coolTimer = 0.0f;
 			data.second.count = data.second.maxcount;
@@ -386,7 +392,8 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		if (!other || other == this)
 			return;
 		//生存状態以外は無視
-		if (other->m_MoveState != enMoveState::Live)
+		if (other->m_MoveState != enMoveState::Live
+			|| m_MoveState != enMoveState::Live)
 		{
 			return;
 		}

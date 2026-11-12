@@ -17,7 +17,7 @@ CCharacter::~CCharacter()
 
 void CCharacter::Update()
 {
-
+	//m_vPosition.y = 1.f;
 	CStaticMeshObject::Update();
 }
 
@@ -34,26 +34,36 @@ void CCharacter::UpDown()
 	m_vPosition.y = 1.f + (float)(sin(t) * 0.3f);
 }
 //回転
-bool CCharacter::Turn(float Speed,float Max,bool Loop)
+bool CCharacter::TurnUpdate(float Speed,float Max,bool Loop)
 {
 	if (m_angle >= Max)
 	{
-		m_angle = Max;
 		if (Loop)
 		{
-			m_angle = 0;
+			m_angle = 0.f;
 		}
-		return true;
+		else
+		{
+			m_angle = Max;
+		}
 	}
+	else
+	{
+		m_angle += Speed;
 
-	m_angle += Speed; // 回転速度
+		if (m_angle > Max)
+		{
+			m_angle = Max;
+		}
+	}
 
 	D3DXQuaternionRotationYawPitchRoll(
 		&m_vQuaternion,
 		m_angle,
-		0.0f,
-		0.0f);
-	return false;
+		0.f,
+		0.f);
+
+	return (m_angle >= Max);
 }
 
 //クオータニオン対応

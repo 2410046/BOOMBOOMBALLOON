@@ -160,7 +160,7 @@ void CGame::Sky()
 	constexpr float XSpeed = 0.01f;
 	constexpr float MaxAngle = D3DX_PI / 2.0f;
 
-	m_pSky->Turn(XSpeed, MaxAngle);
+	m_pSky->TurnUpdate(XSpeed, MaxAngle);
 }
 
 //シーン遷移

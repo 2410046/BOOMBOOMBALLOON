@@ -25,7 +25,7 @@ public:
 	//オブジェクトを上下させる
 	void UpDown();
 	//オブジェクトを回転
-	bool Turn(float Speed = 0.1f,float Max = D3DX_PI * 2.0f,bool Loop=false);
+	bool TurnUpdate(float Speed = 0.1f,float Max = D3DX_PI * 2.0f,bool Loop=false);
 protected:
     //クオータニオン対応
     void Quotanion(D3DXVECTOR3 moveDir);

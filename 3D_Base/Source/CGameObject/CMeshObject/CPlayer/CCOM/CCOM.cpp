@@ -102,14 +102,14 @@ void CCom::Controller()
 		moveDir = toTarget;
 
 		// 近距離かつ正面方向であればブースト攻撃
-		if (distance < 4.0f && AttackLimit("Boost"))
+		if (distance < 4.0f && LimitCoolTime("Boost"))
 		{
 			CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");
 			m_MoveState = enMoveState::Boost;
 			return;
 		}
 		// 中距離であればショット攻撃
-		else if (distance < 17.0f && AttackLimit("Shot"))
+		else if (distance < 17.0f && LimitCoolTime("Shot"))
 		{
 			// ブースト発動中でなければショット
 			if (!m_pReaction || !m_pReaction->Play(CReaction::Firing))

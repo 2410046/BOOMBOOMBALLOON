@@ -211,7 +211,7 @@ void CSelect::PlayerActive()
 			// 該当するプレイヤーの表示パターンを変更
 			// i + 1 はプレイヤー番号（P1～P4）
 			m_pActive[i]->SetPatternNo(0, i + 1);
-			 m_pPlayer[i]->Turn(true);
+			 m_pPlayer[i]->TurnUpdate(true);
 		}
 		else
 		{

@@ -19,6 +19,7 @@ public:
 		Boost,			// ブースト状態
 		Shot,			// 射撃状態
 		Down,			// ダウン状態
+		Turn,			// 回転状態
 		Invincible,	    // 無敵状態
 		Dead,	        // 死亡状態
 	};
@@ -30,15 +31,6 @@ public:
 		float coolTime = 180.0f;
 		float coolTimer = 0.0f;
 		bool isCoolTime = false;
-	};
-
-	// COMの行動状態
-	enum class enCOMState
-	{
-		Chase,      // 接近
-		KeepDist,   // 距離を保つ
-		Attack,     // 攻撃
-		Avoid       // 回避
 	};
 
 public:
@@ -69,7 +61,7 @@ protected:
 	//コントローラー操作
 	virtual void Controller();
 	//攻撃回数の制限
-	bool AttackLimit(const std::string& name);
+	bool LimitCoolTime(const std::string& name);
 	//クールタイムの更新
 	void UpdateCoolTime();
 	//移動制限
@@ -79,6 +71,7 @@ protected:
 	int			m_Point;		//スコアに追加するポイント
 	enMoveState	m_MoveState;	//移動状態
 	std::shared_ptr<CReaction>	m_pReaction;	//リアクション
+
 	std::unordered_map<std::string, AttackData> m_AttackData;
 	std::unordered_map<std::string, ::EsHandle> m_Effect;
 

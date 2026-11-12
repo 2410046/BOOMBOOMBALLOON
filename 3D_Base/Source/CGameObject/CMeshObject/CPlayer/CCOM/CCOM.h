@@ -9,6 +9,16 @@ public:
     virtual ~CCom() override = default;
 
 protected:
+
+    // COMの行動状態
+    enum class enCOMState
+    {
+        Chase,      // 接近
+        KeepDist,   // 距離を保つ
+        Attack,     // 攻撃
+        Avoid       // 回避
+    };
+
     // 人間操作の代わりにAI思考による操作を実行
     virtual void Controller()override;
 

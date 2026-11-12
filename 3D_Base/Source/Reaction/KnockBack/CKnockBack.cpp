@@ -8,7 +8,7 @@ void CKnockBack::Apply(
      const ReactionParam& param)
 {
     D3DXVECTOR3 dir = param.to - param.from;
-
+   
     float len = D3DXVec3Length(&dir);
     if (len <= 0.0001f)
         return;
