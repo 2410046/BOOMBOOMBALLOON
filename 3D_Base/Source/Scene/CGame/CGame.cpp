@@ -1,6 +1,8 @@
 ﻿#include "CGame.h"
 #include "CGameObject/CUIObject/CTime/CTime.h"		//タイムクラス
 #include "Scene/SelectText/CSelectText.h"               //選択肢の関数
+#include "MathUtility.h"
+
 #include "Collision/CollisionManager/CollisionManager.h"
 #include "CMeshObject/CTracking/CTrackingManager/CTrackingManager.h"
 #include "Reaction/ReactionManager.h"
@@ -13,6 +15,8 @@ namespace
 		= D3DXVECTOR3(0.0f, 12.5f, -4.f);	//カメラ座標
 	static const D3DXVECTOR3 Time_Pos
 		= D3DXVECTOR3(630.f, 10.f, 0.f);		//タイムUI座標
+	static const D3DXVECTOR3 Massage_Pos
+		= D3DXVECTOR3(340.f, 210.f, 0.f);		//メッセージ座標
 	static const D3DXVECTOR3 Look_Pos   
 		= D3DXVECTOR3(0.0f, 2.0f, 10.0f);	//カメラの方向座標
 	static const D3DXVECTOR3 Light_Pos  
@@ -24,6 +28,8 @@ namespace
 //コンストラクタ.
 CGame::CGame()
 	: CScene				()
+	, m_scale				(0.f)
+	, m_Massage				(enMassage::Ready)
 {
 	//BGM設定
 	m_BGM = L"BGM\\MouningGame";
@@ -45,7 +51,7 @@ void CGame::Create()
 	//時計のUIのインスタンス生成
 	m_pTimeUI   = std::make_unique<CUIObject>();
 	//カウントダウンUI
-	m_pCountdown = std::make_unique<CUIObject>();
+	m_pMessage = std::make_unique<CUIObject>();
 	//初期化
 	CollisionManager::GetInstance()->Init();
 	CReactionManager::GetInstance()->Init();
@@ -74,10 +80,10 @@ HRESULT CGame::LoadData()
 	m_pTimeUI->SetPosition(Time_Pos);
 	m_pTimeUI->SetScale(0.7f);
 
-	m_pCountdown->AttachSprite(
-		*AssetManager::GetSprite2D(L"Number"));
-	m_pCountdown->SetPosition(Time_Pos);
-	//m_pCountdown->SetScale(1.7f);
+	m_pMessage->AttachSprite(
+		*AssetManager::GetSprite2D(L"Massage"));
+	m_pMessage->SetPosition(Massage_Pos);
+	m_pMessage->SetScale(0.f);
 
 	//プレイヤーの生成
 	m_pPlayer.NewPlayer();
@@ -105,6 +111,27 @@ void CGame::Release()
 //動作関数
 void CGame::Update()
 {
+	switch (m_Massage)
+	{
+	case CGame::Ready:
+		if (delta_clamp(m_scale += 0.01f, 1.f))
+		{
+			//数秒貯めた後TAKEOFF
+			m_pMessage->SetPatternNo(0, 1);
+		}
+		m_pMessage->SetScale(m_scale);
+		break;
+	case CGame::Main:
+
+
+		break;
+	case CGame::Finish:
+		break;
+	default:
+		break;
+	}
+
+
 	CTime::GetInstance()->Update();
 	m_pPlayer.Update();
 	m_Shot.Update(m_pPlayer.GetShots());
@@ -144,7 +171,7 @@ void CGame::Draw()
 	m_pTimeUI->Draw();
 
 	CDirectX11::GetInstance()->SetDepth(false);
-	m_pCountdown->Draw();
+	m_pMessage->Draw();
 	CTime::GetInstance()->Draw();
 	CDirectX11::GetInstance()->SetDepth(true);
 

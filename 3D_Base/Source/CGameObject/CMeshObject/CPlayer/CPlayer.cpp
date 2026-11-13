@@ -31,7 +31,7 @@ CPlayer::CPlayer()
 	: m_MoveState		( enMoveState::App )
 	, m_Life			( 3 )
 	, m_Point			( 0 )
-	, m_AttackData		( )
+	, m_CoolData		( )
 	, m_Effect			()
 {	
 	//カプセルの当たり判定
@@ -41,9 +41,9 @@ CPlayer::CPlayer()
 		= D3DXQUATERNION(0.0f, 0.7071068f, 0.0f, 0.7071068f);
 	m_angle = 0.f;
 	//攻撃制限数を設定
-	m_AttackData["Shot"] = { Max_Shot,Max_Shot, 180.0f,0.f};
-	m_AttackData["Boost"] = { Max_Boost,Max_Boost, 150.0f,0.f };
-	m_AttackData["Invincible"] = { Max_Boost,Max_Boost, 150.0f, 0.f };
+	m_CoolData["Shot"] = { Max_Shot,Max_Shot, 180.0f,0.f};
+	m_CoolData["Boost"] = { Max_Boost,Max_Boost, 150.0f,0.f };
+	m_CoolData["Invincible"] = { Max_Boost,Max_Boost, 150.0f, 0.f };
 }
 //デストラクタ
 CPlayer::~CPlayer()
@@ -129,18 +129,6 @@ void CPlayer::Update()
 		{
 			m_angle = 0.f;
 			LimitCoolTime("Invincible");
-			m_MoveState = enMoveState::Invincible;
-		}
-		break;
-	case enMoveState::Invincible://無敵状態
-		m_vScale = D3DXVECTOR3(0.03f, 0.03f, 0.03f);
-		// クールタイムが終了したら無敵解除
-		if (!m_AttackData["Invincible"].isCoolTime)
-		{
-			m_vScale = D3DXVECTOR3(
-				Base_Size,
-				Base_Size,
-				Base_Size);
 			m_MoveState = enMoveState::Live;
 		}
 		break;
@@ -169,6 +157,8 @@ void CPlayer::Update()
 			m_pReaction->Update();
 		}
 
+
+
 		if (m_pReaction &&
 			m_pReaction->Play(CReaction::Boost))
 		{
@@ -182,9 +172,21 @@ void CPlayer::Update()
 void CPlayer::Draw(
 	const CCamera* pCamera)
 {
-	const auto& param = s_IDTable[m_ID];
-	//色の設定
-	m_pMesh->SetDiffuse(param.Color);
+
+	//無敵時間中
+	if (m_CoolData["Invincible"].isCoolTime)
+	{
+		UpDown(m_Count);
+		m_pMesh->SetDiffuse(
+			D3DXVECTOR4(m_Count, m_Count, m_Count, m_Count));
+	}
+	else
+	{
+		const auto& param = s_IDTable[m_ID];
+		//色の設定
+		m_pMesh->SetDiffuse(param.Color);
+	}
+
 	//m_pMesh->SetAmbient(param.Color);
 	CCharacter::Draw(pCamera);
 }
@@ -201,8 +203,7 @@ void CPlayer::Controller()
 {
 #if 1
 	//無敵状態と生存状態以外の場合
-	if (m_MoveState != enMoveState::Live 
-		&& m_MoveState != enMoveState::Invincible)
+	if (m_MoveState != enMoveState::Live )
 	{
 		return;
 	}
@@ -310,7 +311,7 @@ void CPlayer::Controller()
 //攻撃回数の制限
 bool CPlayer::LimitCoolTime(const std::string& name)
 {
-	auto& data = m_AttackData.at(name);
+	auto& data = m_CoolData.at(name);
 
 	// 使用不可
 	if (data.isCoolTime && data.count <= 0)
@@ -320,9 +321,13 @@ bool CPlayer::LimitCoolTime(const std::string& name)
 
 	// 回数を減らす
 	// 回数が0になったらクールタイム開始
-	if (delta_clamp(
-		data.count -= 1, data.maxcount))
+// 回数を減らす
+	data.count -= 1;
+
+	// 回数が0以下になったらクールタイム開始
+	if (data.count <= 0)
 	{
+		data.count = 0;
 		data.isCoolTime = true;
 	}
 
@@ -350,7 +355,7 @@ void CPlayer::UpdateMoveLimit()
 //クールタイム
 void CPlayer::UpdateCoolTime()
 {
-	for (auto& data : m_AttackData)
+	for (auto& data : m_CoolData)
 	{
 		// 回数が0ならクールタイム中
 		if (!data.second.isCoolTime)
@@ -373,7 +378,7 @@ std::unordered_map<std::string, bool> CPlayer::GetCoolFlag() const
 {
 	std::unordered_map<std::string, bool> data;
 
-	for (const auto& attack : m_AttackData)
+	for (const auto& attack : m_CoolData)
 	{
 		data[attack.first] = attack.second.isCoolTime;
 	}
@@ -391,9 +396,9 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		auto* other = dynamic_cast<CPlayer*>(pCollider->GetListener());
 		if (!other || other == this)
 			return;
-		//生存状態以外は無視
-		if (other->m_MoveState != enMoveState::Live
-			|| m_MoveState != enMoveState::Live)
+
+		if (m_MoveState != enMoveState::Live
+			|| other->m_MoveState != enMoveState::Live)
 		{
 			return;
 		}
@@ -402,6 +407,12 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		//ブースト状態
 		if (m_pReaction&&m_pReaction->Play(CReaction::Boost))
 		{
+			//生存状態以外・無敵中は無視
+			if ( other->m_CoolData["Invincible"].isCoolTime)
+			{
+				return;
+			}
+
 			CSoundManager::GetInstance()->PlaySE(L"SE\\PlayerHit");
 			m_Point = 20;
     		m_pReaction->Stop();//リアクションを終わらせる
@@ -409,6 +420,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 			m_Life = std::clamp(m_Life + 1, 0, 5);
 			//相手のプレイヤーをダウンx状態に
 			other->m_MoveState = enMoveState::Down;
+			OutputDebugStringA("ヒットだよん");
 		}
 		else//お互いブーストじゃない場合		
 		{
@@ -445,9 +457,9 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 
 	case CollisionBase::Shot://ショットに当たった瞬間
 	{
-		//ダウン状態は無視
-		//生存状態以外は無視
-		if (m_MoveState != enMoveState::Live)
+	//生存状態以外・無敵中は無視
+		if (m_MoveState != enMoveState::Live
+			|| m_CoolData["Invincible"].isCoolTime)
 		{
 			return;
 		}

@@ -78,7 +78,7 @@ void CBalloon::Update()
 	{
 		m_MoveState = enMoveState::App;
 	}
-CCharacter::UpDown();
+    CCharacter::UpDown(m_vPosition.y);
 }
 //描画関数
 void CBalloon::Draw(const CCamera* pCamera)

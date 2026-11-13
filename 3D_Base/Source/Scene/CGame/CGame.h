@@ -35,10 +35,17 @@ private:
 	//シーン遷移関数
 	void Next();
 private:
-
+	//メッセージアニメーション
+	enum enMassage
+	{
+		Ready,
+		Main,
+		Finish
+	};
+private:
 	std::unique_ptr<CCharacter>		           m_pSky;		   //スカイクラス
 	std::unique_ptr<CUIObject>		           m_pTimeUI;	   //時計クラス
-	std::unique_ptr<CUIObject>		           m_pCountdown;   //カウントダウンクラス
+	std::unique_ptr<CUIObject>		           m_pMessage;   //カウントダウンクラス
 
 	CCloudManager	m_pCloud;	        //雲
 	CPlayerManager  m_pPlayer;	        //プレイヤー
@@ -49,4 +56,6 @@ private:
 private:
 	int   m_PadButton[2] = { -1, -1 }; // コントローラーが押しているボタン(0:Pad0, 1:Pad1)
 	float m_angle = -1.59f;
+	float m_scale;
+	enMassage m_Massage;
 };

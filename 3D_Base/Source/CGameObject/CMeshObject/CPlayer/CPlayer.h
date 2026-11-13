@@ -20,11 +20,10 @@ public:
 		Shot,			// 射撃状態
 		Down,			// ダウン状態
 		Turn,			// 回転状態
-		Invincible,	    // 無敵状態
 		Dead,	        // 死亡状態
 	};
 
-	struct AttackData
+	struct CoolData
 	{
 		int count = 0;
 		int maxcount = 0;
@@ -72,7 +71,7 @@ protected:
 	enMoveState	m_MoveState;	//移動状態
 	std::shared_ptr<CReaction>	m_pReaction;	//リアクション
 
-	std::unordered_map<std::string, AttackData> m_AttackData;
+	std::unordered_map<std::string, CoolData> m_CoolData;
 	std::unordered_map<std::string, ::EsHandle> m_Effect;
 
 	std::vector<CPlayer*> m_pOtherPlayers; // 参照用他プレイヤーリスト

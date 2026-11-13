@@ -77,7 +77,9 @@ HRESULT CSpriteManager::CreateSprite2D()
     CSprite2D::SPRITE_STATE SSTime    = { 121.f, 145.f , 451.f, 575.f, 451.f, 575.f };
     CSprite2D::SPRITE_STATE SSArrow   = { 62.f, 252.f,62.f, 252.f, 62.f, 252.f };
 
-    CSprite2D::SPRITE_STATE SSUser   = { 30.f, 30.f,500.f, 250.f, 250.f, 250.f };
+    CSprite2D::SPRITE_STATE SSUser = { 30.f, 30.f,500.f, 250.f, 250.f, 250.f };
+    CSprite2D::SPRITE_STATE SSDisplay = { 774.f, 241.f,774.f, 724.f, 774.f, 241.f };
+    CSprite2D::SPRITE_STATE SSMassage   = { 774.f, 241.f,1046.f, 950.f, 1046.f, 303.f };
 
     // スプライトのデータリスト
     Sprite2DData DataList[] =
@@ -91,6 +93,8 @@ HRESULT CSpriteManager::CreateSprite2D()
         { L"Time",            SSTime },
         { L"TimeArrow",       SSArrow },
         { L"AttackUser",      SSUser },
+        { L"DisplayText",     SSDisplay },
+        { L"Massage",     SSMassage },
         
     };
     // データを登録

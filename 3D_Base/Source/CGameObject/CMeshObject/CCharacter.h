@@ -23,7 +23,7 @@ public:
 	//IDの設定
 	void SetID(int id) { m_ID = id; }
 	//オブジェクトを上下させる
-	void UpDown();
+	void UpDown(float& pos);
 	//オブジェクトを回転
 	bool TurnUpdate(float Speed = 0.1f,float Max = D3DX_PI * 2.0f,bool Loop=false);
 protected:

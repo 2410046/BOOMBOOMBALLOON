@@ -218,8 +218,9 @@ void CSelect::PlayerActive()
 			//回転
 			// 接続されていないプレイヤーをCOM
 			m_pActive[i]->SetPatternNo(0, 0);
+			float posY = m_pPlayer[i]->GetPosition().y;
 			//プレイヤーを動かす
-            m_pPlayer[i]->UpDown();
+            m_pPlayer[i]->UpDown(posY);
 		}
 
 	}

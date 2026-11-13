@@ -17,7 +17,7 @@ CCharacter::~CCharacter()
 
 void CCharacter::Update()
 {
-	//m_vPosition.y = 1.f;
+	m_vPosition.y = 1.f;
 	CStaticMeshObject::Update();
 }
 
@@ -26,12 +26,12 @@ void CCharacter::Draw(const CCamera*pCamera)
 	CStaticMeshObject::Draw(pCamera);
 }
 //オブジェクトを上下させる
-void CCharacter::UpDown()
+void CCharacter::UpDown(float& pos)
 {
 	// 時間を進める
 	t += Speed;
 	// 上下にふわふわ動く
-	m_vPosition.y = 1.f + (float)(sin(t) * 0.3f);
+	pos = 1.f + (float)(sin(t) * 0.3f);
 }
 //回転
 bool CCharacter::TurnUpdate(float Speed,float Max,bool Loop)

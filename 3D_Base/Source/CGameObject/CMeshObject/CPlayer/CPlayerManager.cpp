@@ -39,13 +39,13 @@ void CPlayerManager::NewPlayer()
          std::unique_ptr<CPlayer> player = nullptr;
 
 
-         if (i < padCount)
+        // if (i < padCount)
          {
              player = std::make_unique<CPlayer>();
          }
-         else
+         //else
          {
-             player = std::make_unique<CCom>();
+             //player = std::make_unique<CCom>();
          }
 
          //メッシュの接続

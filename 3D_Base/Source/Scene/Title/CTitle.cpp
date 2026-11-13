@@ -182,6 +182,7 @@ void CTitle::Sky()
 		0.f,
 		0.0f);
 	m_pSky->SetQuaternion(Quaternion);
-	m_pSky->UpDown();
-	//m_pSky->Turn(XSpeed, MaxAngle);
+	float posY = m_pSky->GetPosition().y;
+	//プレイヤーを動かす
+	m_pSky->UpDown(posY);
 }

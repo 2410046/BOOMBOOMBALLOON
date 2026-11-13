@@ -35,7 +35,7 @@ CPlayer* CCom::GetNearestTarget()
 void CCom::Controller()
 {
 	// 生存状態または無敵状態以外は操作不能
-	if (m_MoveState != enMoveState::Live && m_MoveState != enMoveState::Invincible)
+	if (m_MoveState != enMoveState::Live)
 	{
 		return;
 	}
