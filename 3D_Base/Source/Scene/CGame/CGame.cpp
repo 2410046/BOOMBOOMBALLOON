@@ -16,7 +16,7 @@ namespace
 	static const D3DXVECTOR3 Time_Pos
 		= D3DXVECTOR3(630.f, 10.f, 0.f);		//タイムUI座標
 	static const D3DXVECTOR3 Massage_Pos
-		= D3DXVECTOR3(340.f, 210.f, 0.f);		//メッセージ座標
+		= D3DXVECTOR3(280.f, 210.f, 0.f);		//メッセージ座標
 	static const D3DXVECTOR3 Look_Pos   
 		= D3DXVECTOR3(0.0f, 2.0f, 10.0f);	//カメラの方向座標
 	static const D3DXVECTOR3 Light_Pos  
@@ -83,7 +83,7 @@ HRESULT CGame::LoadData()
 	m_pMessage->AttachSprite(
 		*AssetManager::GetSprite2D(L"Massage"));
 	m_pMessage->SetPosition(Massage_Pos);
-	m_pMessage->SetScale(0.f);
+	m_pMessage->SetScale(1.f);
 
 	//プレイヤーの生成
 	m_pPlayer.NewPlayer();
@@ -113,38 +113,68 @@ void CGame::Update()
 {
 	switch (m_Massage)
 	{
-	case CGame::Ready:
-		if (delta_clamp(m_scale += 0.01f, 1.f))
+		case CGame::Ready:
+			if (m_pPlayer.Spawn())
+			{
+				//TAKEOFF
+				m_pMessage->SetPatternNo(0, 1);
+				if (delta_clamp(m_scale += 0.1f, 1.7f))
+				{
+					//メインに移行
+					m_Massage = enMassage::Main;
+					m_scale = 0.f;
+				}
+			}
+			m_Balloon.Spawn();
+			break;
+		case CGame::Main:
 		{
-			//数秒貯めた後TAKEOFF
-			m_pMessage->SetPatternNo(0, 1);
+			CTime::GetInstance()->Update();
+			m_pPlayer.Update();
+			m_Shot.Update(m_pPlayer.GetShots());
+			m_Balloon.Update(m_pPlayer.GetLifes());
+			m_pCloud.Update();
+			//CReactionManager::GetInstance()->Update();
+			CollisionManager::GetInstance()->Update();
+			m_pScores.Update(m_pPlayer.GetPoints());
+			m_pIcon.Update(m_pPlayer.GetCoolFlag());
+
+			//スカイの動作関数
+			Sky();
+
+			bool m_Flag = false;
+#ifdef _DEBUG
+			m_Flag = GetAsyncKeyState(VK_RETURN) & 0x8000;
+#endif // DEBUG
+			//時間が来たら
+			if (m_Flag || CTime::GetInstance()->MaxTime())
+			{
+				m_Massage = enMassage::Finish;
+			}
 		}
-		m_pMessage->SetScale(m_scale);
-		break;
-	case CGame::Main:
+			break;
+		case CGame::Finish:
+			//数秒貯めた後TAKEOFF
+			m_pMessage->SetPatternNo(0, 2);
+			if (delta_clamp(m_scale += 0.05f, 1.7f))
+			{
+				//シーン遷移
+				CEffect::StopAll();
+				//スコアをファイルに保存
+				m_pScores.ResultScore();
+				// フェードアウト開始
+				m_Start = true;
+			}
 
-
-		break;
-	case CGame::Finish:
-		break;
-	default:
-		break;
+	        //--------------------
+	        // シーン遷移
+	        //--------------------
+	        UpdateTransition(false);
+			break;
+		default:
+			break;
 	}
 
-
-	CTime::GetInstance()->Update();
-	m_pPlayer.Update();
-	m_Shot.Update(m_pPlayer.GetShots());
-	m_Balloon.Update(m_pPlayer.GetLifes());
-	m_pCloud.Update();
-	//CReactionManager::GetInstance()->Update();
-	CollisionManager::GetInstance()->Update();
-	m_pScores.Update(m_pPlayer.GetPoints());
-	m_pIcon.Update(m_pPlayer.GetCoolFlag());
-	//スカイの動作関数
-	Sky();
-    //シーン遷移
-	Next();
 
 }
 
@@ -171,7 +201,10 @@ void CGame::Draw()
 	m_pTimeUI->Draw();
 
 	CDirectX11::GetInstance()->SetDepth(false);
-	m_pMessage->Draw();
+	if (m_Massage != enMassage::Main)
+	{
+		m_pMessage->Draw();
+	}
 	CTime::GetInstance()->Draw();
 	CDirectX11::GetInstance()->SetDepth(true);
 

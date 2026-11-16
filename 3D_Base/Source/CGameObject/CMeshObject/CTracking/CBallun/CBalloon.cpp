@@ -2,7 +2,6 @@
 CBalloon::CBalloon()
     : m_PlayerPos(0.0f, 0.0f, 0.0f)
     , m_Life(0)
-	, m_MoveState(enMoveState::Idle)
 	, m_pTracking(nullptr)
 {
 	m_vScale = D3DXVECTOR3(0.001f, 0.001f, 0.001f);
@@ -33,50 +32,16 @@ void CBalloon::Init(CTracking* pTracking)
 	//// プレイヤーID
 	m_ID = pTracking->GetID();
 
-	//// 登場アニメーション開始
-	m_MoveState = enMoveState::App;
+	//風船の出現
+	Spawn();
 
 }
 //動作関数
 void CBalloon::Update()
 {
-
-	//--------------------------------------------------------
-	// 状態
-	//--------------------------------------------------------
-
-	switch (m_MoveState)
-	{
-	case enMoveState::App:
-	{
-		// 登場時に少しずつ大きくする
-		m_Scale += 0.00009f;
-		
-		if (m_Scale >= 0.004f)
-		{
-			m_Scale = 0.004f;
-			m_MoveState = enMoveState::Idle;
-		}
-
-		//// サイズを設定
-		m_vScale = D3DXVECTOR3(
-			m_Scale,
-			m_Scale,
-			m_Scale);
-	}
-	break;
-
-	case enMoveState::Idle:
-	{
-	//	CCharacter::Update();
-	}
-	break;
-	default:
-		break;
-	}
 	if (m_Life <= 0)
 	{
-		m_MoveState = enMoveState::App;
+		Spawn();
 	}
     CCharacter::UpDown(m_vPosition.y);
 }
@@ -84,10 +49,20 @@ void CBalloon::Update()
 void CBalloon::Draw(const CCamera* pCamera)
 {
 	const auto& param = s_IDTable[m_ID];
-	//色の設定
-	//m_pMesh->SetDiffuse(param.Color);
 	m_pMesh->SetAmbient(param.Color);
 	CCharacter::Draw(pCamera);
+}
+//風船の出現
+bool CBalloon::Spawn()
+{
+	// 登場時に少しずつ大きくする
+	if (delta_clamp(m_Scale += 0.00009f, 0.004f))
+	{
+		return true;
+	}
+	//// サイズを設定
+	m_vScale = D3DXVECTOR3(m_Scale, m_Scale, m_Scale);
+	return false;
 }
 
 void CBalloon::SetBalloon(

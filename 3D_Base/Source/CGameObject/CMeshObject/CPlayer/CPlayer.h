@@ -21,6 +21,7 @@ public:
 		Down,			// ダウン状態
 		Turn,			// 回転状態
 		Dead,	        // 死亡状態
+		None,
 	};
 
 	struct CoolData
@@ -42,6 +43,8 @@ public:
 	//描画関数
 	virtual void Draw(
 		const CCamera* pCamera ) override;
+	//プレイヤーの出現
+	bool Spawn();
 public:
 	//状態を取得
 	bool GetShot() const{ return m_MoveState == enMoveState::Shot;}
@@ -69,10 +72,9 @@ protected:
 	int         m_Life;			//ライフの数
 	int			m_Point;		//スコアに追加するポイント
 	enMoveState	m_MoveState;	//移動状態
-	std::shared_ptr<CReaction>	m_pReaction;	//リアクション
-
-	std::unordered_map<std::string, CoolData> m_CoolData;
+    std::unordered_map<std::string, CoolData> m_CoolData;
 	std::unordered_map<std::string, ::EsHandle> m_Effect;
 
+	std::shared_ptr<CReaction>	m_pReaction;	//リアクション
 	std::vector<CPlayer*> m_pOtherPlayers; // 参照用他プレイヤーリスト
 };

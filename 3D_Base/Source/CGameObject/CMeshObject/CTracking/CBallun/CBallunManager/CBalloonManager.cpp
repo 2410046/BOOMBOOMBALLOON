@@ -149,9 +149,27 @@ void CBalloonManager::Draw(CCamera*pCamera)
             continue;
         }
 
-
         balloon->Draw(pCamera);
     }
+}
+
+bool CBalloonManager::Spawn()
+{
+    for (auto& balloon : m_Balloons)
+    {
+        if (!balloon)
+        {
+            continue;
+        }
+
+        // 1人でも出現が完了していなければfalse
+        if (!balloon->Spawn())
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 

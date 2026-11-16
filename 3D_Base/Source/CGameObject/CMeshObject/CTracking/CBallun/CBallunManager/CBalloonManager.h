@@ -20,6 +20,8 @@ public:
         const std::vector<int>& Life);
     // 描画関数
     void Draw( CCamera* pCamera );
+    //風船の出現
+    bool Spawn();
     // Release
     void Release();
 

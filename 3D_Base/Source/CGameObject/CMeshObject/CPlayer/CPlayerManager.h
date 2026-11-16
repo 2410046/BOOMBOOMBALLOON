@@ -22,6 +22,8 @@ public:
     void Update();
     //描画関数
     void Draw(const CCamera* pCamera);
+    //出現関数
+    bool Spawn();
     // 全プレイヤー取得
     std::vector<CPlayer*> GetPlayers()const;
     //プレイヤーの取得

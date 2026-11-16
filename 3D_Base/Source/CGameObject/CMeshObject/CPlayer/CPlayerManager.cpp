@@ -12,7 +12,7 @@ namespace
         {  6.f, 1.f, 13.5f }, // ID : 2
     };
     //プレイヤーのサイズ  
-    constexpr float Player_Scale = 0.02f;
+    constexpr float Player_Scale = 0.f;
     constexpr int Max = 4;
     constexpr bool m_Com[] = { true };
 }
@@ -100,6 +100,25 @@ void CPlayerManager::Draw(const CCamera* pCamera)
 
         player->Draw(pCamera);
     }
+}
+//プレイヤーの出現
+bool CPlayerManager::Spawn()
+{
+    for (auto& player : m_Players)
+    {
+        if (!player)
+        {
+            continue;
+        }
+
+        // 1人でも出現が完了していなければfalse
+        if (!player->Spawn())
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 // 全プレイヤー取得
 std::vector<CPlayer*> CPlayerManager::GetPlayers() const

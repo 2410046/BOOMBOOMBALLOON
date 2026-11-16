@@ -1,6 +1,5 @@
 ﻿#include "CPlayer.h"
 
-#include "MathUtility.h"
 #include "Reaction/CReactionApply/CReactionFactory.h"
 #include "CMeshObject/CTracking/CShot/CShot.h"	    //ショットクラス
 #include "CGameObject/CMeshObject/CCloud/CCloud.h"  //雲クラス
@@ -28,12 +27,13 @@ namespace
 }
 //コンストラクタ
 CPlayer::CPlayer()
-	: m_MoveState		( enMoveState::App )
+	: m_MoveState		( enMoveState::None )
 	, m_Life			( 3 )
 	, m_Point			( 0 )
 	, m_CoolData		( )
 	, m_Effect			()
 {	
+	m_vScale = D3DXVECTOR3(0.f, 0.f, 0.f);
 	//カプセルの当たり判定
 	m_pCollider = CreateCollider::CreateCaupsule(
 		radius, height, this, CollisionBase::Player);
@@ -61,18 +61,13 @@ void CPlayer::Update()
 
 	switch (m_MoveState)
 	{
-
 	case enMoveState::App:
-	{
-		//プレイヤーのサイズを増やす
-		if (delta_clamp(m_Scale += Size_Speed, Base_Size))
+		//プレイヤーが出現したら
+		if (Spawn()) 
 		{
-			m_Life = 3;
-			m_MoveState = enMoveState::Live;
-		}
-		//サイズを設定
-		m_vScale = D3DXVECTOR3(m_Scale, m_Scale, m_Scale);
-	}
+			//無敵状態
+			LimitCoolTime("Invincible");
+		};
 	break;
 	case enMoveState::Boost:		//ブースト状態
 	{
@@ -156,26 +151,22 @@ void CPlayer::Update()
 			m_pReaction->SetQuaternion(&m_vQuaternion);
 			m_pReaction->Update();
 		}
-
-
-
 		if (m_pReaction &&
 			m_pReaction->Play(CReaction::Boost))
 		{
 			EffectUpdateY(
 				m_Effect["Boost"], m_vPosition, m_vQuaternion);
 		}
-
 		CCharacter::Update();
 }
 //描画関数
 void CPlayer::Draw(
 	const CCamera* pCamera)
 {
-
 	//無敵時間中
 	if (m_CoolData["Invincible"].isCoolTime)
 	{
+		//点滅させる
 		UpDown(m_Count);
 		m_pMesh->SetDiffuse(
 			D3DXVECTOR4(m_Count, m_Count, m_Count, m_Count));
@@ -186,9 +177,21 @@ void CPlayer::Draw(
 		//色の設定
 		m_pMesh->SetDiffuse(param.Color);
 	}
-
-	//m_pMesh->SetAmbient(param.Color);
 	CCharacter::Draw(pCamera);
+}
+//プレイヤー出現
+bool CPlayer::Spawn()
+{
+	//プレイヤーのサイズを増やす
+	if (delta_clamp(m_Scale += Size_Speed, Base_Size))
+	{
+		m_Life = 3;
+		m_MoveState = enMoveState::Live;
+		return true;
+	}
+	//サイズを設定
+	m_vScale = D3DXVECTOR3(m_Scale, m_Scale, m_Scale);
+	return false;
 }
 //ポイントを取得
 int CPlayer::GetPoint()
@@ -263,7 +266,7 @@ void CPlayer::Controller()
 		CCharacter::Quotanion(moveDir);
 		//nanamehayasi
 	}
-	m_vPosition.y = 1.f;
+	//m_vPosition.y = 1.f;
 #else
 	//ダイレクト操作
 	CXInput* pPad = CXInput::GetInstance(m_ID); // 1Pコントローラー
