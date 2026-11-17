@@ -160,9 +160,6 @@
     <Filter Include="Source\Reaction\CKnockBack">
       <UniqueIdentifier>{e603a93d-fc12-4fb1-bb52-badf703f07ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Reaction\CReactionManager">
-      <UniqueIdentifier>{fde3827b-50b1-4363-875d-19f3346d25d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Reaction\CReactionApply">
       <UniqueIdentifier>{e5d47ec0-a783-47ba-8c6f-4dec96282301}</UniqueIdentifier>
     </Filter>
@@ -365,9 +362,6 @@
     </ClCompile>
     <ClCompile Include="Source\Reaction\CReaction.cpp">
       <Filter>Source\Reaction</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Reaction\ReactionManager.cpp">
-      <Filter>Source\Reaction\CReactionManager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Reaction\CReactionApply\CReactionFactory.cpp">
       <Filter>Source\Reaction\CReactionApply</Filter>
@@ -577,9 +571,6 @@
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CMeshObject\CPlayer\CPlayer.h">
       <Filter>Source\GameObject\StaticMeshObject\Character\CPlayerManager\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Reaction\ReactionManager.h">
-      <Filter>Source\Reaction\CReactionManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Reaction\CReactionApply\CReactionFactory.h">
       <Filter>Source\Reaction\CReactionApply</Filter>

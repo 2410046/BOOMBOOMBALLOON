@@ -104,6 +104,8 @@ void CPlayerManager::Draw(const CCamera* pCamera)
 //プレイヤーの出現
 bool CPlayerManager::Spawn()
 {
+    bool allSpawn = true;
+
     for (auto& player : m_Players)
     {
         if (!player)
@@ -111,14 +113,14 @@ bool CPlayerManager::Spawn()
             continue;
         }
 
-        // 1人でも出現が完了していなければfalse
+        // 各プレイヤーの出現処理を進める
         if (!player->Spawn())
         {
-            return false;
+            allSpawn = false;
         }
     }
 
-    return true;
+    return allSpawn;
 }
 // 全プレイヤー取得
 std::vector<CPlayer*> CPlayerManager::GetPlayers() const

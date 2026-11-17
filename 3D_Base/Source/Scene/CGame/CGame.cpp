@@ -5,7 +5,6 @@
 
 #include "Collision/CollisionManager/CollisionManager.h"
 #include "CMeshObject/CTracking/CTrackingManager/CTrackingManager.h"
-#include "Reaction/ReactionManager.h"
 // 定数定義
 namespace 
 {
@@ -54,7 +53,6 @@ void CGame::Create()
 	m_pMessage = std::make_unique<CUIObject>();
 	//初期化
 	CollisionManager::GetInstance()->Init();
-	CReactionManager::GetInstance()->Init();
 	CTrackingManager::GetInstance()->Init();
 }
 
@@ -134,7 +132,6 @@ void CGame::Update()
 			m_Shot.Update(m_pPlayer.GetShots());
 			m_Balloon.Update(m_pPlayer.GetLifes());
 			m_pCloud.Update();
-			//CReactionManager::GetInstance()->Update();
 			CollisionManager::GetInstance()->Update();
 			m_pScores.Update(m_pPlayer.GetPoints());
 			m_pIcon.Update(m_pPlayer.GetCoolFlag());
@@ -142,28 +139,29 @@ void CGame::Update()
 			//スカイの動作関数
 			Sky();
 
-			bool m_Flag = false;
-#ifdef _DEBUG
-			m_Flag = GetAsyncKeyState(VK_RETURN) & 0x8000;
-#endif // DEBUG
-			//時間が来たら
-			if (m_Flag || CTime::GetInstance()->MaxTime())
-			{
-				m_Massage = enMassage::Finish;
-			}
+//			bool m_Flag = false;
+//#ifdef _DEBUG
+//			m_Flag = GetAsyncKeyState(VK_RETURN) & 0x8000;
+//#endif // DEBUG
+//			//時間が来たら
+//			if (m_Flag || CTime::GetInstance()->MaxTime())
+//			{
+//				m_Massage = enMassage::Finish;
+//			}
 		}
 			break;
 		case CGame::Finish:
 			//数秒貯めた後TAKEOFF
 			m_pMessage->SetPatternNo(0, 2);
+
 			if (delta_clamp(m_scale += 0.05f, 1.7f))
 			{
-				//シーン遷移
-				CEffect::StopAll();
-				//スコアをファイルに保存
-				m_pScores.ResultScore();
-				// フェードアウト開始
-				m_Start = true;
+				////シーン遷移
+				//CEffect::StopAll();
+				////スコアをファイルに保存
+				//m_pScores.ResultScore();
+				//// フェードアウト開始
+				//m_Start = true;
 			}
 
 	        //--------------------

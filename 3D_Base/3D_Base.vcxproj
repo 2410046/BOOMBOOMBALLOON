@@ -213,7 +213,6 @@
     <ClCompile Include="Source\Reaction\CReaction.cpp" />
     <ClCompile Include="Source\Reaction\CReactionApply\CReactionFactory.cpp" />
     <ClCompile Include="Source\Reaction\KnockBack\CKnockBack.cpp" />
-    <ClCompile Include="Source\Reaction\ReactionManager.cpp" />
     <ClCompile Include="Source\Scene\CGame\CGame.cpp" />
     <ClCompile Include="Source\Scene\CResult\CResult.cpp" />
     <ClCompile Include="Source\Scene\CScene.cpp" />
@@ -291,7 +290,6 @@
     <ClInclude Include="Source\Reaction\CReaction.h" />
     <ClInclude Include="Source\Reaction\CReactionApply\CReactionFactory.h" />
     <ClInclude Include="Source\Reaction\KnockBack\CKnockBack.h" />
-    <ClInclude Include="Source\Reaction\ReactionManager.h" />
     <ClInclude Include="Source\Scene\CGame\CGame.h" />
     <ClInclude Include="Source\Scene\CResult\CResult.h" />
     <ClInclude Include="Source\Scene\CScene.h" />
