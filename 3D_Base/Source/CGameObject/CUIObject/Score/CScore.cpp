@@ -5,11 +5,11 @@
 namespace
 {
 
-    constexpr float Space    = 32.f;   // 数字の間隔
+    constexpr float Space    = 38.f;   // 数字の間隔
 
     constexpr float Pop_Power = 50.0f; // スコア増加の演出の強さ
-    constexpr float Base_Size = 0.8f;  // 通常時スケール
-    constexpr float Max_Scale = 1.0f;  // 最大スケール
+    constexpr float Base_Size = 1.f;  // 通常時スケール
+    constexpr float Max_Scale = 1.2f;  // 最大スケール
     constexpr float Scale_Range = 0.5f;  // 拡大幅
 
     constexpr float Speed = 0.2f;  // スケール補間速度
@@ -24,12 +24,12 @@ CScore::CScore()
     : m_Score        ( 0 )
     , m_DisplayScore ( m_Score )   
     , m_UpdateCounter( 0 )
-    , m_Scale        ( 0.8f )
-    , m_TargetScale  ( 0.8f ) 
+    , m_Scale        ( 1.f )
+    , m_TargetScale  ( 1.f ) 
     , m_PrevScore    ( 0 )     
 {
     //サイズを設定
-    m_vScale = D3DXVECTOR3(0.8f, 0.8f, 1.3f);
+    m_vScale = D3DXVECTOR3(1.f, 1.f, 1.3f);
     //パターンナンバー
     m_Patten = m_ID;
     //ランキングをリセット
@@ -124,6 +124,6 @@ void CScore::AddAnime()
         m_TargetScale = Base_Size;  // 目標もリセット
     }
     //サイズを設定
-    m_vScale = D3DXVECTOR3(m_Scale, m_Scale,m_vScale.z);
+    m_vScale = D3DXVECTOR3(1.f, m_Scale,m_vScale.z);
 
 }

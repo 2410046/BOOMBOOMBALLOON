@@ -8,7 +8,7 @@ T Clamp( T val, T min, T max )
 	return ( val < min ) ? min : ( max < val ) ? max : val;
 }
 // 静的メンバ変数の定義と初期化（nullptrで初期化）
-std::array<CXInput*, 2> CXInput::s_instances = { nullptr };
+std::array<CXInput*, 4> CXInput::s_instances = { nullptr };
 //KEY列挙体に対応したXINPUT_GAMEPADのテーブル.
 const WORD KEY_TABLE[CXInput::MAX] =
 {

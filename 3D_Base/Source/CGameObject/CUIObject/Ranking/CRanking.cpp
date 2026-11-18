@@ -34,7 +34,6 @@ CRanking::CRanking()
 {
     // 数字描画用のスプライトを接続
     AttachSprite(*AssetManager::GetSprite2D(L"Number"));
-
     // スコアの表示サイズを設定
     m_vScale = D3DXVECTOR3(0.8f, 0.8f, 0.8f);
 }

@@ -139,15 +139,15 @@ void CGame::Update()
 			//スカイの動作関数
 			Sky();
 
-//			bool m_Flag = false;
-//#ifdef _DEBUG
-//			m_Flag = GetAsyncKeyState(VK_RETURN) & 0x8000;
-//#endif // DEBUG
-//			//時間が来たら
-//			if (m_Flag || CTime::GetInstance()->MaxTime())
-//			{
-//				m_Massage = enMassage::Finish;
-//			}
+			bool m_Flag = false;
+#ifdef _DEBUG
+			m_Flag = GetAsyncKeyState(VK_RETURN) & 0x8000;
+#endif // DEBUG
+			//時間が来たら
+			if (m_Flag || CTime::GetInstance()->MaxTime())
+			{
+				m_Massage = enMassage::Finish;
+			}
 		}
 			break;
 		case CGame::Finish:
@@ -156,12 +156,12 @@ void CGame::Update()
 
 			if (delta_clamp(m_scale += 0.05f, 1.7f))
 			{
-				////シーン遷移
-				//CEffect::StopAll();
-				////スコアをファイルに保存
-				//m_pScores.ResultScore();
-				//// フェードアウト開始
-				//m_Start = true;
+				//シーン遷移
+				CEffect::StopAll();
+				//スコアをファイルに保存
+				m_pScores.ResultScore();
+				// フェードアウト開始
+				m_Start = true;
 			}
 
 	        //--------------------

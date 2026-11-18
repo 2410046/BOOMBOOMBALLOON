@@ -135,5 +135,5 @@ private:
 	XINPUT_VIBRATION    m_vibration;	//振動.
 	bool				m_connect;		//接続判定.
 	// 静的インスタンス格納（4PAD分）
-	static  std::array<CXInput*, 2> s_instances;
+	static  std::array<CXInput*, 4> s_instances;
 };

@@ -66,7 +66,7 @@ void CUIObject::Number(int Score, float Space, int digitCount)
 
 		D3DXVECTOR3 pos = m_vPosition;
 		pos.x += i * Space;
-
+		m_pSprite->SetScale(m_vScale);
 		m_pSprite->SetPosition(pos);
 		//レンダリング.
 		m_pSprite->Render();

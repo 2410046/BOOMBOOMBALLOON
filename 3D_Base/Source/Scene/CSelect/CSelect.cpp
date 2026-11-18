@@ -73,14 +73,14 @@ HRESULT CSelect::LoadData()
 		m_pSelect[i]->AttachSprite(
 			*AssetManager::GetSprite2D(L"SelectText"));
 		m_pSelect[i]->SetPatternNo(0, i);
-		m_pSelect[i]->SetPosition(Sell_Pos);
+		m_pSelect[i]->SetBasePosition(Sell_Pos);
 	}
 
 	for (int i = 0; i < m_pActive.size(); ++i)
 	{
-		//プレイヤー表記の座標
+		//アクティブ表記の座標
 		const D3DXVECTOR3 Active_Pos
-			= D3DXVECTOR3(100.f + i * 300.f, 100.f, 0.f);
+			= D3DXVECTOR3(50.f + i * 300.f, 160.f, 0.f);
 		//プレイヤーの座標
 		const D3DXVECTOR3 Player_Pos
 			= D3DXVECTOR3(-5.f + (i * 3.1f), 1.f, 7.f);
@@ -116,9 +116,7 @@ void CSelect::Update()
 	CSoundManager::PlayLoop(m_BGM);
 
 	//選択肢の設定
-	Selecter(m_Select, (int)m_pSelect.size(), m_Start);
-
-	CCamera::GetInstance()->Update();
+	Selecter(m_Select, (int)m_pSelect.size(), m_Start,true);
 
 	//--------------------
    // 選択中
@@ -188,7 +186,8 @@ void CSelect::PlayerActive()
 	CXInput* pPad = CXInput::GetInstance(Player_Index);
 
 	// 現在接続されているコントローラーの数
-	int m_PadCount = 1;
+	//int m_PadCount = 1;
+	int m_PadCount = 0;
 
 	// 各プレイヤーのコントローラー接続状態を確認
 	for (int i = 0; i < Max_Player; i++)

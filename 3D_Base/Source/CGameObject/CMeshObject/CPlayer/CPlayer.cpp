@@ -151,6 +151,7 @@ void CPlayer::Update()
 			m_pReaction->SetQuaternion(&m_vQuaternion);
 			m_pReaction->Update();
 		}
+
 		if (m_pReaction &&
 			m_pReaction->Play(CReaction::Boost))
 		{
@@ -204,7 +205,7 @@ int CPlayer::GetPoint()
 //プレイヤーの速度
 void CPlayer::Controller()
 {
-#if 1
+#if 0
 	//無敵状態と生存状態以外の場合
 	if (m_MoveState != enMoveState::Live )
 	{
@@ -268,16 +269,20 @@ void CPlayer::Controller()
 	}
 	//m_vPosition.y = 1.f;
 #else
+
+
 	//ダイレクト操作
 	CXInput* pPad = CXInput::GetInstance(m_ID); // 1Pコントローラー
 
 	if (pPad && pPad->Update())
 	{
-		//ダウン状態じゃない場合
-		if (m_MoveState == Down)
+
+		//生存状態以外の場合
+		if (m_MoveState != enMoveState::Live)
 		{
 			return;
 		}
+
 		float LX = static_cast<float>(pPad->GetLThumbX()) / 32767.0f;
 		float LY = static_cast<float>(pPad->GetLThumbY()) / 32767.0f;
 
@@ -287,25 +292,46 @@ void CPlayer::Controller()
 		if (fabs(LX) < DEAD_ZONE) LX = 0.0f;
 		if (fabs(LY) < DEAD_ZONE) LY = 0.0f;
 
+		//if (pPad->IsDown(CXInput::KEY::B),true)
+		//{
+		//	// アニメーション中でなければ再生
+		//	if (m_pReaction &&
+		//		m_pReaction->Play(CReaction::Boost))
+		//	{
+		//		return;
+		//	}
+		//	if (LimitCoolTime("Boost"))
+		//	{
+		//		CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");
+		//		m_MoveState = enMoveState::Boost;
+		//	}
+		//}
+		//if (pPad->IsDown(CXInput::KEY::Y), true)
+		//{
+		//	// アニメーション中でなければ再生
+		//	if (m_pReaction &&
+		//		m_pReaction->Play(CReaction::Firing))
+		//	{
+		//		return;
+		//	}
+
+		//	if (LimitCoolTime("Shot"))
+		//	{
+		//		CSoundManager::GetInstance()->PlaySE(L"SE\\Shot");
+		//		m_MoveState = enMoveState::Shot;
+		//	}
+		//}
 		// 入力方向にそのまま動く（Z軸反転なし）
 		D3DXVECTOR3 moveDir(LX, 0.0f, LY);
 
 		float len = D3DXVec3Length(&moveDir);
-
-
-		if (len > 0.01f) {
+		if (len > 0.01f)
+		{
+			CCharacter::Quotanion(moveDir);
 			// 移動
 			m_vPosition += moveDir * m_Speed;
 
-			Quotanion(moveDir);
-
-			m_MoveState = enMoveState::Walk;	//移動状態
 		}
-		else
-		{
-			m_MoveState = enMoveState::Idle;    //待機状態
-		}
-
 	}
 #endif
 

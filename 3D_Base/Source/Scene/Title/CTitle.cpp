@@ -48,8 +48,6 @@ void CTitle::Create()
 //ロード関数
 HRESULT CTitle::LoadData()
 {
-
-
 	//タイトルロゴの読み込み,座標の設定
 	m_pLogo->AttachSprite(
 		*AssetManager::GetSprite2D(L"Logo"));
@@ -60,12 +58,12 @@ HRESULT CTitle::LoadData()
 	{
 		//選択肢の座標
 		 const D3DXVECTOR3 Sell_Pos 
-			= D3DXVECTOR3(600.f, 400.f + i * 100.f, 0.f);	
+			= D3DXVECTOR3(500.f, 400.f + i * 100.f, 0.f);	
 
 		m_pSelect[i]->AttachSprite(
 			*CSpriteManager::GetSprite2D(L"SelectText"));
 		m_pSelect[i]->SetPatternNo(0, i);
-		m_pSelect[i]->SetPosition(Sell_Pos);
+		m_pSelect[i]->SetBasePosition(Sell_Pos);
 	}
 
 	//スカイの読み込み、座標の設定
