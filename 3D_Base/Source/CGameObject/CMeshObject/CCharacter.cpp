@@ -36,6 +36,8 @@ void CCharacter::UpDown(float& pos)
 //回転
 bool CCharacter::TurnUpdate(float Speed,float Max,bool Loop)
 {
+
+	//m_angle = Speed;
 	if (m_angle >= Max)
 	{
 		if (Loop)

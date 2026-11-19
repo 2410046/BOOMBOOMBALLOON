@@ -156,17 +156,12 @@ void CGame::Update()
 
 			if (delta_clamp(m_scale += 0.05f, 1.7f))
 			{
-				//シーン遷移
-				CEffect::StopAll();
 				//スコアをファイルに保存
 				m_pScores.ResultScore();
 				// フェードアウト開始
 				m_Start = true;
 			}
-
-	        //--------------------
 	        // シーン遷移
-	        //--------------------
 	        UpdateTransition(false);
 			break;
 		default:
@@ -213,12 +208,62 @@ void CGame::Draw()
 //スカイの動作
 void CGame::Sky()
 {
-	//縦に動きながら、横にゆっくり回転
-	constexpr float YSpeed = 0.0001f;
-	constexpr float XSpeed = 0.01f;
-	constexpr float MaxAngle = D3DX_PI / 2.0f;
+#if 0
+	float ratio = CTime::GetInstance()->GetFlameTime() / CTime::GetInstance()->GetMaxTime();
+	ratio = std::clamp(ratio, 0.0f, 1.0f);
+	//yokoに動きながら、横にゆっくり回転
+	// 初期角度
+	constexpr float StartAngle = -D3DX_PI / 1.99f;
 
-	m_pSky->TurnUpdate(XSpeed, MaxAngle);
+	// 1回転
+	constexpr float MaxAngle = D3DX_PI * 2.0f;
+
+	float angle = StartAngle + ratio * MaxAngle;
+
+
+	//m_pSky->TurnUpdate(m_angle, MaxAngle);
+	D3DXQUATERNION mat = m_pSky->GetQuaternion();
+
+	if (m_angle > MaxAngle)
+	{
+		m_angle = MaxAngle;
+	}
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&mat,
+		m_angle,
+		0.f,
+		0.f);
+
+	m_pSky->SetQuaternion(mat);
+
+#else
+
+	float ratio =
+		CTime::GetInstance()->GetFlameTime()
+		/ CTime::GetInstance()->GetMaxTime();
+
+	ratio = std::clamp(ratio, 0.0f, 1.0f);
+
+	// 初期角度
+	constexpr float StartAngle = -D3DX_PI / 1.99f;
+
+	// 1回転
+	constexpr float MaxAngle = D3DX_PI * 1.1f;
+
+	float angle = StartAngle + ratio * MaxAngle;
+
+	D3DXQUATERNION quaternion;
+
+	D3DXQuaternionRotationYawPitchRoll(
+		&quaternion,
+		angle,
+		0.0f,
+		0.0f
+	);
+
+	m_pSky->SetQuaternion(quaternion);
+#endif
 }
 
 //シーン遷移

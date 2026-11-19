@@ -4,7 +4,7 @@
 #include <algorithm>
 namespace
 {
-    constexpr float m_MaxTime = 10;	// スコアテキストの数
+    constexpr float m_MaxTime = 10;	
     // 回転速度
     static constexpr float m_RotSpeed = 0.02f;
     // レコード間隔
@@ -16,7 +16,7 @@ namespace
 }
 CTime::CTime()
     : m_FrameTime(timeGetTime() / 1000.0f)
-
+    , m_Max(m_MaxTime)
 {
     //スプライトを接続
     AttachSprite(*CSpriteManager::GetSprite2D(L"TimeArrow"));

@@ -24,8 +24,10 @@ public:
 	void Reset();
 	// 小数秒まで含めた時間を取得（例：1.23秒）
 	float GetFlameTime() const { return m_FrameTime; }
+	float GetMaxTime() const { return m_Max; }
 private:
 	int m_Count;				// 現在のカウント時間（秒）
 	float m_FrameTime;			// フレーム単位の経過時間（小数秒）
 	float m_LastUpdateTime;		// 前フレームの時間
+	float m_Max;		// 前フレームの時間
 };

@@ -186,7 +186,6 @@ void CSelect::PlayerActive()
 	CXInput* pPad = CXInput::GetInstance(Player_Index);
 
 	// 現在接続されているコントローラーの数
-	//int m_PadCount = 1;
 	int m_PadCount = 0;
 
 	// 各プレイヤーのコントローラー接続状態を確認
@@ -252,3 +251,34 @@ void CSelect::Sky()
 }
 
 //m_pPlayer[i]->Turn(true);
+ //プレイヤーの人数選択
+//void CSelect::PlayerSelect()
+//{
+//	//決定したときにコントローラーを接続してプレイヤーの人数を増やさないため)
+//	if (m_Start)
+//	{
+//		return;
+//	}
+//	// 最大プレイヤー数
+//	static constexpr int Max_Player = 2;
+//	// 操作対象となるプレイヤー番号（0番コントローラ）
+//	static constexpr int Player_Index = 0;
+//	// XInputのシングルトンからプレイヤーのゲームパッドを取得
+//	CXInput* pPad = CXInput::GetInstance(Player_Index);
+//
+//	//接続したコントローラーの数
+//	int m_PadCount = 0;
+//
+//	// コントローラーの接続をチェック
+//	for (int i = 0; i < Max_Player; i++)
+//	{
+//		if (pPad->IsControllerConnected(i))
+//		{
+//			m_PadCount++;
+//		}
+//	}
+//	// UIやパターン番号に反映
+//	m_pMode->SetPatternNo(0, m_PadCount);
+//	//プレイヤー人数を決定
+//	CGameData::GetInstance()->SetPlayNo(m_PadCount);
+//}

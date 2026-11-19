@@ -53,7 +53,6 @@ CPlayer::~CPlayer()
 //動作関数
 void CPlayer::Update()
 {
-
 	//クールタイム
 	UpdateCoolTime();
 	//移動制限
@@ -292,35 +291,35 @@ void CPlayer::Controller()
 		if (fabs(LX) < DEAD_ZONE) LX = 0.0f;
 		if (fabs(LY) < DEAD_ZONE) LY = 0.0f;
 
-		//if (pPad->IsDown(CXInput::KEY::B),true)
-		//{
-		//	// アニメーション中でなければ再生
-		//	if (m_pReaction &&
-		//		m_pReaction->Play(CReaction::Boost))
-		//	{
-		//		return;
-		//	}
-		//	if (LimitCoolTime("Boost"))
-		//	{
-		//		CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");
-		//		m_MoveState = enMoveState::Boost;
-		//	}
-		//}
-		//if (pPad->IsDown(CXInput::KEY::Y), true)
-		//{
-		//	// アニメーション中でなければ再生
-		//	if (m_pReaction &&
-		//		m_pReaction->Play(CReaction::Firing))
-		//	{
-		//		return;
-		//	}
+		if (pPad->IsDown(CXInput::KEY::B,true))
+		{
+			// アニメーション中でなければ再生
+			if (m_pReaction &&
+				m_pReaction->Play(CReaction::Boost))
+			{
+				return;
+			}
+			if (LimitCoolTime("Boost"))
+			{
+				CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");
+				m_MoveState = enMoveState::Boost;
+			}
+		}
+		if (pPad->IsDown(CXInput::KEY::Y, true))
+		{
+			// アニメーション中でなければ再生
+			if (m_pReaction &&
+				m_pReaction->Play(CReaction::Firing))
+			{
+				return;
+			}
 
-		//	if (LimitCoolTime("Shot"))
-		//	{
-		//		CSoundManager::GetInstance()->PlaySE(L"SE\\Shot");
-		//		m_MoveState = enMoveState::Shot;
-		//	}
-		//}
+			if (LimitCoolTime("Shot"))
+			{
+				CSoundManager::GetInstance()->PlaySE(L"SE\\Shot");
+				m_MoveState = enMoveState::Shot;
+			}
+		}
 		// 入力方向にそのまま動く（Z軸反転なし）
 		D3DXVECTOR3 moveDir(LX, 0.0f, LY);
 

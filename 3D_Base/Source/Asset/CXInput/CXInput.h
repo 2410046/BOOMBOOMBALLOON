@@ -112,10 +112,10 @@ public:
 
 	//接続チェック.
 	bool IsConnect() const	{	return m_connect;	}
-	//パッド番号取得.
-	DWORD GetPadID() const	{	return m_padId;		}
+	//パッドの接続数
+	int GetPadID() const	{	return m_padCount;		}
 
-	void  SetPadID(DWORD pad ) {	m_padId = pad;		}
+	void  SetPadID(int pad ) {  m_padCount = pad;		}
 
 	//コントローラーが接続されているか
 	bool IsControllerConnected(int no);
@@ -130,6 +130,7 @@ private:
 private:
 	
 	DWORD               m_padId;		//パッド番号(0~3).
+	int					m_padCount;		//コントローラーの接続数
 	XINPUT_STATE        m_state;		//キー入力情報.
 	XINPUT_STATE		m_stateOld;		//キー入力情報(キーストローク判定用).
 	XINPUT_VIBRATION    m_vibration;	//振動.

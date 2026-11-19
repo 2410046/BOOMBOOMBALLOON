@@ -25,20 +25,15 @@ void CPlayerManager::NewPlayer()
     // コントローラー接続数
     int padCount = CXInput::GetInstance(0)->GetPadID();
 
-    // 人間プレイヤーは1人
-    int playerCount = 1;
+    //// 人間プレイヤーは1人
+    //int playerCount = 0;
 
-    // COM人数
-    int comCount = Max - playerCount;
+    //// COM人数
+    //int comCount = Max - playerCount;
 
     for (int i = 0; i < Max; i++)
     {
-         //プレイヤーのオブジェクト生成
-         //auto player = std::make_unique<CPlayer>();
-
          std::unique_ptr<CPlayer> player = nullptr;
-
-
         if (i < padCount)
          {
              player = std::make_unique<CPlayer>();
