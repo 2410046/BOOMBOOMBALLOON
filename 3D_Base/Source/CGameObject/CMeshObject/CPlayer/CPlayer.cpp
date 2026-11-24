@@ -10,7 +10,7 @@ namespace
 	constexpr float radius = 0.7f;
 	constexpr float height = 0.7f;
 
-	constexpr float TimeSpeed  = 0.1f;	//経過速度
+	constexpr float TimeSpeed  = 0.25f;	//経過速度
 	constexpr float MaxTime    = 10.f;   //指定時間
 	constexpr float Size_Speed = 0.0001f;
 	constexpr float Base_Size = 0.01f;
@@ -140,7 +140,33 @@ void CPlayer::Update()
 	default:
 		break;
 	}
+	
+	//ライフの数に合わせてサイズや速度を変更
+	for (int i = 1;i <= m_Life;i++)
+	{
+		float Max_Size = Base_Size + (0.005f * (i - 1));	
+		m_vScale = D3DXVECTOR3(Max_Size, Max_Size, Max_Size);
+		m_Speed = TimeSpeed / i;
 
+		//ライフが増えていく程pointtuika
+		//m_Point += i;
+	}
+	//lifeの数によって速度やサイズを変更
+	switch (m_Life)
+	{		
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	default:
+		break;
+	}
 	//コントローラー操作
 	Controller();
 	//ノックバック中
@@ -185,7 +211,7 @@ bool CPlayer::Spawn()
 	//プレイヤーのサイズを増やす
 	if (delta_clamp(m_Scale += Size_Speed, Base_Size))
 	{
-		m_Life = 3;
+		m_Life = 1;
 		m_MoveState = enMoveState::Live;
 		return true;
 	}
@@ -204,7 +230,7 @@ int CPlayer::GetPoint()
 //プレイヤーの速度
 void CPlayer::Controller()
 {
-#if 0
+#if 1
 	//無敵状態と生存状態以外の場合
 	if (m_MoveState != enMoveState::Live )
 	{
@@ -229,6 +255,7 @@ void CPlayer::Controller()
 			{
 				return;
 			}
+
 			if (LimitCoolTime("Boost"))
 			{
 				CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");

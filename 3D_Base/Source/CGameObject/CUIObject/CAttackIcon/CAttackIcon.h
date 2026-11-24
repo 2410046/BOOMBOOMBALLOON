@@ -16,7 +16,8 @@ public:
 	virtual void Draw() override;
 
 	// クールタイム情報を設定
-	void SetCoolFlag(const std::unordered_map<std::string, bool>& data)
+	void SetCoolFlag(
+		const std::unordered_map<std::string, bool>& data)
 	{
 		m_CoolTime = data;
 	}

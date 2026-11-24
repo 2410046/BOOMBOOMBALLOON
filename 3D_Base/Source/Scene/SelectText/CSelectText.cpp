@@ -1,5 +1,5 @@
 ﻿#include "CSelectText.h"
-#if 0
+#if 1
 // 押した瞬間だけ
 bool KeyTrigger(int vk)
 {

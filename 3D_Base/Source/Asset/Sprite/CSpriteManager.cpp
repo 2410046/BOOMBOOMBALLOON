@@ -71,7 +71,7 @@ HRESULT CSpriteManager::CreateSprite2D()
   
     CSprite2D::SPRITE_STATE SSLogo   = { 825.f, 276.f, 825.f, 276.f, 825.f, 276.f };
     CSprite2D::SPRITE_STATE SSNumber = { 40.f, 50.f, 1200.f, 603.f, 120.f, 150.f };
-    CSprite2D::SPRITE_STATE SSActive = { 250.f, 45.f, 551.f, 693.f, 551.f, 139.f };
+    CSprite2D::SPRITE_STATE SSActive = { 250.f, 45.f, 551.f, 725.f, 551.f, 145.f };
     CSprite2D::SPRITE_STATE SSRank   = { 403.f, 554.f, 1612.f, 554.f, 403.f, 554.f };
 
     CSprite2D::SPRITE_STATE SSTime    = { 121.f, 145.f , 451.f, 575.f, 451.f, 575.f };
@@ -86,7 +86,7 @@ HRESULT CSpriteManager::CreateSprite2D()
         { L"SelectText", SSSel    },
         { L"Logo",       SSLogo   },
         { L"Number",     SSNumber },
-        { L"ActiveUser", SSActive },
+        { L"ActiveUse", SSActive },
         { L"Rank",       SSRank },
 
         { L"Time",            SSTime },

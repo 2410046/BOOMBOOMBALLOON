@@ -137,16 +137,16 @@ void CGame::Update()
 			m_pIcon.Update(m_pPlayer.GetCoolFlag());
 
 			//スカイの動作関数
-			Sky();
+			//Sky();
 
 			bool m_Flag = false;
 #ifdef _DEBUG
 			m_Flag = GetAsyncKeyState(VK_RETURN) & 0x8000;
 #endif // DEBUG
 			//時間が来たら
-			if (m_Flag || CTime::GetInstance()->MaxTime())
+		//	if (m_Flag || CTime::GetInstance()->MaxTime())
 			{
-				m_Massage = enMassage::Finish;
+				//m_Massage = enMassage::Finish;
 			}
 		}
 			break;

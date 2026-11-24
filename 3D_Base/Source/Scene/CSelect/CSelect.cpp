@@ -86,7 +86,7 @@ HRESULT CSelect::LoadData()
 			= D3DXVECTOR3(-5.f + (i * 3.1f), 1.f, 7.f);
 
 		m_pActive[i]->AttachSprite(
-			*AssetManager::GetSprite2D(L"ActiveUser"));
+			*AssetManager::GetSprite2D(L"ActiveUse"));
 		m_pActive[i]->SetPatternNo(0, 0);
 		m_pActive[i]->SetPosition(Active_Pos);
 
@@ -186,7 +186,7 @@ void CSelect::PlayerActive()
 	CXInput* pPad = CXInput::GetInstance(Player_Index);
 
 	// 現在接続されているコントローラーの数
-	int m_PadCount = 0;
+	int m_PadCount = 4;
 
 	// 各プレイヤーのコントローラー接続状態を確認
 	for (int i = 0; i < Max_Player; i++)

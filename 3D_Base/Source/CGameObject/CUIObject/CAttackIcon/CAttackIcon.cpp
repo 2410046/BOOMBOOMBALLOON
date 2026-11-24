@@ -23,34 +23,33 @@ void CAttackIcon::Update()
 {
 
 
-    //クールタイム中
-    //点滅
+    //クールタイム中にアイコンを消す
     for (int i = 0; i < Max; i++)
     {
-
-
-        if (m_CoolTime["Boost"])
+        if (i == 0)
         {
-            if (i == 0)
+            if (m_CoolTime["Boost"])
             {
-                // Boostアイコン点滅
+                // Boostアイコンを透明
                 m_Alpha[i] = 0.f;
             }
-
-        }
-        if (m_CoolTime["Shot"])
-        {
-            if (i == 1)
+            else
             {
-                // Shotアイコン点滅
-                m_Alpha[i] = 0.f;
+                m_Alpha[i] = 1.f;
             }
         }
-        else
+        else if (i == 1)
         {
-            m_Alpha[i] = 1.f;
+            if (m_CoolTime["Shot"])
+            {
+                // Shotアイコンを透明
+                m_Alpha[i] = 0.f;
+            }
+            else
+            {
+                m_Alpha[i] = 1.f;
+            }
         }
-        //
     }
     CUIObject::Update();
 }
