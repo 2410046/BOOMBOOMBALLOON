@@ -25,10 +25,12 @@ CShot::~CShot()
 }
 void CShot::Init(CTracking* pTracking)
 {
+#if 1
 	if (pTracking == nullptr)
 	{
 		return;
 	}
+
 	D3DXVECTOR3 ShotPos(pTracking->GetPosition().x, 1.f, pTracking->GetPosition().z);
 	// プレイヤーの現在位置を取得
 	SetPosition(ShotPos);
@@ -47,12 +49,62 @@ void CShot::Init(CTracking* pTracking)
 	param.rot = m_vQuaternion;
 	param.time = 200.f;
 	param.power = 2.f;
-	m_pReaction = CReactionFactory::Create(CReaction::Boost);
+	m_pReaction = CReactionFactory::Create("Boost");
 	m_pReaction->Apply(param);
+	// 生存
+	m_ShotFlag = true;
 
+#else
+
+	if (pTracking == nullptr)
+	{
+		return;
+	}
+
+	D3DXVECTOR3 ShotPos(
+		pTracking->GetPosition().x,
+		1.f,
+		pTracking->GetPosition().z);
+
+	SetPosition(ShotPos);
+
+	// プレイヤーの向きを取得
+	m_vQuaternion = pTracking->GetQuaternion();
+
+	// 発射角度を設定
+	D3DXVECTOR3 Axis(0.f, 1.f, 0.f);
+
+	D3DXQUATERNION Rotation;
+	D3DXQuaternionRotationAxis(
+		&Rotation,
+		&Axis,
+		D3DXToRadian(Angle));
+
+	D3DXQUATERNION ShotRot;
+	D3DXQuaternionMultiply(
+		&ShotRot,
+		&m_vQuaternion,
+		&Rotation);
+
+	m_vQuaternion = ShotRot;
+
+	AttachMesh(*AssetManager::GetStatic(L"Asset\\Shot"));
+
+	// プレイヤーID
+	m_ID = pTracking->GetID();
+
+	// ショットの反応
+	CReaction::ReactionParam param;
+	param.rot = m_vQuaternion;
+	param.time = 200.f;
+	param.power = 2.f;
+
+	m_pReaction = CReactionFactory::Create("Boost");
+	m_pReaction->Apply(param);
 
 	// 生存
 	m_ShotFlag = true;
+#endif
 }
 //動作関数
 void CShot::Update()

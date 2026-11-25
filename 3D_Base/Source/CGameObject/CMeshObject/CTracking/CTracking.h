@@ -25,6 +25,8 @@ public:
     CPlayer* GetTarget() const;
     //ID
     int GetID() const;
+
+    int GetLife() const;
 private:
 
     CPlayer* m_pTarget = nullptr;

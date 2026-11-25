@@ -6,7 +6,7 @@ namespace
 CCharacter::CCharacter()
 	: m_Speed	    ( 0.1f )
 	, m_ID          ( 0 )
-	, m_Scale       ( 0 )
+	, m_Scale       ( 0.f )
 
 {
 }

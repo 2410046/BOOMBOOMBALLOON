@@ -15,6 +15,7 @@ CShotManager::~CShotManager()
 
 void CShotManager::NewShot(CTracking* pTracking)
 {
+#if 1
     // プレイヤーIDからTracking取得
     if (pTracking == nullptr)
     {
@@ -29,6 +30,34 @@ void CShotManager::NewShot(CTracking* pTracking)
     // Shot登録
     m_Shots.emplace_back(
         std::move(shot));
+
+#else
+    if (pTracking == nullptr)
+    {
+        return;
+    }
+
+    int Life = pTracking->GetLife();
+
+    const float ShotAngle = 15.f;
+
+    for (int i = 0; i < Life; i++)
+    {
+        float Angle = 0.f;
+
+        if (Life > 1)
+        {
+            Angle = -ShotAngle * (Life - 1) / 2.f
+                + ShotAngle * i;
+        }
+
+        // ショット生成
+        auto shot = std::make_unique<CShot>();
+        shot->Init(pTracking, Angle);
+
+        m_Shots.push_back(std::move(shot));
+    }
+#endif
 }
 
 void CShotManager::Update(

@@ -5,7 +5,7 @@
 //============================================================
 
 CBalloonManager::CBalloonManager()
-   // : m_pTracking(nullptr)
+// : m_pTracking(nullptr)
 {
 }
 //============================================================
@@ -25,8 +25,8 @@ void CBalloonManager::NewBalloon(CTracking* pTracking)
         return;
     }
     // プレイヤーID
-    int playerID =
-        pTracking->GetID();
+    //int playerID =
+    //    pTracking->GetID();
 
     //// 同じプレイヤーの風船が
     //// すでに存在するか確認
@@ -34,6 +34,7 @@ void CBalloonManager::NewBalloon(CTracking* pTracking)
     //{
     //    return;
     //}
+    m_Life = pTracking->GetLife();
     // 風船生成
     auto balloon =
         std::make_unique<CBalloon>();
@@ -44,11 +45,10 @@ void CBalloonManager::NewBalloon(CTracking* pTracking)
         std::move(balloon));
 }
 //更新関数
-void CBalloonManager::Update(
-    const std::vector<int>& lifes)
+void CBalloonManager::Update(const std::vector<int>& Life)
 {
     for (int playerID = 0;
-        playerID < static_cast<int>(lifes.size());
+        playerID < static_cast<int>(Life.size());
         ++playerID)
     {
         // PlayerIDからTrackingを取得
@@ -56,12 +56,13 @@ void CBalloonManager::Update(
             CTrackingManager::GetInstance()
             ->GetTracking(playerID);
 
+        //std::vector<int> m_Life = pTracking->GetLife()
         if (pTracking == nullptr)
         {
             continue;
         }
-        
-        int lifeCount = lifes[playerID];
+
+        int lifeCount = Life[playerID];
 
         // 現在このPlayerが持っている風船数
         int balloonCount = 0;
@@ -140,7 +141,7 @@ void CBalloonManager::Update(
 // Draw
 //============================================================
 
-void CBalloonManager::Draw(CCamera*pCamera)
+void CBalloonManager::Draw(CCamera* pCamera)
 {
     for (auto& balloon : m_Balloons)
     {
@@ -255,7 +256,7 @@ void CBalloonManager::UpdateTracking(
     //========================================================
     // 風船の取得
     //========================================================
-    const float Radius = 1.0f;
+    //const float Radius = 1.0f;
 
     // このプレイヤーの風船だけ取得
     std::vector<CBalloon*> balloons;
@@ -276,12 +277,13 @@ void CBalloonManager::UpdateTracking(
     int count =
         static_cast<int>(balloons.size());
 
+     const float Radius = 0.9f + (0.2f * (count - 1));
     if (count <= 0)
     {
         return;
     }
 
-        // 風船が1個の場合
+    // 風船が1個の場合
     if (count == 1)
     {
         D3DXVECTOR3 pos =
@@ -301,7 +303,7 @@ void CBalloonManager::UpdateTracking(
     {
         float angle =
             -D3DX_PI * 0.5f +
-            D3DX_PI * i / (count-1);
+            D3DX_PI * i / (count - 1);
 
         // 円形のX/Z成分
         float x =

@@ -4,19 +4,24 @@
 #include "CFiring/CFiring.h"
 
 std::shared_ptr<CReaction> CReactionFactory::Create(
-    CReaction::MoveType type)
+    std::string type)
 {
-    switch (type)
+    //リアクションの設定
+    if (type == "Boost")
     {
-    case CReaction::Boost:
         return std::make_unique<CBoost>();
-
-    case CReaction::KnockBack:
+    }
+    else if (type == "KnockBack")
+    {
         return std::make_unique<CKnockBack>();
-
-    case CReaction::Firing:
+    }
+    else if (type == "Firing")
+    {
         return std::make_unique<CFiring>();
-    default:
+    }
+    else
+    {
         return nullptr;
     }
+
 }

@@ -48,7 +48,7 @@ CPlayer* CTracking::GetTarget() const
 {
     return m_pTarget;
 }
-
+//ID取得
 int CTracking::GetID() const
 {
     if (m_pTarget == nullptr)
@@ -57,4 +57,14 @@ int CTracking::GetID() const
     }
 
     return m_pTarget->GetID();
+}
+//ライフ取得
+int CTracking::GetLife() const
+{
+    if (m_pTarget == nullptr)
+    {
+        return -1;
+    }
+
+    return m_pTarget->GetLife();
 }

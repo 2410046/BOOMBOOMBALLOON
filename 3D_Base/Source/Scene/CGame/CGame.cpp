@@ -128,10 +128,12 @@ void CGame::Update()
 		case CGame::Main:
 		{
 			CTime::GetInstance()->Update();
+
 			m_pPlayer.Update();
 			m_Shot.Update(m_pPlayer.GetShots());
 			m_Balloon.Update(m_pPlayer.GetLifes());
 			m_pCloud.Update();
+
 			CollisionManager::GetInstance()->Update();
 			m_pScores.Update(m_pPlayer.GetPoints());
 			m_pIcon.Update(m_pPlayer.GetCoolFlag());

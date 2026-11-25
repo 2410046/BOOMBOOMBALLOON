@@ -2,12 +2,13 @@
 #include "CMeshObject/CCharacter.h"
 #include "Global.h"
 #include "Asset/CXInput/CXInput.h"
+#include "CCount/CCount.h"
 
 /********************************************************************************
 * プレイヤークラス
 **/
 class CPlayer
-	: public CCharacter,public CollisionListener
+	: public CCharacter,public CollisionListener,public CCount
 	//キャラクタークラスを継承.
 {
 public:
@@ -24,15 +25,6 @@ public:
 		None,
 	};
 
-	struct CoolData
-	{
-		int count = 0;
-		int maxcount = 0;
-		float coolTime = 180.0f;
-		float coolTimer = 0.0f;
-		bool isCoolTime = false;
-	};
-
 public:
 	//コンストラクタ
 	CPlayer();
@@ -45,6 +37,8 @@ public:
 		const CCamera* pCamera ) override;
 	//プレイヤーの出現
 	bool Spawn();
+	//プレイヤーのサイズを変更
+	void Delta_State();
 public:
 	//状態を取得
 	bool GetShot() const{ return m_MoveState == enMoveState::Shot;}
@@ -52,8 +46,6 @@ public:
 	int  GetPoint();
 	//ライフを取得
 	int  GetLife() { return m_Life; }
-	//クールタイム中のフラグを取得
-	std::unordered_map<std::string, bool> GetCoolFlag() const;
 	// 他のプレイヤーリストを設定・参照するための関数を追加
 	void SetTargetPlayers(const std::vector<CPlayer*>& players) { m_pOtherPlayers = players; }
 protected:
@@ -62,17 +54,14 @@ protected:
 		CollisionBase* pCollider) override;
 	//コントローラー操作
 	virtual void Controller();
-	//攻撃回数の制限
-	bool LimitCoolTime(const std::string& name);
-	//クールタイムの更新
-	void UpdateCoolTime();
 	//移動制限
 	void UpdateMoveLimit();
 protected:  
 	int         m_Life;			//ライフの数
 	int			m_Point;		//スコアに追加するポイント
+	float       Base_Size;		//プレイヤーのサイズ
 	enMoveState	m_MoveState;	//移動状態
-    std::unordered_map<std::string, CoolData> m_CoolData;
+
 	std::unordered_map<std::string, ::EsHandle> m_Effect;
 
 	std::shared_ptr<CReaction>	m_pReaction;	//リアクション

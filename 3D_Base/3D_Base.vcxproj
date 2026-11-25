@@ -170,6 +170,7 @@
     <ClCompile Include="Source\Asset\Sprite\Sprite2D\CSprite2D.cpp" />
     <ClCompile Include="Source\Asset\Sprite\Sprite3D\CSprite3D.cpp" />
     <ClCompile Include="Source\Camera\CCamera.cpp" />
+    <ClCompile Include="Source\CCount\CCount.cpp" />
     <ClCompile Include="Source\CGameObject\CGameObject.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CCharacter.cpp" />
     <ClCompile Include="Source\CGameObject\CMeshObject\CCloud\CCloud.cpp" />
@@ -241,7 +242,7 @@
     <ClInclude Include="Source\Asset\Sprite\Sprite2D\CSprite2D.h" />
     <ClInclude Include="Source\Asset\Sprite\Sprite3D\CSprite3D.h" />
     <ClInclude Include="Source\Camera\CCamera.h" />
-    <ClInclude Include="Source\CCount.h" />
+    <ClInclude Include="Source\CCount\CCount.h" />
     <ClInclude Include="Source\CGameObject\CGameObject.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CCharacter.h" />
     <ClInclude Include="Source\CGameObject\CMeshObject\CCloud\CCloud.h" />

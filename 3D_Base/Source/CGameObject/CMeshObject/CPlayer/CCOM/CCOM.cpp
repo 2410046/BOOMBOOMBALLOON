@@ -112,7 +112,7 @@ void CCom::Controller()
 		else if (distance < 17.0f && LimitCoolTime("Shot"))
 		{
 			// ブースト発動中でなければショット
-			if (!m_pReaction || !m_pReaction->Play(CReaction::Firing))
+			if (!m_pReaction || !m_pReaction->Play("Firing"))
 			{
 				CSoundManager::GetInstance()->PlaySE(L"SE\\Shot");
 				m_MoveState = enMoveState::Shot;

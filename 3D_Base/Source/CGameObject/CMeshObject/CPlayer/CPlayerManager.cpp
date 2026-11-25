@@ -11,10 +11,8 @@ namespace
         {  6.f, 1.f, 5.5f }, // ID : 2
         {  6.f, 1.f, 13.5f }, // ID : 2
     };
-    //プレイヤーのサイズ  
-    constexpr float Player_Scale = 0.f;
+    //プレイヤー人数                                    
     constexpr int Max = 4;
-    constexpr bool m_Com[] = { true };
 }
 CPlayerManager::CPlayerManager()
 {
@@ -47,8 +45,6 @@ void CPlayerManager::NewPlayer()
          player->AttachMesh(*AssetManager::GetStatic(L"Player\\Player01"));
          //プレイヤーIDの設定
          player->SetID(i);
-         //サイズを設定
-         player->SetScale(Player_Scale);
          //座標を設定
          player->SetPosition(Player_Pos[i]);
 
@@ -107,14 +103,16 @@ bool CPlayerManager::Spawn()
         {
             continue;
         }
-
+        // サイズ更新
+        player->Delta_State();
         // 各プレイヤーの出現処理を進める
         if (!player->Spawn())
         {
             allSpawn = false;
         }
+      
     }
-
+    
     return allSpawn;
 }
 // 全プレイヤー取得

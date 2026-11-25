@@ -1,7 +1,6 @@
 ﻿#include "CScore.h"
 #include "CGameObject/CUIObject/Ranking/CRanking.h"
 #include <algorithm>
-#include "CCount.h"
 namespace
 {
 
@@ -47,7 +46,7 @@ void CScore::Update()
     if (std::fmod(m_Count, 80.0f) == 0.0f)
     {
         m_Score = std::clamp(m_Score + 1, 0, Max);
-        ResetCount(m_Count);
+        m_Count = 0.f;
     }
 
     // ===== 表示スコアの加算アニメーション =====

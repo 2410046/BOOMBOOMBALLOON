@@ -37,4 +37,8 @@ private:
         m_Balloons;
     // Trackingへの参照
     std::vector<CTracking*>m_Tracking;
+
+    std::vector<int> m_Life
+
+    //    int m_Life;
 };

@@ -13,7 +13,7 @@ namespace
 	constexpr float TimeSpeed  = 0.25f;	//経過速度
 	constexpr float MaxTime    = 10.f;   //指定時間
 	constexpr float Size_Speed = 0.0001f;
-	constexpr float Base_Size = 0.01f;
+	constexpr float Default_Size = 0.009f;
 
 	constexpr int Max_Boost  = 1;
 	constexpr int Max_Shot  = 5;
@@ -24,14 +24,16 @@ namespace
 	// 円の半径
 	constexpr float RadiusX = 12.8f;
 	constexpr float RadiusZ = 11.f;
+
+
 }
 //コンストラクタ
 CPlayer::CPlayer()
 	: m_MoveState		( enMoveState::None )
-	, m_Life			( 3 )
+	, m_Life			( 0 )
 	, m_Point			( 0 )
-	, m_CoolData		( )
 	, m_Effect			()
+	, Base_Size			( 0.f )
 {	
 	m_vScale = D3DXVECTOR3(0.f, 0.f, 0.f);
 	//カプセルの当たり判定
@@ -40,6 +42,11 @@ CPlayer::CPlayer()
 	m_vQuaternion
 		= D3DXQUATERNION(0.0f, 0.7071068f, 0.0f, 0.7071068f);
 	m_angle = 0.f;
+
+	m_Scale = 0.f;
+
+	//ライフの数に合わせてサイズや速度を変更
+	Delta_State();
 	//攻撃制限数を設定
 	m_CoolData["Shot"] = { Max_Shot,Max_Shot, 180.0f,0.f};
 	m_CoolData["Boost"] = { Max_Boost,Max_Boost, 150.0f,0.f };
@@ -73,19 +80,8 @@ void CPlayer::Update()
 		CReaction::ReactionParam param;
 		param.rot = m_vQuaternion;
 		param.power = 2.f;
-
-		m_pReaction = CReactionFactory::Create(CReaction::Boost);
+		m_pReaction = CReactionFactory::Create("Boost");
 		m_pReaction->Apply(param);
-
-		const auto& effect = s_IDTable[m_ID];
-
-		m_Effect["Boost"] = CreateEffect(
-			effect.BoostEffect,
-			m_vPosition,
-			m_vQuaternion,
-			0.5f,
-			1.f);
-
 		m_MoveState = enMoveState::Live;
 	}
 	break;
@@ -93,7 +89,7 @@ void CPlayer::Update()
 	{
 		CReaction::ReactionParam param;
 		param.rot = m_vQuaternion;
-		m_pReaction = CReactionFactory::Create(CReaction::Firing);
+		m_pReaction = CReactionFactory::Create("Firing");
 		m_pReaction->Apply(param);
 		m_MoveState = enMoveState::Live;		//一瞬で切り替える
 	}
@@ -127,46 +123,18 @@ void CPlayer::Update()
 		}
 		break;
 	case enMoveState::Dead://死亡状態
-		//クール時間開始
 		//プレイヤーのサイズを小さくする
-		if (delta_clamp(m_Scale -= Size_Speed, Base_Size))
+		if (m_Scale <= 0.f)
 		{
+			m_Scale = 0.f;
 			m_Point = -100;
-			//スコアを半分減らす
 			m_MoveState = enMoveState::App;
 		}
-		m_vScale = D3DXVECTOR3(m_Scale, m_Scale, m_Scale);
 		break;
 	default:
 		break;
 	}
-	
-	//ライフの数に合わせてサイズや速度を変更
-	for (int i = 1;i <= m_Life;i++)
-	{
-		float Max_Size = Base_Size + (0.005f * (i - 1));	
-		m_vScale = D3DXVECTOR3(Max_Size, Max_Size, Max_Size);
-		m_Speed = TimeSpeed / i;
-
-		//ライフが増えていく程pointtuika
-		//m_Point += i;
-	}
-	//lifeの数によって速度やサイズを変更
-	switch (m_Life)
-	{		
-	case 1:
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 5:
-		break;
-	default:
-		break;
-	}
+	Delta_State();
 	//コントローラー操作
 	Controller();
 	//ノックバック中
@@ -178,7 +146,7 @@ void CPlayer::Update()
 		}
 
 		if (m_pReaction &&
-			m_pReaction->Play(CReaction::Boost))
+			m_pReaction->Play("Boost"))
 		{
 			EffectUpdateY(
 				m_Effect["Boost"], m_vPosition, m_vQuaternion);
@@ -208,15 +176,20 @@ void CPlayer::Draw(
 //プレイヤー出現
 bool CPlayer::Spawn()
 {
-	//プレイヤーのサイズを増やす
-	if (delta_clamp(m_Scale += Size_Speed, Base_Size))
+	// 復活時のライフ
+	if (m_Life == 0)
 	{
-		m_Life = 1;
+		m_Life = 3;
+	}
+
+	float TargetSize =
+		Default_Size + (0.004f * (m_Life - 1));
+	// 目標サイズになったら出現完了
+	if (m_Scale >= TargetSize)
+	{
 		m_MoveState = enMoveState::Live;
 		return true;
 	}
-	//サイズを設定
-	m_vScale = D3DXVECTOR3(m_Scale, m_Scale, m_Scale);
 	return false;
 }
 //ポイントを取得
@@ -230,7 +203,7 @@ int CPlayer::GetPoint()
 //プレイヤーの速度
 void CPlayer::Controller()
 {
-#if 1
+#if 0
 	//無敵状態と生存状態以外の場合
 	if (m_MoveState != enMoveState::Live )
 	{
@@ -259,7 +232,12 @@ void CPlayer::Controller()
 			if (LimitCoolTime("Boost"))
 			{
 				CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");
+				//エフェクト出現
+				const auto& effect = s_IDTable[m_ID];
+				m_Effect["Boost"]
+					= CreateEffect(effect.BoostEffect, m_vPosition, m_vQuaternion, 0.5f, 1.f);
 				m_MoveState = enMoveState::Boost;
+
 			}
 		}
 		if ((GetAsyncKeyState('X') & 0x8000))
@@ -322,13 +300,18 @@ void CPlayer::Controller()
 		{
 			// アニメーション中でなければ再生
 			if (m_pReaction &&
-				m_pReaction->Play(CReaction::Boost))
+				m_pReaction->Play("Boost"))
 			{
 				return;
 			}
 			if (LimitCoolTime("Boost"))
 			{
+
 				CSoundManager::GetInstance()->PlaySE(L"SE\\Boost");
+				//エフェクト出現
+				const auto& effect = s_IDTable[m_ID];
+				m_Effect["Boost"] 
+					= CreateEffect(effect.BoostEffect,m_vPosition,m_vQuaternion,0.5f,1.f);
 				m_MoveState = enMoveState::Boost;
 			}
 		}
@@ -336,7 +319,7 @@ void CPlayer::Controller()
 		{
 			// アニメーション中でなければ再生
 			if (m_pReaction &&
-				m_pReaction->Play(CReaction::Firing))
+				m_pReaction->Play("Firing"))
 			{
 				return;
 			}
@@ -362,31 +345,36 @@ void CPlayer::Controller()
 #endif
 
 }
-
-//攻撃回数の制限
-bool CPlayer::LimitCoolTime(const std::string& name)
+//プレイヤーのライフの数でプレイヤーのステータスを変更
+void CPlayer::Delta_State()
 {
-	auto& data = m_CoolData.at(name);
+	float TargetSize = 0.f;
+	float Delta = 0.f;
 
-	// 使用不可
-	if (data.isCoolTime && data.count <= 0)
+	if (m_Life > 0)
 	{
-		return false;
+		TargetSize = Default_Size + (0.004f * (m_Life - 1));
+
+		m_Speed = TimeSpeed / m_Life;
 	}
 
-	// 回数を減らす
-	// 回数が0になったらクールタイム開始
-// 回数を減らす
-	data.count -= 1;
-
-	// 回数が0以下になったらクールタイム開始
-	if (data.count <= 0)
+	// サイズを増やす
+	if (m_Scale < TargetSize)
 	{
-		data.count = 0;
-		data.isCoolTime = true;
+		Delta = Size_Speed;
+	}
+	// サイズを小さくする
+	else if (m_Scale > TargetSize)
+	{
+		Delta = -Size_Speed;
 	}
 
-	return true;
+	UpdateTimer(m_Scale, Delta, TargetSize);
+	
+	m_vScale = D3DXVECTOR3(
+		m_Scale,
+		m_Scale,
+		m_Scale);
 }
 //移動制限
 void CPlayer::UpdateMoveLimit()
@@ -407,39 +395,8 @@ void CPlayer::UpdateMoveLimit()
 		m_vPosition.z = CenterZ + dz / length;
 	}
 }
-//クールタイム
-void CPlayer::UpdateCoolTime()
-{
-	for (auto& data : m_CoolData)
-	{
-		// 回数が0ならクールタイム中
-		if (!data.second.isCoolTime)
-		{
-			continue;
-		}
 
-		// クールタイム終了
-		if (delta_clamp(
-			data.second.coolTimer += 1.f, data.second.coolTime))
-		{
-			data.second.coolTimer = 0.0f;
-			data.second.count = data.second.maxcount;
-			data.second.isCoolTime = false;
-		}
-	}
-}
-//クールタイム中のフラグを取得
-std::unordered_map<std::string, bool> CPlayer::GetCoolFlag() const
-{
-	std::unordered_map<std::string, bool> data;
 
-	for (const auto& attack : m_CoolData)
-	{
-		data[attack.first] = attack.second.isCoolTime;
-	}
-
-	return data;
-}
 //当たり判定
 void CPlayer::OnCollision(CollisionBase* pCollider)
 {
@@ -460,7 +417,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		//相手のリアクション
 		auto& BoostOther = other->m_pReaction;
 		//ブースト状態
-		if (m_pReaction&&m_pReaction->Play(CReaction::Boost))
+		if (m_pReaction && m_pReaction->Play("Boost"))
 		{
 			//生存状態以外・無敵中は無視
 			if ( other->m_CoolData["Invincible"].isCoolTime)
@@ -475,7 +432,6 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 			m_Life = std::clamp(m_Life + 1, 0, 5);
 			//相手のプレイヤーをダウンx状態に
 			other->m_MoveState = enMoveState::Down;
-			OutputDebugStringA("ヒットだよん");
 		}
 		else//お互いブーストじゃない場合		
 		{
@@ -484,7 +440,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 			CReaction::ReactionParam param;
 			param.from = other->GetPosition();
 			param.to = GetPosition();
-			m_pReaction = CReactionFactory::Create(CReaction::KnockBack);
+			m_pReaction = CReactionFactory::Create("KnockBack");
 			m_pReaction->Apply(param);
 
 		}
@@ -494,7 +450,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 	case CollisionBase::Cloud://雲に接触した場合
 	{
 		// ブースト状態なら止める
-		if (m_pReaction && m_pReaction->Play(CReaction::Boost))
+		if (m_pReaction && m_pReaction->Play("Boost"))
 		{
 			m_pReaction->Stop();
 		}
@@ -505,7 +461,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		CReaction::ReactionParam param;
 		param.from = cloud->GetPosition();
 		param.to = GetPosition();
-		m_pReaction = CReactionFactory::Create(CReaction::KnockBack);
+		m_pReaction = CReactionFactory::Create("KnockBack");
 		m_pReaction->Apply(param);
 	}
 	break;
@@ -527,7 +483,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 			return;
 		}
 		//ブースト状態
-		if (m_pReaction && m_pReaction->Play(CReaction::Boost))
+		if (m_pReaction && m_pReaction->Play("Boost"))
 		{
 			shot->SetFlag(false);//ショットが消える
 		}
@@ -545,3 +501,54 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 	}
 	
 }
+
+
+
+//ライフの数に応じてサイズを増減
+//Base_Sizeは0.009f
+//Base_Size = Default_Size + (0.004f * (i - 1));
+//m_Speed = TimeSpeed / i;
+////ライフが増えてたらSize_Speedを+に
+////ライフが減ってたらSize_Speedを-に
+//if(m_Scale< Base_Size)
+
+//if (delta_clamp(m_Scale += Size_Speed, Base_Size))
+//{
+
+//}
+
+	//}
+
+	// ライフの数に応じて目標サイズを設定
+	//if (m_Life <= 0)
+	//{
+	//	Base_Size = 0.f;
+	//}
+	//else
+	//{
+		//Base_Size = Default_Size + (0.004f * (m_Life - 1));
+	//}
+
+//// ライフに応じて移動速度を変更
+//if (m_Life > 0)
+//{
+//	m_Speed = TimeSpeed / m_Life;
+//}
+
+//// サイズを増減
+//if (m_Scale < Base_Size)
+//{
+//	// サイズを大きくする
+//	if (delta_clamp(m_Scale += Size_Speed, Base_Size))
+//	{
+//		m_Scale = Base_Size;
+//	}
+//}
+//else if (m_Scale > Base_Size)
+//{
+//	// サイズを小さくする
+//	if (delta_clamp(m_Scale -= Size_Speed, Base_Size))
+//	{
+//		m_Scale = Base_Size;
+//	}
+//}

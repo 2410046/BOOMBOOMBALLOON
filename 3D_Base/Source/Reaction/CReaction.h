@@ -3,16 +3,10 @@
 * リアクションクラス
 **/
 #include <memory>
+#include<string>
 class CReaction
 {
 public:
-    // 動きのタイプ
-    enum MoveType
-    {
-        Boost,      //ブースト
-        Firing,     //射撃
-        KnockBack,  //ノックバック
-    };
     struct ReactionParam
     {
         D3DXVECTOR3 from = {};
@@ -49,7 +43,7 @@ public:
         m_pQuaternion = Quoternion;
     }
      //モーションを設定
-    virtual MoveType GetType() const = 0;
+    virtual std::string GetType() const = 0;
 
      bool IsActive() const
      {
@@ -69,7 +63,7 @@ public:
          m_State.timer = 0.f;
      }
      //リアクション中の場合
-     bool Play(MoveType type)
+     bool Play(std::string type)
      {
          //if (!reaction)
          //{

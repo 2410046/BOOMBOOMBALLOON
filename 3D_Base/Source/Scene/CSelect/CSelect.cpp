@@ -186,7 +186,7 @@ void CSelect::PlayerActive()
 	CXInput* pPad = CXInput::GetInstance(Player_Index);
 
 	// 現在接続されているコントローラーの数
-	int m_PadCount = 4;
+	int m_PadCount = 0;
 
 	// 各プレイヤーのコントローラー接続状態を確認
 	for (int i = 0; i < Max_Player; i++)

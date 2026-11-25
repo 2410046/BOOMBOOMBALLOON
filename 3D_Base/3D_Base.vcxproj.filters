@@ -160,9 +160,6 @@
     <Filter Include="Source\Reaction\CKnockBack">
       <UniqueIdentifier>{e603a93d-fc12-4fb1-bb52-badf703f07ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Reaction\CReactionApply">
-      <UniqueIdentifier>{e5d47ec0-a783-47ba-8c6f-4dec96282301}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Reaction\CFiring">
       <UniqueIdentifier>{f9a1cb24-d94b-4fb1-b254-53095f5a8e32}</UniqueIdentifier>
     </Filter>
@@ -207,6 +204,12 @@
     </Filter>
     <Filter Include="Source\GameObject\StaticMeshObject\Character\CPlayerManager\CCOM">
       <UniqueIdentifier>{33c368e1-1251-4efc-b13f-44772926a0a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\CCount">
+      <UniqueIdentifier>{91edfca1-7a74-413f-8242-af801696e929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Reaction\CReactionFactory">
+      <UniqueIdentifier>{e5d47ec0-a783-47ba-8c6f-4dec96282301}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -364,7 +367,7 @@
       <Filter>Source\Reaction</Filter>
     </ClCompile>
     <ClCompile Include="Source\Reaction\CReactionApply\CReactionFactory.cpp">
-      <Filter>Source\Reaction\CReactionApply</Filter>
+      <Filter>Source\Reaction\CReactionFactory</Filter>
     </ClCompile>
     <ClCompile Include="Source\Reaction\CFiring\CFiring.cpp">
       <Filter>Source\Reaction\CFiring</Filter>
@@ -404,6 +407,9 @@
     </ClCompile>
     <ClCompile Include="Source\CGameObject\CMeshObject\CPlayer\CCOM\CCOM.cpp">
       <Filter>Source\GameObject\StaticMeshObject\Character\CPlayerManager\CCOM</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CCount\CCount.cpp">
+      <Filter>Source\CCount</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -573,7 +579,7 @@
       <Filter>Source\GameObject\StaticMeshObject\Character\CPlayerManager\Player</Filter>
     </ClInclude>
     <ClInclude Include="Source\Reaction\CReactionApply\CReactionFactory.h">
-      <Filter>Source\Reaction\CReactionApply</Filter>
+      <Filter>Source\Reaction\CReactionFactory</Filter>
     </ClInclude>
     <ClInclude Include="Source\Reaction\CFiring\CFiring.h">
       <Filter>Source\Reaction\CFiring</Filter>
@@ -599,9 +605,6 @@
     <ClInclude Include="Source\IDData.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CCount.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Asset\Effect\CEffectPlay.h">
       <Filter>Source\Asset\CEffect\CEffectPlay</Filter>
     </ClInclude>
@@ -622,6 +625,9 @@
     </ClInclude>
     <ClInclude Include="Source\CGameObject\CMeshObject\CPlayer\CCOM\CCOM.h">
       <Filter>Source\GameObject\StaticMeshObject\Character\CPlayerManager\CCOM</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CCount\CCount.h">
+      <Filter>Source\CCount</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

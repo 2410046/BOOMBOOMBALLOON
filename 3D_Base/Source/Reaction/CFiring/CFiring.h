@@ -12,7 +12,7 @@ public:
     //更新関数
     void Update()override;
     //モーションを設定
-    virtual MoveType GetType() const override { return MoveType::Firing; };
+    virtual std::string GetType() const override { return "Firing"; };
     //virtual D3DXQUATERNION GetRot() const override { return m_vQuaternion; };
 private:
     D3DXQUATERNION m_ShotBaseRot;
