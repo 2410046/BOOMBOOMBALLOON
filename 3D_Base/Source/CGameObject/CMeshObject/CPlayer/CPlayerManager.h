@@ -31,8 +31,6 @@ public:
 
     // 全プレイヤーのShotフラグ取得
     std::vector<bool> GetShots() const;
-    //全プレイヤーのライフ取得
-    std::vector<int> GetLifes() const;
     //全プレイヤーのポイント取得
     std::vector<int> GetPoints() const;
     //全プレイヤーのクールタイムフラグを取得

@@ -17,11 +17,6 @@ public:
 
 	virtual void Update() override;
 	virtual void Draw(const CCamera* pCamera) override;
-
-	//IDの取得
-	int  GetID()const { return m_ID; }
-	//IDの設定
-	void SetID(int id) { m_ID = id; }
 	//オブジェクトを上下させる
 	void UpDown(float& pos);
 	//オブジェクトを回転
@@ -31,7 +26,6 @@ protected:
     //クオータニオン対応
     void Quotanion(D3DXVECTOR3 moveDir);
 protected:
-	int		m_ID;			//ID
 	float	m_Speed;	//移動速度
 	float   t = 0.f;
 	float   m_Scale;

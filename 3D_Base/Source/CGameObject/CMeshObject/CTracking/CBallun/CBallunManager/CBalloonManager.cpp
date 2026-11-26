@@ -1,16 +1,9 @@
 #include "CBalloonManager.h"
 #include "CMeshObject/CTracking/CTrackingManager/CTrackingManager.h"
-//============================================================
-// Constructor
-//============================================================
 
 CBalloonManager::CBalloonManager()
-// : m_pTracking(nullptr)
 {
 }
-//============================================================
-// Destructor
-//============================================================
 
 CBalloonManager::~CBalloonManager()
 {
@@ -34,7 +27,7 @@ void CBalloonManager::NewBalloon(CTracking* pTracking)
     //{
     //    return;
     //}
-    m_Life = pTracking->GetLife();
+
     // 風船生成
     auto balloon =
         std::make_unique<CBalloon>();
@@ -45,24 +38,21 @@ void CBalloonManager::NewBalloon(CTracking* pTracking)
         std::move(balloon));
 }
 //更新関数
-void CBalloonManager::Update(const std::vector<int>& Life)
+void CBalloonManager::Update()
 {
-    for (int playerID = 0;
-        playerID < static_cast<int>(Life.size());
-        ++playerID)
+    for (int playerID = 0; playerID < 4; playerID++)
     {
         // PlayerIDからTrackingを取得
         CTracking* pTracking =
             CTrackingManager::GetInstance()
             ->GetTracking(playerID);
 
-        //std::vector<int> m_Life = pTracking->GetLife()
         if (pTracking == nullptr)
         {
             continue;
         }
 
-        int lifeCount = Life[playerID];
+        int lifeCount = pTracking->GetLife();
 
         // 現在このPlayerが持っている風船数
         int balloonCount = 0;
@@ -81,14 +71,14 @@ void CBalloonManager::Update(const std::vector<int>& Life)
         }
 
         // Lifeより風船が少ない場合だけ生成
-        while (balloonCount < lifeCount)
+        if (balloonCount < lifeCount)
         {
             NewBalloon(pTracking);
             balloonCount++;
         }
 
         // Lifeより風船が多い場合は削除
-        while (balloonCount > lifeCount)
+        else if (balloonCount > lifeCount)
         {
             for (auto it = m_Balloons.begin();
                 it != m_Balloons.end();
@@ -109,10 +99,7 @@ void CBalloonManager::Update(const std::vector<int>& Life)
         }
 
         // 配置
-        UpdateTracking(
-            playerID,
-            pTracking,
-            lifeCount);
+        UpdateTracking( playerID,pTracking,lifeCount);
     }
 
     for (auto& balloon : m_Balloons)
@@ -181,7 +168,6 @@ bool CBalloonManager::Spawn()
 void CBalloonManager::Release()
 {
     m_Balloons.clear();
-    m_Tracking.clear();
 }
 
 CBalloon* CBalloonManager::GetBalloon(int playerID)

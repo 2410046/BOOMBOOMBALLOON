@@ -1,7 +1,5 @@
 #include "CShot.h"
 #include "Reaction/CReactionApply/CReactionFactory.h"
-
-
 namespace
 {
 	//当たり判定
@@ -23,9 +21,9 @@ CShot::~CShot()
 {
 	CollisionManager::GetInstance()->Unregister(m_pCollider);
 }
-void CShot::Init(CTracking* pTracking)
+void CShot::Init(CTracking* pTracking,float Angle)
 {
-#if 1
+#if 0
 	if (pTracking == nullptr)
 	{
 		return;
@@ -55,7 +53,6 @@ void CShot::Init(CTracking* pTracking)
 	m_ShotFlag = true;
 
 #else
-
 	if (pTracking == nullptr)
 	{
 		return;
@@ -97,7 +94,7 @@ void CShot::Init(CTracking* pTracking)
 	CReaction::ReactionParam param;
 	param.rot = m_vQuaternion;
 	param.time = 200.f;
-	param.power = 2.f;
+	param.power = 1.f;
 
 	m_pReaction = CReactionFactory::Create("Boost");
 	m_pReaction->Apply(param);
@@ -170,14 +167,15 @@ void CShot::OnCollision(CollisionBase* base)
 	case CollisionBase::Shot://ショットに当たった場合
 	{
 		auto* shot = dynamic_cast<CShot*>(base->GetListener());
-		if (!shot || shot == this)
+		if (!shot || shot == this|| shot->GetID() == m_ID)
 		{
 			return;
 		}
+
 		m_ShotFlag = false;
 	}
 		break;
-	case CollisionBase::Player://プレイヤーに当たった場合
+
 	case CollisionBase::Cloud://雲に当たった場合
 		m_pReaction->TimeOut();
 		m_ShotFlag = false;

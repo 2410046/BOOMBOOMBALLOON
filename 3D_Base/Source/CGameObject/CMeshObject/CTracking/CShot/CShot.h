@@ -13,7 +13,7 @@ public:
 	CShot();
 	virtual~CShot()override;
 	//初期化
-	virtual void Init(CTracking* pTracking);
+	virtual void Init(CTracking* pTracking,float Angle);
 	//動作関数
 	virtual void Update() override;
 	//描画関数

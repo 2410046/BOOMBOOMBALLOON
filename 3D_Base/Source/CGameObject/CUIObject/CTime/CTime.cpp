@@ -4,7 +4,7 @@
 #include <algorithm>
 namespace
 {
-    constexpr float m_MaxTime = 10;	
+    constexpr float m_MaxTime = 60;	
     // 回転速度
     static constexpr float m_RotSpeed = 0.02f;
     // レコード間隔

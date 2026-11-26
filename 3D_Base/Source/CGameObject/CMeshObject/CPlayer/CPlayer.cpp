@@ -489,6 +489,7 @@ void CPlayer::OnCollision(CollisionBase* pCollider)
 		}
 		else 
 		{
+			shot->SetFlag(false);
 			CSoundManager::GetInstance()->PlaySE(L"SE\\Ballon");
 			// 相手のShotならダウン
 			//スコアを減らす

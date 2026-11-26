@@ -16,8 +16,7 @@ public:
 
     void NewBalloon(CTracking* pTracking);
     // 更新関数
-    void Update(
-        const std::vector<int>& Life);
+    void Update();
     // 描画関数
     void Draw( CCamera* pCamera );
     //風船の出現
@@ -33,12 +32,5 @@ public:
             int lifeCount);
 private:
     // Balloon
-    std::vector<std::unique_ptr<CBalloon>>
-        m_Balloons;
-    // Trackingへの参照
-    std::vector<CTracking*>m_Tracking;
-
-    std::vector<int> m_Life
-
-    //    int m_Life;
+    std::vector<std::unique_ptr<CBalloon>> m_Balloons;
 };

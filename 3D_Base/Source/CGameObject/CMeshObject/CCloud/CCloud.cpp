@@ -43,7 +43,7 @@ void CCloud::Update()
 	{
 		m_Speed = 0.1f;
 		// 雲のサイズをサイン波で変化させる
-		m_Scale = 1.f + (float)(sin(t) * 0.3f);
+		m_Scale = 1.f + (float)(sin(t) * 0.1f);
 		
 		if (delta_clamp(m_Count += 1.f, 50.f))
 		{

@@ -65,6 +65,10 @@ public:
 	void SetQuaternion(D3DXQUATERNION Quaternion) {
 		m_vQuaternion = Quaternion;
 	}
+	//IDの取得
+	int  GetID()const { return m_ID; }
+	//IDの設定
+	void SetID(int id) { m_ID = id; }
 	const D3DXMATRIX& GetWorldMatrix() const;
 
 protected:
@@ -74,6 +78,6 @@ protected:
 	mutable D3DXMATRIX m_WorldTrans;
 
 	D3DXQUATERNION m_vQuaternion;	//クォータニオンの回転
-
+	int		m_ID;			//ID
 	float m_Count;
 };

@@ -156,25 +156,6 @@ CPlayerManager::GetShots() const
 
     return result;
 }
-//全プレイヤーのライフを取得
-std::vector<int>
-CPlayerManager::GetLifes() const
-{
-    std::vector<int> result;
-
-    for (const auto& player : m_Players)
-    {
-        if (player == nullptr)
-        {
-            result.push_back(false);
-            continue;
-        }
-        result.push_back(
-            player->GetLife());
-    }
-
-    return result;
-}
 //全プレイヤーのポイントを取得
 std::vector<int> CPlayerManager::GetPoints() const
 {

@@ -92,8 +92,7 @@ HRESULT CGame::LoadData()
 	//雲の生成
 	m_pCloud.NewCloud();
 
-	//時間のリセット
-	CTime::GetInstance()->Reset();
+
 	// カメラの座標や角度の設定
 	CCamera::GetInstance()->SetCamera(Camera_Pos, Look_Pos);
 	//ライトの設定
@@ -118,6 +117,8 @@ void CGame::Update()
 				m_pMessage->SetPatternNo(0, 1);
 				if (delta_clamp(m_scale += 0.1f, 1.7f))
 				{
+					//時間のリセット
+					CTime::GetInstance()->Reset();
 					//メインに移行
 					m_Massage = enMassage::Main;
 					m_scale = 0.f;
@@ -131,7 +132,7 @@ void CGame::Update()
 
 			m_pPlayer.Update();
 			m_Shot.Update(m_pPlayer.GetShots());
-			m_Balloon.Update(m_pPlayer.GetLifes());
+			m_Balloon.Update();
 			m_pCloud.Update();
 
 			CollisionManager::GetInstance()->Update();
@@ -139,16 +140,16 @@ void CGame::Update()
 			m_pIcon.Update(m_pPlayer.GetCoolFlag());
 
 			//スカイの動作関数
-			//Sky();
+			Sky();
 
 			bool m_Flag = false;
 #ifdef _DEBUG
 			m_Flag = GetAsyncKeyState(VK_RETURN) & 0x8000;
 #endif // DEBUG
 			//時間が来たら
-		//	if (m_Flag || CTime::GetInstance()->MaxTime())
+			if (m_Flag || CTime::GetInstance()->MaxTime())
 			{
-				//m_Massage = enMassage::Finish;
+				m_Massage = enMassage::Finish;
 			}
 		}
 			break;

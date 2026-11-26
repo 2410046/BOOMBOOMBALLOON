@@ -36,8 +36,6 @@ public:
 	{
 		m_Alpha = alpha;
 	}
-	void SetID(int id) { m_ID = id; }
-	int GetID() const { return m_ID; }
 protected:
 
 	//CGameObjectから継承した関数
@@ -50,5 +48,4 @@ protected:
 	POINTS		m_PatternNo;	//パターン番号(マス目)
 	float       m_Alpha;
 	int			m_Patten;		//画像の位置
-	int         m_ID;			  //スコアID
 };

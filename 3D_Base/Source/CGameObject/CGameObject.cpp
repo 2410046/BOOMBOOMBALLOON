@@ -7,6 +7,7 @@ CGameObject::CGameObject()
 	, m_vScale		( 1.0f, 1.0f, 1.0f )
     , m_vQuaternion(D3DXQUATERNION(0.f, 0.f, 0.f, 1.f))
 	, m_Count		( 0 )
+	, m_ID			( 0 )
 {
     D3DXMatrixIdentity(&m_WorldTrans);
 }
