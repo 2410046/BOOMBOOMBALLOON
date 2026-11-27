@@ -1,6 +1,6 @@
 #pragma once
 #include"CEffect.h"
-//エフェクトハンドル
+//エフェクトの生成と設定
 inline EsHandle CreateEffect(
     const std::u16string& fileName,
     const D3DXVECTOR3& position,
@@ -8,25 +8,29 @@ inline EsHandle CreateEffect(
     float scale = 0.5f,
     float speed = 1.0f)
 {
+    // エフェクトを再生
     EsHandle effect = CEffect::Play(fileName, position);
-
+    // エフェクトのサイズを設定
     CEffect::SetScale(
-        effect,D3DXVECTOR3(scale, scale, scale));
-
+        effect, D3DXVECTOR3(scale, scale, scale));
+    // エフェクトの回転を設定
     CEffect::SetQuaternion(effect, Quaternion);
+    // エフェクトの位置を設定
     CEffect::SetLocation(effect, position);
+    // エフェクトの再生速度を設定
     CEffect::SetSpeed(effect, speed);
 
     return effect;
 }
 
-//エフェクトの更新
+// エフェクトの位置・回転を更新
 inline void EffectUpdate(
     ::EsHandle m_Effect, const D3DXVECTOR3& position, const D3DXQUATERNION& Quaternion)
 {
     CEffect::SetLocation(m_Effect, position);
     CEffect::SetQuaternion(m_Effect, Quaternion );
 }
+// エフェクトの位置とY軸方向の回転を更新
 inline void EffectUpdateY(
     ::EsHandle m_Effect, const D3DXVECTOR3& position, const D3DXQUATERNION& Quaternion)
 {
@@ -48,6 +52,7 @@ inline void EffectUpdateY(
     D3DXVec3Normalize(&dir, &dir);
 
     CEffect::SetLocation(m_Effect, position);
+    // 進行方向に合わせてY軸回転を設定
     CEffect::SetRotationY(m_Effect, dir, D3DXToRadian(90.f));
 }
 //エフェクトの終了

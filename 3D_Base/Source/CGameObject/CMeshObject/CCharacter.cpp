@@ -1,10 +1,11 @@
 ﻿#include "CCharacter.h"
 namespace
 {
-	constexpr float Speed = 0.05f;
+
 }
 CCharacter::CCharacter()
-	: m_Speed	    ( 0.1f )
+	: m_pCollider   ( nullptr )
+	, m_Speed	    ( 0.1f )
 	, m_Scale       ( 0.f )
 {
 }
@@ -26,16 +27,16 @@ void CCharacter::Draw(const CCamera*pCamera)
 //オブジェクトを上下させる
 void CCharacter::UpDown(float& pos)
 {
+	constexpr float Speed = 0.05f;
+	constexpr float rate = 0.3f;
 	// 時間を進める
 	t += Speed;
 	// 上下にふわふわ動く
-	pos = 1.f + (float)(sin(t) * 0.3f);
+	pos = 1.f + (float)(sin(t) * rate);
 }
 //回転
 bool CCharacter::TurnUpdate(float Speed,float Max,bool Loop)
 {
-
-	//m_angle = Speed;
 	if (m_angle >= Max)
 	{
 		if (Loop)

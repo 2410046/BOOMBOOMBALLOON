@@ -1,56 +1,51 @@
 #pragma once
 /**************************************************
 *	スフィアコリジョンクラス
-*   当たり判定に使用する
+*   球形の当たり判定情報を計算・保持する
 **/
 #include "Collision/CollisionBase/CollisionBase.h" // 当たり判定基底クラス
 class CollisionSphere
     : public CollisionBase
 {
-public:
+private:
     //--------------------------------------
-    // 球構造体
+    // 球の中心座標と半径を管理する構造体
     // Center : 中心座標
     // Radius : 半径
     //--------------------------------------
-    struct SphereSphape
+    struct SphereShape
     {
         D3DXVECTOR3 Center 
             = D3DXVECTOR3(0.f, 0.f, 0.f);
         float Radius = 0.1f;
     };
-
 public:
     //--------------------------------------
     // コンストラクタ
-    // radius : 半径
-    // object : 所有オブジェクト
-    // layer  : 所属レイヤー
-    // offset : 中心のローカルオフセット
+    // radius   : 半径
+    // Listener : 衝突時の通知先
+    // tag      : 所属するレイヤー
+    // offset   : 中心のローカルオフセット
     //--------------------------------------
     CollisionSphere(
         float radius,
-        CollisionListener* listener,
+        CollisionListener* Listener,
         LayerTag tag,
         const D3DXVECTOR3& offset = D3DXVECTOR3(0.f, 0.f, 0.f) 
     );
+    // デストラクタ
+    ~CollisionSphere() {};
 
-    ~CollisionSphere();
-
-    //--------------------------------------
-    // 更新処理
-    // ワールド座標から中心を計算
-    //--------------------------------------
+    // ワールド座標を基準に球の中心座標を更新
     void WorldUpdate() override;
 
-    //--------------------------------------
-    // 球情報取得
-    //--------------------------------------
-    const SphereSphape& GetSphere() const { return m_Sphere; }
-    void SetOffset(const D3DXVECTOR3& offset) { m_Offset = offset; }
+    // 球の情報を取得
+    const SphereShape& GetSphere() const { return m_Sphere; }
+   
+    // コリジョン形状の種類を取得
     CollisionType GetType() const override { return CollisionType::Sphere; }
 private:
-    float m_Radius;          // 半径（元データ）
+    float m_Radius;          // 半径
     D3DXVECTOR3 m_Offset;    // 中心のローカルオフセット
-    SphereSphape m_Sphere;    // 計算済み球情報
+    SphereShape m_Sphere{};    // スフィア情報
 };

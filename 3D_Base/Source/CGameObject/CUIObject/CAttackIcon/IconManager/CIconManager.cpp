@@ -27,7 +27,7 @@ void CIconManager::NewIcon()
         // スコアオブジェクト生成
         auto icon = std::make_unique<CAttackIcon>();
         //スプライトを接続
-        icon->AttachSprite(*AssetManager::GetSprite2D(L"AttackUser"));
+        icon->AttachSprite(*CAssetManager::GetSprite2D(L"AttackUser"));
         //IDを設定する
         icon->SetID(i);
         //座標を設定

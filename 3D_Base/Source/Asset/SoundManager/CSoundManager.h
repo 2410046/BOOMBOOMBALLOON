@@ -6,8 +6,7 @@
 #include <memory>
 /**************************************************
 *	サウンドマネージャークラス.
-*	Manager(マネージャー)：管理者.
-*		Singleton(シングルトン：デザインパターンの１つ)で作成.
+*	サウンドを再生・取得・解放と管理するクラス   		
 **/
 class CSoundManager
 	:public Singleton<CSoundManager>
@@ -18,25 +17,25 @@ private:
 public:
 	~CSoundManager();
 
-	//サウンドデータ読込関数.
+	//サウンドデータの読込関数
 	bool Load(HWND hWnd);
-	//サウンドデータ解放関数.
+	//サウンドデータ解放関数
 	void Release();
 
-	//SEを再生する.
+	//SEを再生する
 	static void PlaySE(const std::basic_string<TCHAR>& alias) {
 		GetInstance()->m_pSound.at(alias)->PlaySE();
 	}
-	//ループ再生する.
+	//ループ再生する
 	static void PlayLoop(const std::basic_string<TCHAR>& alias) {
 		GetInstance()->m_pSound.at(alias)->PlayLoop();
 	}
-	//停止する.
+	//停止する
 	static void Stop(const std::basic_string<TCHAR>&  alias) {
 		GetInstance()->m_pSound.at(alias)->Stop();
 	}
-	static void SetVolume(const std::basic_string<TCHAR>& alias, LONG volume)
-	{
+	//音量を設定
+	static void SetVolume(const std::basic_string<TCHAR>& alias, LONG volume){
 		GetInstance()->m_pSound.at(alias)->SetVolume(volume);
 	}
 private:

@@ -55,10 +55,11 @@ HRESULT CEffect::Create()
 //データ読み込み
 HRESULT CEffect::LoadData()
 {
-	// ファイルパス
+	// エフェクトの保存先と拡張子
 	static const std::u16string TEX_DIR = u"Data\\Effekseer\\";
 	static const std::u16string TEX_EFK = u".efk";
 
+	// 読み込むエフェクト
 	const char16_t* fileName[] =
 	{
 		u"delete1",
@@ -73,16 +74,16 @@ HRESULT CEffect::LoadData()
 
 	//配列の最大要素数を算出（配列全体のサイズ／配列１つ分のサイズ）
 	int list_max = sizeof(fileName) / sizeof(fileName[0]);
-
+	// エフェクトを順番に読み込む
 	for (int i = 0; i < list_max; i++)
 	{
-	
+		// ファイルパスを生成
 		std::u16string path 
 			= TEX_DIR + fileName[i] + TEX_EFK;
 		// エフェクトの読み込み
 		m_pEffect[fileName[i]] =
 			::EsEffect::Create(m_pManager, path.c_str());
-
+		// 読み込みに失敗した場合はエラーを返す
 		if (m_pEffect[fileName[i]] == nullptr)
 		{
 			_ASSERT_EXPR(false, L"CEffect::LoadData()");

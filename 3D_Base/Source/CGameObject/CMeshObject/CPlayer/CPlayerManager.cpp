@@ -1,5 +1,4 @@
 ﻿#include "CGameObject/CMeshObject/CPlayer/CPlayerManager.h"
-#include "Asset/AssetManager/AssetManager.h"
 #include "CMeshObject/CTracking/CTrackingManager/CTrackingManager.h"
 namespace
 {
@@ -32,17 +31,17 @@ void CPlayerManager::NewPlayer()
     for (int i = 0; i < Max; i++)
     {
          std::unique_ptr<CPlayer> player = nullptr;
-        if (i < padCount)
+       // if (i < padCount)
          {
              player = std::make_unique<CPlayer>();
          }
-         else
+        // else
          {
-             player = std::make_unique<CCom>();
+             //player = std::make_unique<CCom>();
          }
 
          //メッシュの接続
-         player->AttachMesh(*AssetManager::GetStatic(L"Player\\Player01"));
+         player->AttachMesh(*CAssetManager::GetStatic(L"Player\\Player01"));
          //プレイヤーIDの設定
          player->SetID(i);
          //座標を設定

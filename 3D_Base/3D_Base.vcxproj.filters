@@ -37,9 +37,6 @@
     <Filter Include="Source\GameObject\SpriteObject">
       <UniqueIdentifier>{cca73fca-1a9b-4392-8b37-bffb05ad32a7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\BoundingSphere">
-      <UniqueIdentifier>{fed4633c-ed5b-4e9f-ba05-83315a3f326f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\SkinMesh">
       <UniqueIdentifier>{7772785f-4812-48b4-a2c0-c8e86f9204a4}</UniqueIdentifier>
     </Filter>
@@ -75,9 +72,6 @@
     </Filter>
     <Filter Include="Source\GameObject\SpriteObject\UI\CFade">
       <UniqueIdentifier>{fc0a0b18-5735-4175-81d0-550eeb4c9741}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\CSV">
-      <UniqueIdentifier>{f0282e4c-aaa8-4cb3-9cb9-d7162c1d8267}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Scene\CSelect">
       <UniqueIdentifier>{fe060c5f-2934-450e-8181-972036530326}</UniqueIdentifier>
@@ -138,9 +132,6 @@
     </Filter>
     <Filter Include="Source\Asset\CSound">
       <UniqueIdentifier>{270f52a2-ef4a-4c46-ad63-45ddea695be2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Asset\AssetManager">
-      <UniqueIdentifier>{c075f51e-0421-40cc-b0ee-fa3175f8c8af}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\GameObject\StaticMeshObject\Character">
       <UniqueIdentifier>{dcd0ea19-724e-4625-8448-3d91af7dbd22}</UniqueIdentifier>
@@ -211,6 +202,9 @@
     <Filter Include="Source\Reaction\CReactionFactory">
       <UniqueIdentifier>{e5d47ec0-a783-47ba-8c6f-4dec96282301}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Asset\CAssetManager">
+      <UniqueIdentifier>{c075f51e-0421-40cc-b0ee-fa3175f8c8af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\stdafx.cpp">
@@ -221,9 +215,6 @@
     </ClCompile>
     <ClCompile Include="Source\Camera\CCamera.cpp">
       <Filter>Source\CCamera</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CSV\CSV.cpp">
-      <Filter>Source\CSV</Filter>
     </ClCompile>
     <ClCompile Include="Source\Asset\CXInput\CXInput.cpp">
       <Filter>Source\CXInput</Filter>
@@ -330,12 +321,6 @@
     <ClCompile Include="Source\Collision\CollisionBase\Collider\Box\CollisionBox.cpp">
       <Filter>Source\Collision\CollsionBase\Collider\Box</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Collision\BSphere\CBoundingSphere.cpp">
-      <Filter>Source\BoundingSphere</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Asset\AssetManager\AssetManager.cpp">
-      <Filter>Source\Asset\AssetManager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Collision\CollisionManager\CollisionManager.cpp">
       <Filter>Source\Collision\CollisionManager</Filter>
     </ClCompile>
@@ -411,6 +396,9 @@
     <ClCompile Include="Source\CCount\CCount.cpp">
       <Filter>Source\CCount</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Asset\CAssetManager\CAssetManager.cpp">
+      <Filter>Source\Asset\CAssetManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Global.h">
@@ -427,9 +415,6 @@
     </ClInclude>
     <ClInclude Include="Source\Camera\CCamera.h">
       <Filter>Source\CCamera</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CSV\CSV.h">
-      <Filter>Source\CSV</Filter>
     </ClInclude>
     <ClInclude Include="Source\Asset\CXInput\CXInput.h">
       <Filter>Source\CXInput</Filter>
@@ -500,9 +485,6 @@
     <ClInclude Include="Source\Asset\SoundManager\CSound.h">
       <Filter>Source\Asset\CSound</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Asset\SoundManager\CSoundManager.h">
-      <Filter>Source\Asset\CSound</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Asset\Mesh\SkinMesh\CSkinMeshParser.h">
       <Filter>Source\SkinMesh</Filter>
     </ClInclude>
@@ -529,12 +511,6 @@
     </ClInclude>
     <ClInclude Include="Source\Collision\CollisionBase\Collider\Box\CollisionBox.h">
       <Filter>Source\Collision\CollsionBase\Collider\Box</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Collision\BSphere\CBoundingSphere.h">
-      <Filter>Source\BoundingSphere</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Asset\AssetManager\AssetManager.h">
-      <Filter>Source\Asset\AssetManager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Collision\CollisionManager\CollisionManager.h">
       <Filter>Source\Collision\CollisionManager</Filter>
@@ -628,6 +604,12 @@
     </ClInclude>
     <ClInclude Include="Source\CCount\CCount.h">
       <Filter>Source\CCount</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Asset\CAssetManager\CAssetManager.h">
+      <Filter>Source\Asset\CAssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Asset\SoundManager\CSoundManager.h">
+      <Filter>Source\Asset\CSound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

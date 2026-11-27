@@ -61,7 +61,7 @@ HRESULT CSelect::LoadData()
 {
 
 	m_pBack->AttachSprite(
-		*AssetManager::GetSprite3D(L"TestSky"));
+		*CAssetManager::GetSprite3D(L"TestSky"));
 
 	//選択肢の画像の読み込み、パターン番号の設定、座標の設定
 	for (int i = 0; i < m_pSelect.size(); ++i)
@@ -71,7 +71,7 @@ HRESULT CSelect::LoadData()
 			= D3DXVECTOR3(300.f+(i*500.f), 500.f, 0.f);
 
 		m_pSelect[i]->AttachSprite(
-			*AssetManager::GetSprite2D(L"SelectText"));
+			*CAssetManager::GetSprite2D(L"SelectText"));
 		m_pSelect[i]->SetPatternNo(0, i);
 		m_pSelect[i]->SetBasePosition(Sell_Pos);
 	}
@@ -86,12 +86,12 @@ HRESULT CSelect::LoadData()
 			= D3DXVECTOR3(-5.f + (i * 3.1f), 1.f, 7.f);
 
 		m_pActive[i]->AttachSprite(
-			*AssetManager::GetSprite2D(L"ActiveUse"));
+			*CAssetManager::GetSprite2D(L"ActiveUse"));
 		m_pActive[i]->SetPatternNo(0, 0);
 		m_pActive[i]->SetPosition(Active_Pos);
 
 		m_pPlayer[i]->AttachMesh(
-			*AssetManager::GetStatic(L"Player\\Player01"));
+			*CAssetManager::GetStatic(L"Player\\Player01"));
 		m_pPlayer[i]->SetPosition(Player_Pos);
 		m_pPlayer[i]->SetScale(0.01f, 0.01f, 0.01f);
 		m_pPlayer[i]->SetID(i);
@@ -127,7 +127,7 @@ void CSelect::Update()
 		for (int i = 0; i < m_pSelect.size(); ++i)
 		{
 			//選択されたときの状態
-			m_pSelect[i]->SellState(i, m_Select, 2);
+			m_pSelect[i]->SelectState(i, m_Select, 2);
 		}
 
 		//プレイヤーの人数選択

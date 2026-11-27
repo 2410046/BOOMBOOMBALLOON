@@ -19,7 +19,7 @@ CCamera::CCamera()
 CCamera::~CCamera()
 {
 }
-//動作関数
+//更新関数
 void CCamera::Update()
 {
 	if (GetAsyncKeyState('W') & 0x8000) m_Camera.vPosition.z += 0.1f; // 前進

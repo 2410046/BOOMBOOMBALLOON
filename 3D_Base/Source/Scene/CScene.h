@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <Windows.h>
-#include "Asset/AssetManager/AssetManager.h"       //サウンドマネージャークラス
+#include "Asset/CAssetManager/CAssetManager.h"     //アセットマネージャークラス
 #include "Asset/CXInput/CXInput.h"	               //コントローラークラス
 #include "Camera/CCamera.h"                        //カメラクラス
 #include "CGameObject/CUIObject/CUIObject.h"       //UIオブジェクトクラス

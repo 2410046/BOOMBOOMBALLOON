@@ -1,17 +1,18 @@
 #pragma once
-#include <memory>
 #include <unordered_map>
 #include "MathUtility.h"
 /********************************************************************************
-*	カウントを使用するクラスに継承する
+*	カウントクラス
+*   攻撃回数やクールタイムを管理する基底クラス
 **/
 class CCount
 {
 public:
 	virtual ~CCount() = default;
-	//クールタイム中のフラグを取得
+	// クールタイム中の状態を取得
 	std::unordered_map<std::string, bool> GetCoolFlag() const;
 protected:
+	// クールタイムの管理データ
 	struct CoolData
 	{
 		int count = 0;
@@ -20,10 +21,11 @@ protected:
 		float coolTimer = 0.0f;
 		bool isCoolTime = false;
 	};
-	//攻撃回数の制限
+    // 攻撃回数を制限、クールタイムを判定
 	bool LimitCoolTime(const std::string& name);
 	//クールタイムの更新
 	void UpdateCoolTime();
 protected:
+	// 攻撃ごとのクールタイム管理
 	std::unordered_map<std::string, CoolData> m_CoolData = {};
 };

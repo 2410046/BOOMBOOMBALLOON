@@ -112,9 +112,8 @@ public:
 
 	//接続チェック.
 	bool IsConnect() const	{	return m_connect;	}
-	//パッドの接続数
+	//パッドの接続数取得、設定
 	int GetPadID() const	{	return m_padCount;		}
-
 	void  SetPadID(int pad ) {  m_padCount = pad;		}
 
 	//コントローラーが接続されているか

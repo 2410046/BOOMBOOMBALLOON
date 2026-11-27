@@ -19,7 +19,7 @@ void CSpriteManager::Release()
     m_3DMapList.clear();
     m_2DMapList.clear();
 }
-//全てのスプライトを生成
+//全てのスプライトを読み込み
 HRESULT CSpriteManager::Create()
 {
     // 2Dスプライト生成
@@ -51,15 +51,27 @@ HRESULT CSpriteManager::LoadData()
 
     return S_OK; // 成功
 }
-//スプライト2Dの情報を取得
+// スプライト2Dをマップから取得
 CSprite2D* CSpriteManager::GetSprite2D(std::wstring name)
-{
-    return GetInstance()->Sprite2D_Internal(name);
+{	
+    // すでに読み込まれているか確認
+    auto it = m_2DMapList.find(name);
+    if (it != m_2DMapList.end())
+    {
+        return it->second.get();
+    }
+    return nullptr;
 }
-//スプライト3Dの情報を取得
+// スプライト3Dをマップから取得
 CSprite3D* CSpriteManager::GetSprite3D(std::wstring name)
 {
-    return GetInstance()->Sprite3D_Internal(name);
+    // すでに読み込まれているか確認
+    auto it = m_3DMapList.find(name);
+    if (it != m_3DMapList.end())
+    {
+        return it->second.get();
+    }
+    return nullptr;
 }
 // スプライト2D生成
 HRESULT CSpriteManager::CreateSprite2D()
@@ -203,24 +215,5 @@ void CSpriteManager::RegisterSprite3D(const Sprite3DData& data)
 {
     m_3DData.push_back(data);
 }
-CSprite2D* CSpriteManager::Sprite2D_Internal(std::wstring name)
-{
-    auto it = m_2DMapList.find(name);
-    if (it != m_2DMapList.end())
-    {
-        return it->second.get();
-    }
-    return nullptr;
-}
 
-// スプライト3Dをマップから取得
-CSprite3D* CSpriteManager::Sprite3D_Internal(std::wstring name)
-{
-    auto it = m_3DMapList.find(name);
-    if (it != m_3DMapList.end())
-    {
-        return it->second.get();
-    }
-    return nullptr;
-}
 

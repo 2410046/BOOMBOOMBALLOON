@@ -1,5 +1,5 @@
 ﻿#include "CMeshManager.h"
-
+// メッシュの保存先と拡張子
 static const std::wstring STATIC_MESH_DIR = L"Data\\Mesh\\Static\\";
 static const std::wstring SKIN_MESH_DIR = L"Data\\Mesh\\Skin\\";
 static const std::wstring MESH_X = L".X";
@@ -23,24 +23,8 @@ void CMeshManager::Release()
 	m_SkinMapList.clear();
 	m_StaticMapList.clear();
 }
-
-
-// スタティックメッシュ取得
-CStaticMesh* CMeshManager::GetStatic(const std::wstring& name)
-{
-	return GetInstance()->GetStatic_Internal(name);
-}
-
-
-// スキンメッシュ取得
-CSkinMesh* CMeshManager::GetSkin(const std::wstring& name)
-{
-	return GetInstance()->GetSkin_Internal(name);
-}
-
-
 // スタティックメッシュ取得・生成
-CStaticMesh* CMeshManager::GetStatic_Internal(
+CStaticMesh* CMeshManager::GetStatic(
 	const std::wstring& name)
 {
 	// すでに読み込まれているか確認
@@ -70,10 +54,8 @@ CStaticMesh* CMeshManager::GetStatic_Internal(
 
 	return result;
 }
-
-
 // スキンメッシュ取得・生成
-CSkinMesh* CMeshManager::GetSkin_Internal(
+CSkinMesh* CMeshManager::GetSkin(
 	const std::wstring& name)
 {
 	// すでに読み込まれているか確認

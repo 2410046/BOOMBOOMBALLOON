@@ -50,7 +50,7 @@ HRESULT CTitle::LoadData()
 {
 	//タイトルロゴの読み込み,座標の設定
 	m_pLogo->AttachSprite(
-		*AssetManager::GetSprite2D(L"Logo"));
+		*CAssetManager::GetSprite2D(L"Logo"));
 	m_pLogo->SetPosition(350.f, 600.f, 0.f);
 
 	//選択肢の画像の読み込み、パターン番号の設定、座標の設定
@@ -61,14 +61,14 @@ HRESULT CTitle::LoadData()
 			= D3DXVECTOR3(500.f, 400.f + i * 100.f, 0.f);	
 
 		m_pSelect[i]->AttachSprite(
-			*CSpriteManager::GetSprite2D(L"SelectText"));
+			*CAssetManager::GetSprite2D(L"SelectText"));
 		m_pSelect[i]->SetPatternNo(0, i);
 		m_pSelect[i]->SetBasePosition(Sell_Pos);
 	}
 
 	//スカイの読み込み、座標の設定
 	m_pSky->AttachMesh(
-		*AssetManager::GetStatic(L"Sky\\TitleSky"));
+		*CAssetManager::GetStatic(L"Sky\\TitleSky"));
 
 	D3DXQUATERNION quaternion;
 
@@ -118,7 +118,7 @@ void CTitle::Update()
 		for (int i = 0; i < m_pSelect.size(); ++i)
 		{
 			//選択されたときの状態
-			m_pSelect[i]->SellState(i, m_Select, 0);
+			m_pSelect[i]->SelectState(i, m_Select, 0);
 		}
 
 		Sky();

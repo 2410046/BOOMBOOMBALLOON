@@ -25,10 +25,10 @@ public:
     HRESULT Create();
     //全てのスプライトを読み込む
     HRESULT LoadData();
-    //スプライト2Dの情報を取得
-    static CSprite2D* GetSprite2D(std::wstring  name);
-    //スプライト3Dの情報を取得
-    static CSprite3D* GetSprite3D(std::wstring name);
+    // スプライト2Dをマップから取得
+    CSprite2D* GetSprite2D(std::wstring name);
+    // スプライト3Dをマップから取得
+    CSprite3D* GetSprite3D(std::wstring name);
 protected://内部処理用
     // スプライト2D生成
     HRESULT CreateSprite2D();
@@ -38,12 +38,6 @@ protected://内部処理用
     HRESULT LoadSprite2D();
     //スプライト3Dの読み込み
     HRESULT LoadSprite3D();
-    // スプライト2Dをマップから取得
-    // ※外部からは直接呼ばず、GetSprite2D()経由で使用する
-    CSprite2D* Sprite2D_Internal(std::wstring name);
-    // スプライト3Dをマップから取得
-    // ※外部からは直接呼ばず、GetSprite3D()経由で使用する
-    CSprite3D* Sprite3D_Internal(std::wstring name);
 protected:
     //スプライト2Dの管理データ
     struct Sprite2DData

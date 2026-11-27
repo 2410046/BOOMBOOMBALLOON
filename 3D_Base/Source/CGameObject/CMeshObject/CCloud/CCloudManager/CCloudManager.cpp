@@ -23,7 +23,7 @@ void CCloudManager::NewCloud()
             std::make_unique<CCloud>();
 
         //メッシュを接続
-        cloud->AttachMesh(*AssetManager::GetStatic(L"Asset\\Cloud"));
+        cloud->AttachMesh(*CAssetManager::GetStatic(L"Asset\\Cloud"));
         // 円周上の角度を計算
         const float angle = 2.0f * D3DX_PI * i / ObjectCount;
 

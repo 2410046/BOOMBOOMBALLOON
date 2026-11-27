@@ -1,54 +1,51 @@
 #include"CCount.h"
-//攻撃回数の制限
+// 攻撃回数を制限、クールタイムを判定
 bool CCount::LimitCoolTime(const std::string& name)
 {
+	// 指定した攻撃の管理データを取得
 	auto& data = m_CoolData.at(name);
 
-	// 使用不可
+	// クールタイム中、または使用回数が残っていない場合は使用不可
 	if (data.isCoolTime && data.count <= 0)
 	{
 		return false;
 	}
 
-	// 回数を減らす
-	// 回数が0になったらクールタイム開始
-// 回数を減らす
-	data.count -= 1;
-
-	// 回数が0以下になったらクールタイム開始
-	if (data.count <= 0)
+	// 使用回数を減らし、残り回数が0になったらクールタイムを開始
+	if (delta_clamp(
+		data.count -= 1,data.maxcount))
 	{
-		data.count = 0;
 		data.isCoolTime = true;
 	}
 
 	return true;
 }
 
-//クールタイム中のフラグを取得
+// クールタイム中の状態を取得
 std::unordered_map<std::string, bool> CCount::GetCoolFlag() const
 {
 	std::unordered_map<std::string, bool> data;
-
-	for (const auto& attack : m_CoolData)
+	// 各クールタイム状態を取得
+	for (const auto& count : m_CoolData)
 	{
-		data[attack.first] = attack.second.isCoolTime;
+		data[count.first] = count.second.isCoolTime;
 	}
 
 	return data;
 }
-//クールタイム
+// クールタイムの更新
 void CCount::UpdateCoolTime()
 {
+	// 各クールタイムを更新
 	for (auto& data : m_CoolData)
 	{
-		// 回数が0ならクールタイム中
+		// クールタイム中でなければスキップ
 		if (!data.second.isCoolTime)
 		{
 			continue;
 		}
 
-		// クールタイム終了
+		// クールタイムが終了したら使用回数を元に戻す
 		if (delta_clamp(
 			data.second.coolTimer += 1.f, data.second.coolTime))
 		{

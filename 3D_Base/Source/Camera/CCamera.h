@@ -1,7 +1,8 @@
 ﻿#pragma once
 #include "Singleton.h"
 /********************************************************************************
-*	カメラクラス.
+*	カメラクラス
+*   ゲーム内のカメラの位置・向き・視点を管理するクラス
 **/
 class CCamera
 	:public Singleton<CCamera>
@@ -12,18 +13,20 @@ private:
 public:
 	//デストラクタ
 	~CCamera();
-	//動作関数
+	//更新関数
 	void Update();
 	//カメラ関数.
 	void Camera();
 	//プロジェクション関数.
 	void Projection();
-
-	CAMERA     GetCamera()const { return m_Camera; }	//カメラの位置
-	LIGHT	   GetLight ()const { return m_Light; }		//ライトの位置
-	D3DXMATRIX GetView  ()const { return m_mView; }		//ビュー行列
-	D3DXMATRIX GetProj  ()const { return m_mProj; }		//射影行列
-
+	//カメラの位置
+	CAMERA     GetCamera()const { return m_Camera; }
+	//ライトの位置
+	LIGHT	   GetLight ()const { return m_Light; }
+	//ビュー行列
+	D3DXMATRIX GetView  ()const { return m_mView; }	
+	//射影行列
+	D3DXMATRIX GetProj  ()const { return m_mProj; }		
 	//カメラの位置を設定
 	void SetCamera(
 		const D3DXVECTOR3& position, const D3DXVECTOR3& look);

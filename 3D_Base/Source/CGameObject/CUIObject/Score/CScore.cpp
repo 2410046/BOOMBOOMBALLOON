@@ -1,128 +1,114 @@
 ﻿#include "CScore.h"
 #include "CGameObject/CUIObject/Ranking/CRanking.h"
-#include <algorithm>
 namespace
 {
+    // 数字の描画間隔
+    constexpr float Space = 38.0f;
 
-    constexpr float Space    = 38.f;   // 数字の間隔
+    // スコア増加時の拡大アニメーション用定数
+    constexpr float Pop_Power     = 50.0f;  // 拡大演出の強さを決める基準値
+    constexpr float Base_Size     = 1.0f;   // 通常時の大きさ
+    constexpr float Max_Scale     = 1.2f;   // 基本の拡大率
+    constexpr float Scale_Range   = 0.5f;   // 増加量に応じた拡大率の範囲
+    constexpr float Speed         = 0.2f;   // 拡大率の補間速度
+    constexpr float Scale_Epsilon = 0.01f;  // 拡大率の補間終了判定値
 
-    constexpr float Pop_Power = 50.0f; // スコア増加の演出の強さ
-    constexpr float Base_Size = 1.f;  // 通常時スケール
-    constexpr float Max_Scale = 1.2f;  // 最大スケール
-    constexpr float Scale_Range = 0.5f;  // 拡大幅
+    // スコア制御用定数
+    constexpr float Add_Interval        = 80.0f; // 自動加算するまでの間隔
 
-    constexpr float Speed = 0.2f;  // スケール補間速度
-    constexpr float Scale_Epsilon = 0.01f; // 収束判定
-
-    constexpr int   Update_Interval = 5;     // 表示更新間隔
-    //スコアの上限
-    constexpr int Max = 9999;
+    constexpr int   Max                 = 9999;  // スコアの最大値
 
 }
+// コンストラクタ
 CScore::CScore()
     : m_Score        ( 0 )
     , m_DisplayScore ( m_Score )   
-    , m_UpdateCounter( 0 )
     , m_Scale        ( 1.f )
     , m_TargetScale  ( 1.f ) 
     , m_PrevScore    ( 0 )     
 {
     //サイズを設定
     m_vScale = D3DXVECTOR3(1.f, 1.f, 1.3f);
-    //パターンナンバー
-    m_Patten = m_ID;
-    //ランキングをリセット
+    // ゲーム開始時にランキング情報を初期化
     CRanking::GetInstance()->Reset();
 }
-
+//デストラクタ
 CScore::~CScore()
 {
 }
 //動作関数
 void CScore::Update()
 {
+    // 一定間隔ごとにスコアを自動加算
     m_Count++;
 
-    if (std::fmod(m_Count, 80.0f) == 0.0f)
+    if (std::fmod(m_Count, Add_Interval) == 0.0f)
     {
+        // スコアを1加算し、スコアを0～最大値の範囲に制限
         m_Score = std::clamp(m_Score + 1, 0, Max);
+        //カウントをリセット
         m_Count = 0.f;
     }
-
-    // ===== 表示スコアの加算アニメーション =====
-    m_UpdateCounter++; // フレームカウント
-
-    if (m_UpdateCounter >= Update_Interval)
-    {
-        m_UpdateCounter = 0; // カウンタリセット
-
-        int diff = m_Score - m_DisplayScore; // 実スコアとの差分
-
-        // 1ずつ増減させてゆっくり追従させる
-        int step = std::clamp(diff, -1, 1);
-
-        m_DisplayScore += step; // 表示スコア更新
-
-    }
-    //スコアが増えた時のアニメーション
+     //数値のカウントアニメーション
+     CountUp(m_Score, m_DisplayScore);
+    // スコア増加時に数字を拡大
      AddAnime();
-//スコアが５００たまるごとにライフを増やすとかやろう
 }
 //描画関数
 void CScore::Draw()
 {
-    //プレイヤーによってスコアの色を変える
+    // プレイヤーIDに対応した数字の表示パターンを設定
     m_Patten = m_ID;
-    // 数字を描画（m_vPosition は変更しない）
+    // 表示用スコアを描画
     Number(m_DisplayScore, Space);
 }
 //スコアの増減
 void CScore::Fluctuation(int point)
 {
-    // プレイヤーが当てたら
+    // 加算・減算するポイントをスコアに反映
     m_Score += point;
+    // スコアを0～最大値の範囲に制限
     m_Score = std::clamp(m_Score, 0, Max);
 }
-
-//ゲーム終了時のスコア
+//ゲーム終了時にスコアをランキングにスコアを設定
 void CScore::ResultScore()
 {
-    //ランキングに登録
+    // プレイヤーIDとスコアをランキングに登録
     CRanking::GetInstance()->Register(m_ID, m_Score);
 }
-//スコアが増えた時のアニメーション
+// スコア増加時のアニメーション
 void CScore::AddAnime()
 {
-
-    // ===== スコア増加検知（ポップ演出）=====
+    // 前回よりスコアが増えている場合のみ処理
     if (m_Score > m_PrevScore)
     {
-        // 前回よりスコアが増えている場合のみ処理
-        int diff = m_Score - m_PrevScore; // 増加量を取得
+        // スコアの増加量を取得
+        int diff = m_Score - m_PrevScore;
 
         // 増加量をもとに演出の強さを決定（0.0～1.0に制限）
         float power = std::clamp(diff / Pop_Power, 0.0f, 1.0f);
-
-        // スケールの目標値を設定（増えるほど大きくなる）
-        m_TargetScale = Max_Scale + power * Scale_Range; // 最大で約1.5倍
+        // 増加量に応じてスケールの目標値を設定
+        m_TargetScale = Max_Scale + power * Scale_Range;
     }
 
-    // 現在のスコアを保存（次フレーム比較用）
+    // 現在のスコアを保存（次回の増加判定に使用）
     m_PrevScore = m_Score;
 
-    // ===== スケールを元に戻す（イージング）=====
-    float ScaleDiff = m_TargetScale - m_Scale; // 現在と目標の差
+    // 現在の拡大率と目標値の差を計算
+    float ScaleDiff = m_TargetScale - m_Scale; 
 
-    // 徐々に目標値へ近づける（補間）
+    // 現在の数字のサイズを徐々に目標値へ近づける（補間）
     m_Scale += ScaleDiff * Speed;
 
-    // ほぼ目標に到達したら固定
+    // 目標値にほぼ到達したら通常サイズに戻す
     if (std::abs(ScaleDiff) < Scale_Epsilon)
     {
-        m_Scale       = Base_Size;  // 元のサイズに戻す
-        m_TargetScale = Base_Size;  // 目標もリセット
+        // 元のサイズに戻す
+        m_Scale       = Base_Size;  
+        // 目標値も初期値に戻す
+        m_TargetScale = Base_Size;
     }
     //サイズを設定
-    m_vScale = D3DXVECTOR3(1.f, m_Scale,m_vScale.z);
+    m_vScale = D3DXVECTOR3(m_vScale.x, m_Scale,m_vScale.z);
 
 }

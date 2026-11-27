@@ -1,8 +1,5 @@
 ﻿#pragma once
-#include <vector>
-#include <memory>
-#include "CScore.h"  //スコアクラス
-#include "Asset/Sprite/CSpriteManager.h"
+#include "CScore.h" 
 
 /********************************************************************************
 *	スコアマネージャークラス
@@ -14,16 +11,15 @@ public:
     CScoreManager();
     //デストラクタ
     ~CScoreManager() = default;
-
     // スコアの生成
     void NewScore();
-    // 動作関数
+    //更新関数 (point : プレイヤーの獲得ポイント)
     void Update(const std::vector<int>& point);
     // 描画関数
     void Draw();
     // プレイヤーIDから対応するスコアオブジェクトを取得
     CScore* GetScore(int ID);
-    // 全プレイヤーのスコアを取得
+    // ゲーム終了時のスコア登録
     void ResultScore();
 private:
     std::vector<std::unique_ptr<CScore>> m_Scores; // スコア

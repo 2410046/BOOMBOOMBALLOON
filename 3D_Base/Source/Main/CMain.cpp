@@ -2,12 +2,8 @@
 #include "Scene/SceneManager/SceneManager.h"
 #include "DirectX/CDirectX9.h"
 #include "DirectX/CDirectX11.h"
+#include "Asset/CAssetManager/CAssetManager.h"
 
-#include "Asset/AssetManager/AssetManager.h"
-//#include "Asset/SoundManager/CSoundManager.h"
-//#include "Asset/Effect/CEffect.h"
-//#include "Asset/Sprite/CSpriteManager.h"
-//#include "Asset/Mesh/CMeshManager.h"
 //ウィンドウを画面中央で起動を有効にする.
 //#define ENABLE_WINDOWS_CENTERING
 
@@ -73,7 +69,7 @@ HRESULT CMain::Create()
 		return E_FAIL;
 	}
 	//アセット生成
-	AssetManager::GetInstance()->Create(m_hWnd);
+	CAssetManager::GetInstance()->Create();
 	// 最初のシーンを設定（タイトル画面）
 	SceneManager::GetInstance()->NewScene(m_hWnd);
 
@@ -84,7 +80,7 @@ HRESULT CMain::Create()
 HRESULT CMain::LoadData()
 {
 	//アセットのロード
-	AssetManager::GetInstance()->LoadData();
+	CAssetManager::GetInstance()->LoadData(m_hWnd);
 	return S_OK;
 }
 

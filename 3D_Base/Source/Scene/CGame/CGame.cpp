@@ -60,7 +60,7 @@ void CGame::Create()
 HRESULT CGame::LoadData()
 {
 	//メッシュの読み込み
-	m_pSky->AttachMesh(*AssetManager::GetStatic(L"Sky\\Sky1"));
+	m_pSky->AttachMesh(*CAssetManager::GetStatic(L"Sky\\Sky1"));
 	//座標の読み込み
 	m_pSky->SetPosition(Sky_Pos);
 	D3DXQUATERNION quaternion;
@@ -74,12 +74,12 @@ HRESULT CGame::LoadData()
 
 	//タイムUIクラス
 	m_pTimeUI->AttachSprite(
-		*AssetManager::GetSprite2D(L"Time"));
+		*CAssetManager::GetSprite2D(L"Time"));
 	m_pTimeUI->SetPosition(Time_Pos);
 	m_pTimeUI->SetScale(0.7f);
 
 	m_pMessage->AttachSprite(
-		*AssetManager::GetSprite2D(L"Massage"));
+		*CAssetManager::GetSprite2D(L"Massage"));
 	m_pMessage->SetPosition(Massage_Pos);
 	m_pMessage->SetScale(1.f);
 

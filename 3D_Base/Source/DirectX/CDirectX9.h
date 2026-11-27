@@ -2,7 +2,7 @@
 
 //警告についてのコード分析を無効にする.4005:再定義.
 #pragma warning(disable:4005)
-
+#include "Singleton.h"
 //DirectX9.
 #include <d3dx9.h>
 
@@ -18,33 +18,20 @@
 *	DirectX9 セットアップ.
 **/
 class CDirectX9
+	:public Singleton<CDirectX9>
 {
-public:
+private:
 	//シングルトン
-	static CDirectX9* GetInstance()
-	{
-		static CDirectX9 Instance;
-		return &Instance;
-	}
+	friend class Singleton<CDirectX9>;
+	CDirectX9();
+public:
+	~CDirectX9();
 	//DirectX9構築.
 	HRESULT Create( HWND hWnd );
 	//DirectX9解放.
 	void Release();
-
 	//デバイスオブジェクトを取得.
 	static LPDIRECT3DDEVICE9 GetDevice() { return GetInstance()->m_pDevice9; }
-private:
-	//外部からアクセス不可能.
-//外部からコンストラクタへのアクセスを禁止する.
-	CDirectX9();
-	~CDirectX9();
-	//コピーコンストラクタによるコピーを禁止する.
-	//「=delete」で関数の定義を削除できる.
-	CDirectX9(const CDirectX9& rhs) = delete;
-	//代入演算子によるコピーを禁止する.
-//operator(オペレータ):演算子のオーバーロードで、演算の中身を拡張できる.
-	CDirectX9& operator = (const CDirectX9& rhs) = delete;
-
 private:
 	LPDIRECT3DDEVICE9	m_pDevice9;	//デバイスオブジェクト.
 };

@@ -3,7 +3,7 @@
 #include "Singleton.h"
 #include <vector>
 #include <iostream>
-#include <algorithm>  // これが必要
+#include <algorithm> 
 /********************************************************************************
 *	ランキングクラス
 **/
@@ -40,13 +40,13 @@ public:
     int GetRank(int index) const;
     //カウント終了を取得
     bool GetCountEnd(int index) const;
-    int GetRankID(int index) const
-    {
-        return m_RankID[index];
-    }
+    int GetRankID(int index) const { return m_RankID[index];  }
+protected:
+    // 順位確定処理
+    // all : true = 全員確定 / false = 1人だけ確定
+    void ConfirmRanking(bool all);
     //順位位置を取得
     int GetRankIndex(int playerID) const;
-protected:
     // 座標交換
     void SwapPosition(int playerID, int targetID);
     void ConfirmRank(int playerID);

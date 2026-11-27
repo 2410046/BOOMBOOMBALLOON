@@ -33,7 +33,7 @@ CRanking::CRanking()
     : m_ScoreList() // プレイヤーごとのスコアデータリスト
 {
     // 数字描画用のスプライトを接続
-    AttachSprite(*AssetManager::GetSprite2D(L"Number"));
+    AttachSprite(*CAssetManager::GetSprite2D(L"Number"));
     // スコアの表示サイズを設定
     m_vScale = D3DXVECTOR3(0.8f, 0.8f, 0.8f);
 }
@@ -98,21 +98,8 @@ void CRanking::Update()
             data.DisplayScore = data.MyScore;
         }
 
-        // 最下位から順番に順位を確定する
-        for (int i = static_cast<int>(m_ScoreList.size()) - 1; i >= 0; --i)
-        {
-            // 対象プレイヤーのスコアデータを取得
-            auto& data = m_ScoreList[i];
-
-            // すでに順位が確定している場合はスキップ
-            if (data.CoundEnd) continue;
-
-            // プレイヤーの順位に応じて表示位置を確定する
-            ConfirmRank(data.ID);
-
-            // 順位確定済みの状態にする
-            data.CoundEnd = true;
-        }
+        // 全プレイヤーの順位を確定
+        ConfirmRanking(true);
 
         // 基底クラスの更新処理を実行
         CUIObject::Update();
@@ -121,91 +108,21 @@ void CRanking::Update()
         return;
     }
 
-    //--------------------------------------------------
-    // 通常のスコアカウントアップ処理
-    //--------------------------------------------------
-
-    // スコア更新までの経過時間を管理
-    static float time = 0.0f;
-
-    // 経過時間を加算
-    time++;
-
-    // 一定間隔ごとにスコアを更新する
-    if (time >= Update_Interval)
-    {
-        // 経過時間をリセット
-        time = 0;
-
-        // 全プレイヤーの表示スコアを更新
+        // 数値のカウントアップアニメーション
         for (auto& data : m_ScoreList)
         {
-            // 順位が確定しているプレイヤーは更新しない
-            if (data.CoundEnd) continue;
 
-            // 最終スコアと現在の表示スコアとの差を取得
-            int diff = data.MyScore - data.DisplayScore;
+             // 順位が確定しているプレイヤーは更新しない
+             if (data.CoundEnd) continue;
+             //数値のカウントアップアニメーション
+             CountUp(data.MyScore, data.DisplayScore);
 
-            // 差を-1～1の範囲に制限して表示スコアを更新
-            // 最終スコアに向かって1ずつ増減させる
-            data.DisplayScore += std::clamp(diff, -1, 1);
         }
-
-
-    //int count = 0;
-
-        //for (int i = static_cast<int>(m_ScoreList.size()); i++;)
-        //{
-        //    // 対象プレイヤーのスコアデータを取得
-        //    auto& data = m_ScoreList[i];
-        //    if (data.CoundEnd)
-        //    {
-        //        m_Count++;
-        //    }
-        //}
-
-        //if (m_Count >= 3)
-        //{
-        //    // 全プレイヤーの表示スコアを最終スコアにする
-        //    for (auto& data : m_ScoreList)
-        //    {
-        //        data.DisplayScore = data.MyScore;
-        //        //// すでに順位が確定している場合はスキップ
-        //        if (data.CoundEnd) continue;
-        //        //// プレイヤーの順位に応じて表示位置を確定する
-        //        //ConfirmRank(data.ID);
-        //        //// 順位確定済みの状態にする
-        //        data.CoundEnd = true;
-        //    }
-        //}
-
-        //--------------------------------------------------
+        // ------------------------------------------------
         // 順位確定処理
         //--------------------------------------------------
-        // 最下位から順番に順位確定の条件を確認する
-        for (int i = static_cast<int>(m_ScoreList.size()) - 1; i >= 0; --i)
-        {
-            // 対象プレイヤーのスコアデータを取得
-            auto& data = m_ScoreList[i];
-
-            // すでに順位が確定している場合はスキップ
-            if (data.CoundEnd) continue;
-
-            // 最終スコアに到達していなければ順位を確定しない
-            if (data.DisplayScore != data.MyScore) break;
-
-            // プレイヤーの順位に応じて表示位置を確定する
-            ConfirmRank(data.ID);
-
-            // 順位確定済みの状態にする
-            data.CoundEnd = true;
-            //順位が確定した数をカウント
-            m_Count++;
-           
-            // 1回の更新で確定する順位は1人だけにする
-            break;
-        }
-    }
+        // スコアが最終値に到達したプレイヤーの順位を確定
+        ConfirmRanking(false);
 
     // 基底クラスの更新処理を実行
     CUIObject::Update();
@@ -287,6 +204,34 @@ void CRanking::ConfirmRank(int playerID)
 
     // 順位確定人数を加算
     ++m_ConfirmCount;
+}
+// 順位確定処理
+// all : true = 全員確定 / false = 1人だけ確定
+void CRanking::ConfirmRanking(bool all)
+{   // 最下位から順番に順位確定の条件を確認
+    for (int i = static_cast<int>(m_ScoreList.size()) - 1; i >= 0; --i)
+    {
+        // 対象プレイヤーのスコアデータを取得
+        auto& data = m_ScoreList[i];
+
+        // すでに順位が確定している場合はスキップ
+        if (data.CoundEnd) continue;
+
+        // 全員確定でない場合は最終スコアへの到達を確認
+        if (!all && data.DisplayScore != data.MyScore) break;
+
+        // プレイヤーの順位に応じて表示位置を確定
+        ConfirmRank(data.ID);
+
+        // 順位確定済みの状態にする
+        data.CoundEnd = true;
+
+        // 順位確定数をカウント
+        m_Count++;
+
+        // 通常時は1人だけ確定
+        if (!all) break;
+    }
 }
 //順位位置を取得
 int CRanking::GetRankIndex(int playerID) const

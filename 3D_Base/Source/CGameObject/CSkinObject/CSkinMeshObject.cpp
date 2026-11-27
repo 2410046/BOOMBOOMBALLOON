@@ -1,5 +1,5 @@
 ﻿#include "CSkinMeshObject.h"
-
+//コンストラクタ
 CSkinMeshObject::CSkinMeshObject()
 	: m_pMesh			( nullptr )
 	, m_pAnimCtrl		( nullptr )
@@ -9,36 +9,41 @@ CSkinMeshObject::CSkinMeshObject()
 	, m_BonePos			()
 {
 }
-
+//デストラクタ
 CSkinMeshObject::~CSkinMeshObject()
 {
+	//メッシュを切り離す
 	DetachMesh();
 }
-
+//更新関数
 void CSkinMeshObject::Update()
 {
+	// メッシュが接続されていない場合は更新しない
 	if( m_pMesh == nullptr ){
 		return;
 	}
 }
-
+//描画関数
 void CSkinMeshObject::Draw(
 	const CCamera* pCamera)
 {
-	if( m_pMesh == nullptr ){
+	// メッシュが接続されていない場合は描画しない
+	if (m_pMesh == nullptr)
+	{
 		return;
 	}
 
 	//描画直前で座標や回転情報などを更新.
-	m_pMesh->SetPosition( m_vPosition );
-	m_pMesh->SetRotation( m_vRotation );
-	m_pMesh->SetScale( m_vScale );
+	m_pMesh->SetPosition(m_vPosition);
+	m_pMesh->SetRotation(m_vRotation);
+	m_pMesh->SetScale(m_vScale);
 
-	CAMERA Camera = pCamera->GetInstance()->GetCamera();
+	// カメラ情報を取得
+	CAMERA Camera    = pCamera->GetCamera();
+	D3DXMATRIX View  = pCamera->GetView();
+	D3DXMATRIX Proj  = pCamera->GetProj();
+	LIGHT	   Light = pCamera->GetLight();
 
-	D3DXMATRIX View = pCamera->GetInstance()->GetView();
-	D3DXMATRIX Proj = pCamera->GetInstance()->GetProj();
-	LIGHT	   Light = pCamera->GetInstance()->GetLight();
 	//レンダリング.
 	m_pMesh->Render( View, Proj, Light, Camera.vPosition,
 		m_pAnimCtrl );	//クローンを設定

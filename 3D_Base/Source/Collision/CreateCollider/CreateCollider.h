@@ -5,20 +5,20 @@
 #include "CollisionBase/Collider/Box/CollisionBox.h"
 #include "CollisionListener/CollisionListener.h"
 /********************************************************************************
-*	当たり判定生成クラス
+*	当たり判定生成と登録を行うクラス
 **/
 class CreateCollider
 {
 public:
-    //スフィアの当たり判定を生成
+    //スフィアの当たり判定を生成・登録
     static std::shared_ptr<CollisionBase> CreateSphere(
         float Radius, CollisionListener* pOwner,
         CollisionBase::LayerTag tag, const D3DXVECTOR3& offset = D3DXVECTOR3(0.f,0.f,0.f)); 
-    //カプセルの当たり判定を生成
+    //カプセルの当たり判定を生成・登録
     static std::shared_ptr<CollisionBase> CreateCaupsule(
         float Radius, float Height, CollisionListener* pOwner,
         CollisionBase::LayerTag tag);
-    //ボックスの当たり判定生成
+    //ボックスの当たり判定を生成・登録
     static std::shared_ptr<CollisionBase> CreateBox(
         D3DXVECTOR3 Langth, CollisionListener* pOwner,
         CollisionBase::LayerTag tag);

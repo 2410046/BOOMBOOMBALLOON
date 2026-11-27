@@ -1,97 +1,82 @@
 ﻿#include "CTime.h"
-#include <stdio.h>
-#include <iostream>
 #include <algorithm>
-namespace
-{
-    constexpr float m_MaxTime = 60;	
-    // 回転速度
-    static constexpr float m_RotSpeed = 0.02f;
-    // レコード間隔
-    static constexpr float m_Space = 650.f;
-    // 補間速度
-    static constexpr float m_LerpSpeed = 0.2f;
-    // Y座標固定値
-    static constexpr float m_PosY = 350.f;
-}
+// コンストラクタ
 CTime::CTime()
-    : m_FrameTime(timeGetTime() / 1000.0f)
-    , m_Max(m_MaxTime)
+    : m_Max      ( 10.f )
 {
-    //スプライトを接続
-    AttachSprite(*CSpriteManager::GetSprite2D(L"TimeArrow"));
+    // 表示するスプライトを接続
+    AttachSprite(*CAssetManager::GetSprite2D(L"TimeArrow"));
+
+    // 表示位置と大きさを設定
     m_vPosition = D3DXVECTOR3(673.f, 50.f, 0.f);
-    m_vScale = D3DXVECTOR3(0.15f, 0.12f, 0.15f);
-    //リセット
+    m_vScale    = D3DXVECTOR3(0.15f, 0.12f, 0.15f);
+
+    // 時間を初期化
     Reset();
 }
-
+// デストラクタ
 CTime::~CTime()
 {
 }
-//動作関数
+
+// 動作関数
 void CTime::Update()
 {
-    // 現在時間取得（秒）
+    // 現在時刻を取得（秒）
     float currentTime = timeGetTime() / 1000.0f;
 
-    // 前フレームからの経過時間を計算
+    // 前回の更新からの経過時間を計算
     float deltaTime = currentTime - m_LastUpdateTime;
+
+    // 前回の更新時刻を更新
     m_LastUpdateTime = currentTime;
 
     // 経過時間を加算
     m_FrameTime += static_cast<float>(deltaTime);
 
-    // 最大時間以内ならカウント更新
-    if (m_Count <= m_MaxTime)
-    {
-        if (m_FrameTime > m_Count)
-        {
-            // 現在時間取得（ミリ秒 → 秒）
-            m_Count = static_cast<int>(m_FrameTime);
-        }
-    }
-
+    // UIの更新処理
     CUIObject::Update();
-
 }
-
-//ゲージの中身
+// 描画関数
 void CTime::Draw()
 {
-    // 小数点以下も含めた経過時間から進行度を計算
-    float ratio = m_FrameTime / m_MaxTime;
+    // 経過時間から制限時間に対する進行度を計算
+    float ratio = m_FrameTime / m_Max;
+
+    // 進行度を0～1の範囲に制限
     ratio = std::clamp(ratio, 0.0f, 1.0f);
 
-    // 時計の針の回転
-    float angle = ratio * 360.0f;
+    // 進行度に応じて針の回転角度を計算
+    constexpr float Degrees = 360.0f;
+    float angle = ratio * Degrees;
 
+    // 針の回転角度を設定
     m_vRotation = D3DXVECTOR3(
         0.0f,
         D3DXToRadian(180.0f),
         D3DXToRadian(angle)
     );
 
+    // UIを描画
     CUIObject::Draw();
 }
+
 //制限時間を超えたら
 bool CTime::MaxTime()
 {
     //制限時間を超えたら
-    if (m_Count >= m_MaxTime)
+    if (m_FrameTime >= m_Max)
     {
         return true;
     }
     return false;
 }
-//初期化
+// 時間の初期化
 void CTime::Reset()
 {
-    // 秒カウント初期化
-    m_Count = 0;
     // 経過時間初期化
     m_FrameTime = 0.0f;
-    // 現在時間を基準時間として設定
-    // （最初のフレームのデルタタイム補正）
+    // 現在時刻を基準時刻として設定
+    // 初回更新時に余分な時間が加算されるのを防ぐ
     m_LastUpdateTime = timeGetTime() / 1000.0f;
 }

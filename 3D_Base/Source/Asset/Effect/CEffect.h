@@ -48,7 +48,7 @@ private:
 	CEffect();
 public:
 	~CEffect();
-	//構築
+	//構築関数
 	HRESULT Create();
 	//データ読み込み
 	HRESULT LoadData();

@@ -6,7 +6,7 @@ CFade::CFade()
     : m_Alpha( 0.f )
 {
     //スプライトを接続
-    AttachSprite(*AssetManager::GetSprite3D(L"Black"));
+    AttachSprite(*CAssetManager::GetSprite3D(L"Black"));
   
 }
 //デストラクタ

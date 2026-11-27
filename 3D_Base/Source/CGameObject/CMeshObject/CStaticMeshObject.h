@@ -7,34 +7,32 @@
 
 /************************************************************
 *	スタティックメッシュオブジェクトクラス.
+*   スタティックメッシュを使用するゲームオブジェクト
 **/
 class CStaticMeshObject
 	: public CGameObject
 {
 public:
+	//コンストラクタ
 	CStaticMeshObject();
+	//デストラクタ
 	virtual ~CStaticMeshObject() override;
-
-	//CGameObjectで純粋仮想関数の宣言がされてるのでこちらで定義を書く.
+	//更新関数
 	virtual void Update() override;
+	//描画関数
 	virtual void Draw( const CCamera*pCamera ) override;
 
 	//メッシュを接続する.
-	void AttachMesh( CStaticMesh& pMesh ){
+	void AttachMesh( CStaticMesh& pMesh )
+	{
 		m_pMesh = &pMesh;
 	}
 	//メッシュを切り離す.
-	void DetachMesh(){
+	void DetachMesh()
+	{
 		m_pMesh = nullptr;
 	}
-	//コライダー取得
-	const std::shared_ptr<CollisionBase>& GetCollider() const
-	{
-		return m_pCollider;
-	}
+
 protected:
-	CStaticMesh*		m_pMesh;
-	bool                m_ActEffect;		// エフェクトが発生
-	float               CollisionScale;
-	std::shared_ptr<CollisionBase>	m_pCollider;	//当たり判定
+	CStaticMesh* m_pMesh;   // 接続しているスタティックメッシュ
 };

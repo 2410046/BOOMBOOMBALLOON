@@ -3,40 +3,41 @@
 
 #undef min
 #undef max
-
+//--------------------------------------
+// コンストラクタ
+// Length   : ボックスのサイズ
+// Listener : 衝突時の通知先
+// tag      : 所属するレイヤー
+//--------------------------------------
 CollisionBox::CollisionBox(
     D3DXVECTOR3 Length, CollisionListener* listener, LayerTag tag)
     : CollisionBase(listener,tag)
 {
-    // Boxのサイズ（幅・高さ・奥行き）
+    // ボックスのサイズを設定
     m_Length = Length;
 
-    // ローカル空間での中心オフセット
+    // ローカル座標での中心位置を設定
     m_Offset = D3DXVECTOR3(0.f, 0.f, 0.f);
 }
 
-CollisionBox::~CollisionBox()
-{
-}
-
-// 更新処理
-// ・ワールド行列を使ってAABBを生成する
-// ・回転・スケールを考慮したBoxを作る
+// ワールド座標を基準にボックスの最小座標と最大座標を更新
 void CollisionBox::WorldUpdate()
 {
-    // ワールド行列取得
-    // （位置・回転・スケールをすべて含む）
+    // 所有オブジェクトを取得
     CGameObject* object = dynamic_cast<CGameObject*>(GetListener());
-    if (!object) return;
 
+    if (!object)
+    {
+        return;
+    }
+    // ワールド行列を取得
     const D3DXMATRIX& world = object->GetWorldMatrix();
 
-    // 半サイズ計算
-    // ・中心から各方向への距離になる
-    D3DXVECTOR3 half = m_Length * 0.5f;
+    // ボックスの半分のサイズを計算
+    constexpr float LengthRate = 0.5f;
+    D3DXVECTOR3 half = m_Length * LengthRate;
 
-    // ローカル空間での8頂点定義
-    // ・中心(0,0,0)基準のBox
+    // ローカル座標での8頂点を定義
     D3DXVECTOR3 local[8] =
     {
         {-half.x, -half.y, -half.z},
@@ -49,13 +50,12 @@ void CollisionBox::WorldUpdate()
         { half.x,  half.y,  half.z},
     };
 
-    // ワールド変換後の頂点配列
+    // ワールド座標に変換した頂点を格納
     D3DXVECTOR3 worldPos[8];
 
     for (int i = 0; i < 8; i++)
     {
-        // ローカル頂点にオフセットを加算
-        // → Boxの中心位置を調整
+        // ローカル座標に中心位置のオフセットを加算
         D3DXVECTOR3 p = local[i] + m_Offset;
 
         // ローカル → ワールド変換
@@ -66,26 +66,24 @@ void CollisionBox::WorldUpdate()
         D3DXVec3TransformCoord(&worldPos[i], &p, &world);
     }
 
-    // AABB初期化（最初の頂点）
+    // 最初の頂点を基準に最小座標と最大座標を初期化
     m_Box.Min = worldPos[0];
     m_Box.Max = worldPos[0];
 
-    // 全頂点からAABBを生成
-    // ・各軸ごとに最小値・最大値を更新
+    // 8頂点から各軸の最小値と最大値を計算
     for (int i = 1; i < 8; i++)
     {
-        // 最小値更新
+        // 各軸の最小値を更新
         m_Box.Min.x = std::min(m_Box.Min.x, worldPos[i].x);
         m_Box.Min.y = std::min(m_Box.Min.y, worldPos[i].y);
         m_Box.Min.z = std::min(m_Box.Min.z, worldPos[i].z);
 
-        // 最大値更新
+        // 各軸の最大値を更新
         m_Box.Max.x = std::max(m_Box.Max.x, worldPos[i].x);
         m_Box.Max.y = std::max(m_Box.Max.y, worldPos[i].y);
         m_Box.Max.z = std::max(m_Box.Max.z, worldPos[i].z);
     }
 
-    // AABB中心を計算
-    // ・衝突処理やデバッグ描画で使用
-    m_WorldPos = (m_Box.Min + m_Box.Max) * 0.5f;
+    // 最小座標と最大座標から中心位置を計算
+    m_WorldPos = (m_Box.Min + m_Box.Max) * LengthRate;
 }

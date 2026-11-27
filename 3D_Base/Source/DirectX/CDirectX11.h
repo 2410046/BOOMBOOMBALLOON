@@ -2,7 +2,7 @@
 
 //警告についてのコード分析を無効にする.4005:再定義.
 #pragma warning(disable:4005)
-
+#include "Singleton.h"
 //ヘッダ読込.
 #include <D3DX11.h>
 #include <D3D11.h>
@@ -21,14 +21,14 @@
 *	DirectX11 セットアップ.
 **/
 class CDirectX11
+	:public Singleton<CDirectX11>
 {
-public:
+private:
 	//シングルトン
-	static CDirectX11* GetInstance()
-	{
-		static CDirectX11 Instance;
-		return &Instance;
-	}
+	friend class Singleton<CDirectX11>;
+	CDirectX11();
+public:
+	~CDirectX11();
 	//DirectX11構築.
 	HRESULT Create(HWND hWnd);
 	//DirectX11解放.
@@ -48,17 +48,6 @@ public:
 	static ID3D11Device* GetDevice() { return GetInstance()->m_pDevice11; }
 	//デバイスコンテキストを取得.
 	static ID3D11DeviceContext* GetContext() { return GetInstance()->m_pContext11; }
-private:
-	//外部からアクセス不可能.
-//外部からコンストラクタへのアクセスを禁止する.
-	CDirectX11();
-	~CDirectX11();
-	//コピーコンストラクタによるコピーを禁止する.
-	//「=delete」で関数の定義を削除できる.
-	CDirectX11(const CDirectX11& rhs) = delete;
-	//代入演算子によるコピーを禁止する.
-//operator(オペレータ):演算子のオーバーロードで、演算の中身を拡張できる.
-	CDirectX11& operator = (const CDirectX11& rhs) = delete;
 private:
 	//デバイスとスワップチェイン作成.
 	HRESULT CreateDeviceAndSwapChain(

@@ -3,68 +3,57 @@
 
 /**************************************************
 *	カプセルコリジョンクラス
-*	当たり判定に使用する
+*   カプセル形状の当たり判定情報を計算・保持する
 **/
 class CollisionCapsule
 	: public CollisionBase
 {
-public:
+private:
 	//--------------------------------------
-	// カプセル構造体
+	// カプセルの始点・終点・半径を管理する構造体
 	// Start : 始点
 	// End   : 終点
 	// Radius: 半径
 	//--------------------------------------
 	struct Capsule
 	{
-		D3DXVECTOR3 Start = D3DXVECTOR3(0.f,0.f,0.f);
-		D3DXVECTOR3 End = D3DXVECTOR3(0.f, 0.f, 0.f);
+		D3DXVECTOR3 Start 
+			= D3DXVECTOR3(0.f,0.f,0.f);
+		D3DXVECTOR3 End 
+			= D3DXVECTOR3(0.f, 0.f, 0.f);
 		float Radius = 0.1f;
 	};
 public:
 	//--------------------------------------
 	// コンストラクタ
-	// radius : 半径
-	// height : 高さ（Start〜Endの長さ）
-	// object : 所有オブジェクト
-	// layer  : 所属レイヤー
+	// radius   : 半径
+	// height   : 高さ（Start〜Endの長さ）
+	// Listener : 衝突時の通知先
+	// tag      : 所属するレイヤー
 	//--------------------------------------
 	CollisionCapsule(
-		float radius, float height, CollisionListener* listener, LayerTag tag);
-
-	~CollisionCapsule();
-
-	// 更新処理
-	// ワールド座標に応じてStart/Endを更新
+		float radius, float height, 
+		CollisionListener* Listener, LayerTag tag);
+	// デストラクタ
+	~CollisionCapsule() {};
+	// ワールド座標を基準にカプセルの始点と終点を更新
 	void WorldUpdate() override;
-
-	// ローカルオフセット設定
-	// モデル基準の位置ずれ
-	void SetLocalOffsetA(const D3DXVECTOR3& offset) { m_LocalOffsetA = offset; }
-	void SetLocalOffsetB(const D3DXVECTOR3& offset) { m_LocalOffsetB = offset; }
-	// 移動オフセット設定
-	// 動きに応じた補正（予測など）
-	void SetMoveOffsetA(const D3DXVECTOR3& offset) { m_MoveOffsetA = offset; }
-	void SetMoveOffsetB(const D3DXVECTOR3& offset) { m_MoveOffsetB = offset; }
-	// カプセル情報取得
+	// カプセル情報を取得
 	const Capsule& GetCapsule() const { return m_Capsule; }
-	//カプセルの古い情報取得
-	const Capsule& GetBeforeCapsule() const{ return m_BeforeCapsule;}
-	// 半径設定
+	// カプセルの半径を設定
 	void SetRadius(float r) { m_Radius = r; }
-
+	// コリジョン形状の種類を取得
 	CollisionType GetType() const override { return CollisionType::Capsule; }
 private:
-	float m_Radius; // カプセル半径
-	bool m_IsInitialized;
-	// 移動補正オフセット（予測位置などに使用）
+	float m_Radius;   // カプセルの半径
+
+	// 移動位置を補正するオフセット
 	D3DXVECTOR3 m_MoveOffsetA;
 	D3DXVECTOR3 m_MoveOffsetB;
 
-	// ローカル座標でのオフセット
+	// ローカル座標での位置を補正するオフセット
 	D3DXVECTOR3 m_LocalOffsetA;
 	D3DXVECTOR3 m_LocalOffsetB;
 
-	Capsule m_Capsule; // 計算済みカプセル情報
-	Capsule m_BeforeCapsule;//以前のカプセル情報
+	Capsule m_Capsule{}; // カプセル情報
 };
